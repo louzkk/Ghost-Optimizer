@@ -1,4 +1,4 @@
-# 👻 Bem-Vindo ao Ghost Optimizer
+# 👻 Ghost Optimizer
 O **Ghost Optimizer** é uma alternativa gratuita para otimizar o Windows 10/11, melhorando o desempenho e a privacidade do sistema.
 Ele remove bloatware, bloqueia telemetria e anúncios, otimiza a conexão e aplica tweaks para deixar o sistema mais responsivo.
 É recomendado para aumentar o FPS em jogos e reduzir o PING, sendo ideal para computadores e notebooks desde os mais fracos até os mais potentes.
