@@ -261,7 +261,7 @@ echo %p%[ %roxo%+%p% %p%]%w% Tempo de resposta de janelas reduzido.
 
 taskkill /f /im explorer.exe && start explorer.exe
 echo %p%[ %roxo%+%p% %p%]%w% Interface do Windows reiniciada.
-
+:: @louzkk
 reg add "HKLM\System\CurrentControlSet\Control\Remote Assistance" /v "fAllowToGetHelp" /t REG_DWORD /d 0 /f >nul
 echo %p%[ %roxo%+%p% %p%]%w% Assistência Remota desativada.
 
@@ -652,7 +652,7 @@ echo %p%[ %roxo%+%p% %p%]%w% UsbCeip desativado.
 schtasks /end /tn "\Microsoft\Windows\Customer Experience Improvement Program\Uploader" >nul 2>&1
 schtasks /change /tn "\Microsoft\Windows\Customer Experience Improvement Program\Uploader" /disable >nul 2>&1
 echo %p%[ %roxo%+%p% %p%]%w% Uploader desativado.
-
+:: @louzkk
 schtasks /end /tn "\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" >nul 2>&1
 schtasks /change /tn "\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" /disable >nul 2>&1
 echo %p%[ %roxo%+%p% %p%]%w% Microsoft Compatibility Appraiser desativado.
@@ -762,7 +762,7 @@ echo %p%[ %roxo%+%p% %p%]%w% Device User desativado.
 
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\NVIDIA Corporation\Global\NvTelemetry" /v "Enabled" /t REG_DWORD /d 0 /f >nul
 echo %p%[ %roxo%+%p% %p%]%w% Telemetria da %g%NVIDIA%w% desativada.
-
+:: @louzkk
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\AMD\ACE\Settings\General" /v "EnableTelemetry" /t REG_DWORD /d 0 /f >nul
 echo %p%[ %roxo%+%p% %p%]%w% Telemetria da %r%AMD%w% desativada.
 
@@ -813,7 +813,7 @@ echo.
 echo %p%Aperte Enter para continuar%w%
 set /p "resposta=%w%>:%roxo%"
 goto:menu
-
+:: @louzkk
 :comandos
 @echo off
 title Ghost Optimizer // Lista de Comandos
