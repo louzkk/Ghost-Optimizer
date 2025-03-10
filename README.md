@@ -29,10 +29,10 @@ Ele remove bloatware, bloqueia telemetria e anúncios, otimiza a conexão e apli
 - 4: Inicia Desativação de Telemetria;
 - 5: Inicia Desativação de Serviços;
 - 6: Inicia Limpeza do Sistema;
-- potato: Inicia Otimização Agressiva;
+- potato: Inicia Otimização Agressiva.
 
 ## 💻 Requisitos Mínimos
-- Windows 10 ou 11.
+- Windows 10 ou 11;
 - Sistema 64 Bits.
 
 ## ❤️ Agradecimentos
@@ -42,7 +42,6 @@ Ele remove bloatware, bloqueia telemetria e anúncios, otimiza a conexão e apli
 1. Baixe o **Ghost Optimizer.exe**  [aqui](https://github.com/louzkk/Ghost-Optimizer/releases).
 2. Execute como **Administrador** (Desative o Antivírus).
 3. Leia o arquivo Read Me.txt ou Me Leia.txt.
-4. Crie um Ponto de Restauração antes de iniciar.
 
 ---
 🔹 *Feito por [@louzkk](https://github.com/louzkk)*  
