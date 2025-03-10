@@ -19,11 +19,10 @@ Ele remove bloatware, bloqueia telemetria e anúncios, otimiza a conexão e apli
 - Desativa OneDrive, Copilot e Cortana.
 
 ## 📥 Download e Uso  
-1. Baixe o **Ghost Optimizer.exe** [aqui](https://github.com/louzkk/Ghost-Optimizer/raw/refs/heads/main/Ghost%20Optimizer.exe)  
-2. Execute como **Administrador**
-(Caso tenha problemas com o Windows Defender, selecione o arquivo como exceção.)
-3. Leia o arquivo Readme.txt
-4. Crie um Ponto de Restauração antes de iniciar qualquer otimização
+1. Baixe o **Ghost Optimizer.exe**  [aqui](https://github.com/louzkk/Ghost-Optimizer/raw/refs/heads/main/Ghost%20Optimizer.exe).
+2. Execute como **Administrador** (Desative o Antivírus).
+3. Leia o arquivo Read Me.txt ou Me Leia.txt.
+4. Crie um Ponto de Restauração antes de iniciar.
 
 ## 📷 Capturas de Tela  
 ![Preview](https://github.com/louzkk/Ghost-Optimizer/blob/main/Resourcers/Preview.png?raw=true)
