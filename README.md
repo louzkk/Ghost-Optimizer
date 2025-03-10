@@ -26,7 +26,7 @@ Ele remove bloatware, bloqueia telemetria e anúncios, otimiza a conexão e apli
 4. Crie um Ponto de Restauração antes de iniciar qualquer otimização
 
 ## 📷 Capturas de Tela  
-![Preview](https://imgur.com/hfys1ve)
+![Preview](https://github.com/louzkk/Ghost-Optimizer/blob/main/Resourcers/Preview.png?raw=true)
 
 ---
 🔹 *Feito por [@louzkk](https://github.com/louzkk)*  
