@@ -19,6 +19,22 @@ Ele remove bloatware, bloqueia telemetria e anúncios, otimiza a conexão e apli
 - Desativa Atualização em Segundo Plano;
 - Desativa OneDrive, Copilot e Cortana.
 
+## 🛠️ Comandos do Script
+- 0: Cria Ponto de Restauração;
+- 1: Inicia Otimização Padrão;
+- 2: Inicia Otimização de Conexão;
+- 3: Inicia Correção de Arquivos;
+- 4: Inicia Desativação de Telemetria;
+- 5: Inicia Desativação de Serviços;
+- 6: Inicia Limpeza do Sistema;
+- potato: Inicia Otimização Agressiva;
+- recarregar: Reinicia o Script;
+- hack: Exibe Árvore do Sistema;
+- sair: Fecha o Script;
+- reiniciar: Reinicia o Sistema;
+- github: Abre a página do Script;
+- ghost: Abre créditos rápidos.
+
 ## 💻 Requisitos Mínimos
 - Windows 10 ou 11.
 - Sistema 64 Bits.
