@@ -1,4 +1,4 @@
-![Preview](https://github.com/louzkk/Ghost-Optimizer/blob/main/Resourcers/image.png)
+![Preview](https://github.com/louzkk/Ghost-Optimizer/blob/main/Resources/image.png)
 
 # 👻 Ghost Optimizer
 O **Ghost Optimizer** é uma alternativa gratuita para otimizar o Windows 10/11, melhorando o desempenho e a privacidade do sistema.
