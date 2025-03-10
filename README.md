@@ -30,12 +30,6 @@ Ele remove bloatware, bloqueia telemetria e anúncios, otimiza a conexão e apli
 - 5: Inicia Desativação de Serviços;
 - 6: Inicia Limpeza do Sistema;
 - potato: Inicia Otimização Agressiva;
-- recarregar: Reinicia o Script;
-- hack: Exibe Árvore do Sistema;
-- sair: Fecha o Script;
-- reiniciar: Reinicia o Sistema;
-- github: Abre a página do Script;
-- ghost: Abre créditos rápidos.
 
 ## 💻 Requisitos Mínimos
 - Windows 10 ou 11.
