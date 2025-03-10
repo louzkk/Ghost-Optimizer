@@ -1,3 +1,5 @@
+![Preview](https://github.com/louzkk/Ghost-Optimizer/blob/main/Resourcers/image.png)
+
 # 👻 Ghost Optimizer
 O **Ghost Optimizer** é uma alternativa gratuita para otimizar o Windows 10/11, melhorando o desempenho e a privacidade do sistema.
 Ele remove bloatware, bloqueia telemetria e anúncios, otimiza a conexão e aplica tweaks para deixar o sistema mais responsivo.
@@ -47,9 +49,6 @@ Ele remove bloatware, bloqueia telemetria e anúncios, otimiza a conexão e apli
 2. Execute como **Administrador** (Desative o Antivírus).
 3. Leia o arquivo Read Me.txt ou Me Leia.txt.
 4. Crie um Ponto de Restauração antes de iniciar.
-
-## 📷 Capturas de Tela  
-![Preview](https://github.com/louzkk/Ghost-Optimizer/blob/main/Resourcers/Preview.png?raw=true)
 
 ---
 🔹 *Feito por [@louzkk](https://github.com/louzkk)*  
