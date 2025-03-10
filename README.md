@@ -39,7 +39,7 @@ Ele remove bloatware, bloqueia telemetria e anúncios, otimiza a conexão e apli
 - Tester: @MysteryNich.
 
 ## 📥 Download e Uso  
-1. Baixe o **Ghost Optimizer.exe**  [aqui](https://github.com/louzkk/Ghost-Optimizer/releases/download/Optimizer/Ghost.Optimizer.exe).
+1. Baixe o **Ghost Optimizer.exe**  [aqui](https://github.com/louzkk/Ghost-Optimizer/releases).
 2. Execute como **Administrador** (Desative o Antivírus).
 3. Leia o arquivo Read Me.txt ou Me Leia.txt.
 4. Crie um Ponto de Restauração antes de iniciar.
