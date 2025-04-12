@@ -1,61 +1,56 @@
-![Preview](https://github.com/louzkk/Ghost-Optimizer/blob/main/Resources/image.png)
-
 # 👻 Ghost Optimizer
 
-O **Ghost Optimizer** é uma ferramenta gratuita para otimizar o Windows 10 e 11, focada em **desempenho** e **privacidade**.
+**Ghost Optimizer** is a free tool to optimize Windows 10 and 11, focused on **performance** and **privacy**.
 
-Ele remove bloatware, desativa serviços desnecessários, bloqueia telemetria/anúncios, otimiza a conexão e aplica ajustes avançados para deixar o sistema mais leve e responsivo.
+It removes bloatware, disables unnecessary services, blocks telemetry/ads, optimizes the connection, and applies advanced tweaks to make the system lighter and more responsive.
 
-Ideal para quem quer **mais FPS em jogos**, **menos uso de recursos** e **ping reduzido** — seja em PCs fracos ou potentes.
+Ideal for those who want **more FPS in games**, **less resource usage**, and **lower ping** — whether on low-end or high-end PCs.
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-## 🚀 Funcionalidades
+## 🚀 Features
 
-✅ Aumenta o desempenho geral  
-✅ Reduz uso de RAM, CPU e disco  
-✅ Otimiza gerenciamento de memória e energia  
-✅ Diminui o número de processos em segundo plano  
-✅ Melhora a privacidade e segurança  
-✅ Bloqueia telemetria do sistema e de drivers  
-✅ Impede rastreamento e anúncios  
-✅ Corrige bugs e problemas comuns  
-✅ Faz limpeza de arquivos temporários  
-✅ Remove aplicativos desnecessários  
-✅ Desativa atualizações em segundo plano  
-✅ Desativa OneDrive, Copilot e Cortana  
+✅ Increases overall performance  
+✅ Reduces RAM, CPU, and DISK usage  
+✅ Optimizes memory and power management  
+✅ Reduces background processes  
+✅ Enhances privacy and security  
+✅ Blocks system and driver telemetry  
+✅ Prevents tracking and ads  
+✅ Fixes bugs and common issues  
+✅ Cleans temporary files  
+✅ Removes unnecessary apps  
+✅ Disables background updates  
+✅ Disables OneDrive, Copilot, and Cortana  
 
-## 🛠️ Comandos disponíveis
+## 🛠️ Available Commands
 
-| Comando  | Função                                 |
-|----------|----------------------------------------|
-| `0`      | Criar ponto de restauração             |
-| `1`      | Otimização padrão                      |
-| `2`      | Otimização de conexão                  |
-| `3`      | Correção de arquivos                   |
-| `4`      | Desativar telemetria                   |
-| `5`      | Desativar serviços                     |
-| `6`      | Limpeza do sistema                     |
-| `potato` | Otimização agressiva (modo extremo)    |
+| Command  | Function                                |
+|----------|-----------------------------------------|
+| `0`      | Create a restore point                 |
+| `1`      | Standard optimization                  |
+| `2`      | Connection optimization                 |
+| `3`      | File repair                            |
+| `4`      | Disable telemetry                       |
+| `5`      | Disable services                        |
+| `6`      | System cleanup                          |
+| `potato` | Aggressive optimization (extreme mode)  |
 
+## 💻 Requirements
 
-## 💻 Requisitos
+- Windows 10 or 11  
+- 32/64-bit operating system  
 
-- Windows 10 ou 11  
-- Sistema operacional de 32/64 bits  
+## 📥 How to use
 
+1. Go to the [releases page](https://github.com/louzkk/Ghost-Optimizer/releases) and download **Ghost Optimizer.exe**  
+2. Run as **Administrator** *(disable antivirus)*  
+3. Read the `Read Me.txt` file for detailed instructions
 
-## 📥 Como usar
-
-1. Acesse a [página de releases](https://github.com/louzkk/Ghost-Optimizer/releases) e baixe o **Ghost Optimizer.exe**  
-2. Execute como **Administrador** *(desative o antivírus)*  
-3. Leia o arquivo `Read Me.txt` ou `Me Leia.txt` para instruções detalhadas
-
-
-## ❤️ Agradecimentos
+## ❤️ Acknowledgements
 
 - Tester: [@MysteryNich](https://github.com/MysteryNich)
 
 ---
 
-🔹 *Feito com 💻 por [@louzkk](https://github.com/louzkk)*
+🔹 *Made by [@louzkk](https://github.com/louzkk)*
