@@ -34,7 +34,7 @@ Ideal for those who want **more FPS in games**, **less resource usage**, and **l
 | `4`      | Disable telemetry                       |
 | `5`      | Disable services                        |
 | `6`      | System cleanup                          |
-| `potato` | Aggressive optimization (extreme mode)  |
+| `potato` | Aggressive optimization                |
 
 ## 💻 Requirements
 
