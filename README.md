@@ -1,7 +1,5 @@
 ![Preview](https://github.com/louzkk/Ghost-Optimizer/blob/main/Resources/image.png)
 
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-
 # 👻 Ghost Optimizer
 
 O **Ghost Optimizer** é uma ferramenta gratuita para otimizar o Windows 10 e 11, focada em **desempenho** e **privacidade**.
@@ -9,6 +7,8 @@ O **Ghost Optimizer** é uma ferramenta gratuita para otimizar o Windows 10 e 11
 Ele remove bloatware, desativa serviços desnecessários, bloqueia telemetria/anúncios, otimiza a conexão e aplica ajustes avançados para deixar o sistema mais leve e responsivo.
 
 Ideal para quem quer **mais FPS em jogos**, **menos uso de recursos** e **ping reduzido** — seja em PCs fracos ou potentes.
+
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 ## 🚀 Funcionalidades
 
