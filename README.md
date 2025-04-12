@@ -1,47 +1,66 @@
 ![Preview](https://github.com/louzkk/Ghost-Optimizer/blob/main/Resources/image.png)
 
 # 👻 Ghost Optimizer
-O **Ghost Optimizer** é uma alternativa gratuita para otimizar o Windows 10/11, melhorando o desempenho e a privacidade do sistema.
-Ele remove bloatware, bloqueia telemetria e anúncios, otimiza a conexão e aplica tweaks para deixar o sistema mais responsivo.
-É recomendado para aumentar o FPS em jogos e reduzir o PING, sendo ideal para computadores e notebooks desde os mais fracos até os mais potentes.
 
-## 🚀 Recursos do Script
-- Melhora o Desempenho geral do sistema;
-- Reduz uso de RAM, CPU, e HDD;
-- Otimiza o Gerenciamento de Memória;
-- Otimiza o Gerenciamento de Energia;
-- Reduz a Quantidade de Processos;
-- Melhora a Privacidade e Segurança;
-- Bloqueia Telemetria do Sistema e Drivers;
-- Bloqueia Serviços de Rastreamento;
-- Bloqueia Serviços de Anúncios;
-- Corrige Problemas Comuns no Windows;
-- Limpa Arquivos Temporários e Desnecessários;
-- Remove Aplicativos Indesejados;
-- Desativa Atualização em Segundo Plano;
-- Desativa OneDrive, Copilot e Cortana.
+O **Ghost Optimizer** é uma ferramenta gratuita para otimizar o Windows 10 e 11, focada em **desempenho** e **privacidade**.
 
-## 🛠️ Comandos do Script
-- 0: Cria Ponto de Restauração;
-- 1: Inicia Otimização Padrão;
-- 2: Inicia Otimização de Conexão;
-- 3: Inicia Correção de Arquivos;
-- 4: Inicia Desativação de Telemetria;
-- 5: Inicia Desativação de Serviços;
-- 6: Inicia Limpeza do Sistema;
-- potato: Inicia Otimização Agressiva.
+Ele remove bloatware, desativa serviços desnecessários, bloqueia telemetria/anúncios, otimiza a conexão e aplica ajustes avançados para deixar o sistema mais leve e responsivo.
 
-## 💻 Requisitos Mínimos
-- Windows 10 ou 11;
-- Sistema 64 Bits.
-
-## ❤️ Agradecimentos
-- Tester: @MysteryNich.
-
-## 📥 Download e Uso  
-1. Baixe o **Ghost Optimizer.exe**  [aqui](https://github.com/louzkk/Ghost-Optimizer/releases).
-2. Execute como **Administrador** (Desative o Antivírus).
-3. Leia o arquivo Read Me.txt ou Me Leia.txt.
+Ideal para quem quer **mais FPS em jogos**, **menos uso de recursos** e **ping reduzido** — seja em PCs fracos ou potentes.
 
 ---
-🔹 *Feito por [@louzkk](https://github.com/louzkk)*  
+
+## 🚀 Funcionalidades
+
+✅ Aumenta o desempenho geral  
+✅ Reduz uso de RAM, CPU e disco  
+✅ Otimiza gerenciamento de memória e energia  
+✅ Diminui o número de processos em segundo plano  
+✅ Melhora a privacidade e segurança  
+✅ Bloqueia telemetria do sistema e de drivers  
+✅ Impede rastreamento e anúncios  
+✅ Corrige bugs e problemas comuns  
+✅ Faz limpeza de arquivos temporários  
+✅ Remove aplicativos desnecessários  
+✅ Desativa atualizações em segundo plano  
+✅ Desativa OneDrive, Copilot e Cortana  
+
+---
+
+## 🛠️ Comandos disponíveis
+
+| Comando  | Função                                 |
+|----------|----------------------------------------|
+| `0`      | Criar ponto de restauração             |
+| `1`      | Otimização padrão                      |
+| `2`      | Otimização de conexão                  |
+| `3`      | Correção de arquivos                   |
+| `4`      | Desativar telemetria                   |
+| `5`      | Desativar serviços                     |
+| `6`      | Limpeza do sistema                     |
+| `potato` | Otimização agressiva (modo extremo)    |
+
+---
+
+## 💻 Requisitos
+
+- Windows 10 ou 11  
+- Sistema operacional de 64 bits  
+
+---
+
+## 📥 Como usar
+
+1. Acesse a [página de releases](https://github.com/louzkk/Ghost-Optimizer/releases) e baixe o **Ghost Optimizer.exe**  
+2. Execute como **Administrador** *(desative o antivírus)*  
+3. Leia o arquivo `Read Me.txt` ou `Me Leia.txt` para instruções detalhadas
+
+---
+
+## ❤️ Agradecimentos
+
+- Tester: [@MysteryNich](https://github.com/MysteryNich)
+
+---
+
+🔹 *Feito com 💻 por [@louzkk](https://github.com/louzkk)*
