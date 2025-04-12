@@ -8,8 +8,6 @@ Ele remove bloatware, desativa serviços desnecessários, bloqueia telemetria/an
 
 Ideal para quem quer **mais FPS em jogos**, **menos uso de recursos** e **ping reduzido** — seja em PCs fracos ou potentes.
 
----
-
 ## 🚀 Funcionalidades
 
 ✅ Aumenta o desempenho geral  
@@ -25,8 +23,6 @@ Ideal para quem quer **mais FPS em jogos**, **menos uso de recursos** e **ping r
 ✅ Desativa atualizações em segundo plano  
 ✅ Desativa OneDrive, Copilot e Cortana  
 
----
-
 ## 🛠️ Comandos disponíveis
 
 | Comando  | Função                                 |
@@ -40,14 +36,12 @@ Ideal para quem quer **mais FPS em jogos**, **menos uso de recursos** e **ping r
 | `6`      | Limpeza do sistema                     |
 | `potato` | Otimização agressiva (modo extremo)    |
 
----
 
 ## 💻 Requisitos
 
 - Windows 10 ou 11  
-- Sistema operacional de 64 bits  
+- Sistema operacional de 32/64 bits  
 
----
 
 ## 📥 Como usar
 
@@ -55,7 +49,6 @@ Ideal para quem quer **mais FPS em jogos**, **menos uso de recursos** e **ping r
 2. Execute como **Administrador** *(desative o antivírus)*  
 3. Leia o arquivo `Read Me.txt` ou `Me Leia.txt` para instruções detalhadas
 
----
 
 ## ❤️ Agradecimentos
 
