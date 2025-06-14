@@ -1,4 +1,4 @@
-# 👻 Ghost Optimizer
+# ⚡ Ghost Optimizer
 
 **Ghost Optimizer** is a free tool to optimize Windows 10 and 11, focused on **performance**, **privacy**, and **competitive games**.
 
@@ -15,7 +15,7 @@ Now includes **deep-level optimizations** and a custom **SOCD Cleaner** (like Ra
 ✔️ Lowers RAM, CPU, and disk usage  
 ✔️ Optimizes memory management  
 ✔️ Applies Ghost-Optimizer power plan  
-✔️ Optimizes network settings for lower latency  
+✔️ Optimizes network for lower latency  
 ✔️ Reduces unnecessary background activity  
 ✔️ Blocks telemetry from Windows and drivers  
 ✔️ Disables tracking services and ads  
@@ -34,7 +34,7 @@ Now includes **deep-level optimizations** and a custom **SOCD Cleaner** (like Ra
 
 ## 📥 How to use
 
-1. Go to the [Releases](https://github.com/louzkk/Ghost-Optimizer/releases) and download **Ghost Optimizer.exe**  
+1. Go to the [Releases](https://github.com/louzkk/Ghost-Optimizer/releases) and download **Ghost Optimizer.rar**  
 2. Run as **Administrator**  
    *(You may need to temporarily disable your antivirus to avoid false positives)*
 
@@ -45,5 +45,3 @@ Now includes **deep-level optimizations** and a custom **SOCD Cleaner** (like Ra
 ---
 
 💬 Found a bug or have a suggestion? [Open an issue](https://github.com/louzkk/Ghost-Optimizer/issues)
-
-🔹 *Made by [@louzkk](https://github.com/louzkk)*
