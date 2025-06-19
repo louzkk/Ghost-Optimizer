@@ -19,7 +19,7 @@ Now includes **deep-level optimizations** and a custom **SOCD Cleaner** (like Ra
 ✔️ Boosts overall system performance   
 ✔️ Lowers RAM, CPU, and disk usage   
 ✔️ Optimizes memory management    
-✔️ Applies Khorivie's power plan   
+✔️ Applies Khorvie's power plan   
 ✔️ Optimizes network for lower latency   
 ✔️ Reduces unnecessary background activity   
 ✔️ Blocks telemetry from Windows and drivers   
