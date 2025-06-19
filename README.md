@@ -9,15 +9,11 @@ Ideal for those who want **more FPS in games**, **less resource usage**, and **l
 
 Now includes **deep-level optimizations** and a custom **SOCD Cleaner** (like Razer Snaptap), which fixes multi-key inputs to avoid blocking or delay — improving movement control in competitive games.
 
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-
-![Platform](https://img.shields.io/badge/platform-Windows-blue)
-
-![Made with](https://img.shields.io/badge/Made%20with-AutoHotkey-green)
-
-![Status](https://img.shields.io/badge/status-stable-brightgreen)
-
-![Version](https://img.shields.io/badge/version-3.0.0-blue)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg) 
+![Platform](https://img.shields.io/badge/platform-Windows-blue) 
+![Made with](https://img.shields.io/badge/Made%20with-AutoHotkey-green) 
+![Status](https://img.shields.io/badge/status-stable-brightgreen) 
+![Version](https://img.shields.io/badge/version-3.0.0-blue) 
 
 ## 🚀 Features
 
