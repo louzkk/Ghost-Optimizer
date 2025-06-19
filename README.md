@@ -16,21 +16,21 @@ Now includes **deep-level optimizations** and a custom **SOCD Cleaner** (like Ra
 
 ## 🚀 Features
 
-✔️ Boosts overall system performance 
-✔️ Lowers RAM, CPU, and disk usage 
-✔️ Optimizes memory management 
-✔️ Applies Khorivie's power plan 
-✔️ Optimizes network for lower latency 
-✔️ Reduces unnecessary background activity 
-✔️ Blocks telemetry from Windows and drivers 
-✔️ Disables tracking services and ads 
-✔️ Fixes common Windows bugs and glitches 
-✔️ Maintains the integrity of Windows files 
-✔️ Clears system temporary memory 
-✔️ Disables automatic background updates 
-✔️ Disables Cortana, Copilot, OneDrive and Widgets 
-✔️ SOCD Cleaner for better input response in competitive gameplay 
-✔️ Include: MSI Util, NVIDIA Profile Inspector 
+✔️ Boosts overall system performance   
+✔️ Lowers RAM, CPU, and disk usage   
+✔️ Optimizes memory management    
+✔️ Applies Khorivie's power plan   
+✔️ Optimizes network for lower latency   
+✔️ Reduces unnecessary background activity   
+✔️ Blocks telemetry from Windows and drivers   
+✔️ Disables tracking services and ads   
+✔️ Fixes common Windows bugs and glitches   
+✔️ Maintains the integrity of Windows files    
+✔️ Clears system temporary memory   
+✔️ Disables automatic background updates   
+✔️ Disables Cortana, Copilot, OneDrive and Widgets   
+✔️ SOCD Cleaner for better input response in competitive gameplay    
+✔️ Include: MSI Util, NVIDIA Profile Inspector   
 
 ## 💻 Requirements
 
