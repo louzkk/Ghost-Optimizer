@@ -1,4 +1,4 @@
-![Banner](./Resourcers/newbanner.png)
+![Banner]([./Resourcers/newbanner.png](https://github.com/louzkk/Ghost-Optimizer/blob/e70941415963195a2192215ff950054b26ade25b/Resources/newbanner.png))
 
 # ⚡ Ghost Optimizer
 
