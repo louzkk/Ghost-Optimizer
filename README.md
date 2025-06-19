@@ -14,16 +14,18 @@ Now includes **deep-level optimizations** and a custom **SOCD Cleaner** (like Ra
 ✔️ Boosts overall system performance  
 ✔️ Lowers RAM, CPU, and disk usage  
 ✔️ Optimizes memory management  
-✔️ Applies Ghost-Optimizer power plan  
+✔️ Applies Khorivie's power plan  
 ✔️ Optimizes network for lower latency  
 ✔️ Reduces unnecessary background activity  
 ✔️ Blocks telemetry from Windows and drivers  
 ✔️ Disables tracking services and ads  
-✔️ Fixes common Windows bugs and glitches  
+✔️ Fixes common Windows bugs and glitches
+✔️ Maintains the integrity of Windows files
 ✔️ Clears system temporary memory  
 ✔️ Disables automatic background updates  
 ✔️ Disables Cortana, Copilot, OneDrive and Widgets  
-✔️ SOCD Cleaner for better input response in competitive gameplay  
+✔️ SOCD Cleaner for better input response in competitive gameplay
+✔️ Include: MSI Util, NVIDIA Profile Inspector.
 
 ## 💻 Requirements
 
@@ -34,8 +36,8 @@ Now includes **deep-level optimizations** and a custom **SOCD Cleaner** (like Ra
 
 ## 📥 How to use
 
-1. Go to the [Releases](https://github.com/louzkk/Ghost-Optimizer/releases) and download **Ghost Optimizer.rar**  
-2. Run as **Administrator**  
+1. Go to the [Releases](https://github.com/louzkk/Ghost-Optimizer/releases) and download **Ghost-Optimizer.rar**  
+2. Run **Ghost-Optimizer.exe** as **Administrator**.
    *(You may need to temporarily disable your antivirus to avoid false positives)*
 
 ## ❤️ Acknowledgements
