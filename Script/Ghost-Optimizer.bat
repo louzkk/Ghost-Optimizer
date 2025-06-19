@@ -1226,13 +1226,13 @@ timeout /t 3 /nobreak >nul
 goto:menu
 
 :socd
-title Ghost Optimizer // Input Cleaner [2/2]
+title Ghost Optimizer // Input Cleaner (Experimental) (AHK v1.1) [1/2]
 @echo off
 cls
 chcp 65001 >nul
 
 echo.
-echo  %p%[ %roxo%•%p% %p%]%w% Do you want to start %p%(%roxo%Ghost%p%)%w% Input Cleaner? %p%(%roxo%Y%p%/%roxo%N%p%)%w%
+echo  %p%[ %roxo%•%p% %p%]%w% Do you want to start %roxo%Ghost Input Cleaner%w%? %p%(%roxo%Y%p%/%roxo%N%p%)%w%
 echo.
 echo  %p%Warning:%w% SOCD Cleaner removes simultaneous opposite keyboard inputs (like left • right),
 echo  simulating precise commands like %g%Razer Snaptap%w% to improve playability in competitive games.
