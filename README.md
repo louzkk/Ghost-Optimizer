@@ -1,3 +1,5 @@
+![Banner](./Resourcers/newbanner.png)
+
 # ⚡ Ghost Optimizer
 
 **Ghost Optimizer** is a free tool to optimize Windows 10 and 11, focused on **performance**, **privacy**, and **competitive games**.
