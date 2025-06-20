@@ -41,7 +41,7 @@ Agora inclui **otimizações em nível profundo** e um **SOCD Cleaner personaliz
 
 ⚠️ Este script aplica alterações em nível de sistema e oferece a opção de criar um ponto de restauração antes de prosseguir.
 
-## 📥 Como usar
+## 📥 Como usar / Baixar
 
 1. Acesse a aba de [Releases](https://github.com/louzkk/Ghost-Optimizer/releases) e baixe o arquivo **Ghost-Optimizer.rar**  
 2. Execute **Ghost-Optimizer.exe** como **Administrador**.  
