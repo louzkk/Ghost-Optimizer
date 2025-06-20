@@ -16,7 +16,7 @@ Now includes **deep-level optimizations** and a custom **SOCD Cleaner** (like Ra
 
 <p align="right">
   <a href="README.ptbr.md">
-    <img src="https://raw.githubusercontent.com/hjnilsson/country-flags/master/png100px/br.png" width="20"/> Versão em Português
+    <img src="https://twemoji.maxcdn.com/v/latest/72x72/1f1e7-1f1f7.png" width="20"/> Versão em Português
   </a>
 </p>
 
