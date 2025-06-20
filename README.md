@@ -14,7 +14,7 @@ Now includes **deep-level optimizations** and a custom **SOCD Cleaner** (like Ra
 ![Status](https://img.shields.io/badge/status-beta-red) 
 ![Version](https://img.shields.io/badge/version-3.0.0-blue) 
 
-[🇺🇸 English](README.md) | [🇧🇷 Português](README.ptbr.md)
+[🇧🇷 Versão em Português](README.ptbr.md)
 
 ## 🚀 Features
 
