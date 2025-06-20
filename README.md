@@ -41,7 +41,7 @@ Now includes **deep-level optimizations** and a custom **SOCD Cleaner** (like Ra
 
 ⚠️ This script applies system-level changes and offers an option to create a system restore point before proceeding.
 
-## 📥 How to use
+## 📥 How to use / Download
 
 1. Go to the [Releases](https://github.com/louzkk/Ghost-Optimizer/releases) and download **Ghost-Optimizer.rar**  
 2. Run **Ghost-Optimizer.exe** as **Administrator**.
