@@ -50,6 +50,7 @@ Now includes **deep-level optimizations** and a custom **SOCD Cleaner** (like Ra
 ## ❤️ Acknowledgements
 
 - Beta Tester: [@MysteryNich](https://github.com/MysteryNich)
+- https://github.com/MarcoRavich/Opendows
 
 ---
 
