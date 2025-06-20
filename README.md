@@ -14,7 +14,11 @@ Now includes **deep-level optimizations** and a custom **SOCD Cleaner** (like Ra
 ![Status](https://img.shields.io/badge/status-beta-red) 
 ![Version](https://img.shields.io/badge/version-3.0.0-blue) 
 
-[<img src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/png100px/br.png" width="16"/> Versão em Português](README.ptbr.md)
+<p align="right">
+  <a href="README.ptbr.md">
+    <img src="https://raw.githubusercontent.com/hjnilsson/country-flags/master/png100px/br.png" width="20"/> Versão em Português
+  </a>
+</p>
 
 ## 🚀 Features
 
