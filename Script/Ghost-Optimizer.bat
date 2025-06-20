@@ -323,7 +323,7 @@ echo  %p%[ %roxo%•%p% %p%]%w% Kernel Optimizations Applied. %p%(%roxo%7%p%)%w%
 
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v FeatureSettingsOverride /t REG_DWORD /d 3 /f >nul
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v FeatureSettingsOverrideMask /t REG_DWORD /d 3 /f >nul
-echo  %p%[ %roxo%•%p% %p%]%w% %r%Spectre/Meltdown%w% algorithms disabled. %p%(%roxo%3%p%)%w%
+echo  %p%[ %roxo%•%p% %p%]%w% %r%Spectre/Meltdown%w% algorithms disabled. %p%(%roxo%2%p%)%w%
 
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v EnableVirtualizationBasedSecurity /t REG_DWORD /d 0 /f >nul 2>nul
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v RequirePlatformSecurityFeatures /t REG_DWORD /d 0 /f >nul 2>nul
