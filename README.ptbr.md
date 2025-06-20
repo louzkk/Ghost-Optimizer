@@ -50,6 +50,7 @@ Agora inclui **otimizações em nível profundo** e um **SOCD Cleaner personaliz
 ## ❤️ Agradecimentos
 
 - Beta Tester: [@MysteryNich](https://github.com/MysteryNich)
+- https://github.com/MarcoRavich/Opendows
 
 ---
 
