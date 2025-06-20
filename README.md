@@ -31,7 +31,7 @@ Now includes **deep-level optimizations** and a custom **SOCD Cleaner** (like Ra
 ✔️ Clears system temporary memory   
 ✔️ Disables automatic background updates   
 ✔️ Disables Cortana, Copilot, OneDrive and Widgets   
-✔️ Input Cleaner for better input response
+✔️ Input Cleaner for better input response  
 ✔️ Include: MSI Util, NVIDIA Profile Inspector   
 
 ## 💻 Requirements
