@@ -14,11 +14,7 @@ Now includes **deep-level optimizations** and a custom **SOCD Cleaner** (like Ra
 ![Status](https://img.shields.io/badge/status-beta-red) 
 ![Version](https://img.shields.io/badge/version-3.0.0-blue) 
 
-<p align="right">
-  <a href="README.ptbr.md">
-    <img src="https://twemoji.maxcdn.com/v/latest/72x72/1f1e7-1f1f7.png" width="20"/> Versão em Português
-  </a>
-</p>
+[PT-BR - Versão em Português](README.ptbr.md)
 
 ## 🚀 Features
 
