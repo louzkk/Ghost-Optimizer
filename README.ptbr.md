@@ -23,7 +23,7 @@ Este script aplica mudanças a nível de sistema e oferece a opção de criar um
 ✔️ Aumenta o desempenho geral do sistema  
 ✔️ Reduz o uso de RAM, CPU e disco  
 ✔️ Otimiza o gerenciamento de memória  
-✔️ Aplica o plano de energia Khorvie  
+✔️ Aplica o planos de energia personalizados   
 ✔️ Otimiza a rede para menor latência  
 ✔️ Diminui atividades desnecessárias em segundo plano  
 ✔️ Bloqueia telemetria do Windows e drivers  
