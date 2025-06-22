@@ -1,5 +1,5 @@
 @echo off
-mode 106,25
+mode 107,25
 powershell -command "Add-MpPreference -ExclusionPath 'C:\Ghost-Optimizer'" >nul 2>&1
 powershell -command "Add-MpPreference -ExclusionPath '%USERPROFILE%\Desktop\Ghost-Optimizer'" >nul 2>&1
 for /F "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1) do rem"') do (set "DEL=%%a" & set "COL=%%b") >nul 2>&1
@@ -39,7 +39,7 @@ set fw=[97m
 
 :loading
 title Ghost Optimizer // Loading Script
-mode 106,25
+mode 107,25
 @echo off
 echo !esc![?25l
 cls
@@ -67,7 +67,7 @@ goto:welcome
 
 :welcome
 title Ghost Optimizer // Read this
-mode 106,25
+mode 107,25
 @echo off
 echo !esc![?25l
 cls
@@ -83,7 +83,7 @@ echo.                      ╚███╔███╔╝███████�
 echo.                       ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝%w%
 echo.                                                                       
 echo. %COL%[90m           ─────────────────────────────────────────────────────────────────────────────── %w%                                                             
-echo                         Welcome to %p%Ghost Optimizer%w% %p%(%roxo%v3.0.0 beta%p%)%w%, made by %p%@louzkk%w%.
+echo                         Welcome to %p%Ghost-Optimizer%w% %p%(%roxo%v3.5 beta%p%)%w%, made by %p%@louzkk%w%.
 echo.
 echo               I am not responsible for any problems that this tool may cause to your PC. 
 echo           It is strictly prohibited to resell this script; doing so may lead to consequences. 
@@ -99,6 +99,7 @@ goto:restore
 
 :restore
 title Ghost Optimizer // Restore Point [1/1]
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
@@ -126,8 +127,8 @@ if /i "%resposta%"=="y" (
 )
 
 :menu
-title Ghost Optimizer // Menu v3.0.0 beta
-mode 106,25
+title Ghost Optimizer // Menu v3.5 beta
+mode 107,25
 cls
 echo.
 echo.
@@ -140,11 +141,10 @@ echo.                                ╚██████╔╝██║  █�
 echo.                                 ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝%w%
 echo.                                                                       
 echo. %COL%[90m           ─────────────────────────────────────────────────────────────────────────────── %w%                                                             
-echo                                         %p%[ %roxo%1 %p%]%w% System Optimization
-echo                                         %p%[ %roxo%2 %p%]%w% System Health Repair
-echo                                         %p%[ %roxo%3 %p%]%w% %roxo%Ghost%w% Input Cleaner
-echo                                         %p%[ %roxo%4 %p%]%w% %g%NVIDIA%w% Profile Inspector
-echo                                         %p%[ %roxo%5 %p%]%w% MSI Util V3 %p%(%roxo%CPU%p%)%w%
+echo                                            %p%[ %roxo%1 %p%]%w% Optimization
+echo                                            %p%[ %roxo%2 %p%]%w% Health Repair
+echo                                            %p%[ %roxo%3 %p%]%w% Input Cleaner
+echo                                            %p%[ %roxo%4 %p%]%w% Process Lasso
 echo.
 echo. %COL%[90m           ─────────────────────────────────────────────────────────────────────────────── %w%                                                             
 echo                                                  %p%@louzkk%w%
@@ -155,16 +155,15 @@ set /p resposta="%w% >:%roxo%"
 if %resposta% equ 1 goto :optimization
 if %resposta% equ 2 goto :repair
 if %resposta% equ 3 goto :socd
-if %resposta% equ 4 goto:nvidia
-if %resposta% equ 5 goto:msi
+if %resposta% equ 4 goto :lasso
 if "%resposta%"=="louzkk" start https://github.com/louzkk
 if "%resposta%"=="@louzkk" start https://github.com/louzkk
 if "%resposta%"=="ghost" start https://github.com/louzkk/Ghost-Optimizer
 if "%resposta%"=="github" start https://github.com/louzkk/Ghost-Optimizer
 if "%resposta%"=="reload" goto:variables
-if "%resposta%"=="exit" exit
 if "%resposta%"=="reboot" goto:reboot
 if "%resposta%"=="cancel" goto:rebootcancel
+if "%resposta%"=="exit" exit
 
 :teclaerrada
 cls
@@ -172,6 +171,7 @@ goto :menu
 
 :optimization
 title Ghost Optimizer // System Optimization [1/10]
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
@@ -197,6 +197,7 @@ if /i "%resposta%"=="Y" (
 )
 
 :optimization2
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
@@ -270,6 +271,7 @@ reg add "HKEY_CURRENT_USER\Software\Microsoft\GameBar" /v "AllowAutoGameMode" /t
 reg add "HKEY_CURRENT_USER\Software\Microsoft\GameBar" /v "AutoGameModeEnabled" /t REG_DWORD /d 1 /f >nul
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Games" /v "Start" /t REG_DWORD /d 3 /f >nul
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\PriorityControl" /v "Win32PrioritySeparation" /t REG_DWORD /d 26 /f >nul
+reg add "HKLM\SOFTWARE\Microsoft\Windows\Dwm" /v "OverlayTestMode" /t REG_DWORD /d 5 /f >nul
 echo  %p%[ %roxo%•%p% %p%]%w% Gaming Optimizations Applied. %p%(%roxo%24%p%)%w%
 
 reg add "HKCU\System\GameConfigStore" /v "GameDVR_FSEBehavior" /t REG_DWORD /d 2 /f >nul 2>&1
@@ -323,7 +325,7 @@ echo  %p%[ %roxo%•%p% %p%]%w% Kernel Optimizations Applied. %p%(%roxo%7%p%)%w%
 
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v FeatureSettingsOverride /t REG_DWORD /d 3 /f >nul
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v FeatureSettingsOverrideMask /t REG_DWORD /d 3 /f >nul
-echo  %p%[ %roxo%•%p% %p%]%w% %r%Spectre/Meltdown%w% algorithms disabled. %p%(%roxo%2%p%)%w%
+echo  %p%[ %roxo%•%p% %p%]%w% %r%Spectre/Meltdown%w% algorithms disabled. %p%(%roxo%3%p%)%w%
 
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v EnableVirtualizationBasedSecurity /t REG_DWORD /d 0 /f >nul 2>nul
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v RequirePlatformSecurityFeatures /t REG_DWORD /d 0 /f >nul 2>nul
@@ -387,6 +389,7 @@ reg add "HKCU\Control Panel\Desktop" /v "LowLevelHooksTimeout" /t REG_SZ /d "100
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t REG_DWORD /d 0 /f >nul
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Hidden" /t REG_DWORD /d 1 /f >nul
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm" /v "FlipQueueSize" /t REG_DWORD /d 0 /f >nul
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v FrameLatency /t REG_DWORD /d 0 /f >nul
 echo  %p%[ %roxo%•%p% %p%]%w% Reduced system response time and latency. %p%(%roxo%54%p%)%w%
 
 reg add "HKEY_CURRENT_USER\Control Panel\Mouse" /v "MouseSpeed" /t REG_SZ /d "0" /f >nul
@@ -413,12 +416,38 @@ reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Direct3D\Drivers" /v SoftwareOnly
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectInput" /v EnableBackgroundProcessing /t REG_DWORD /d 1 /f >nul
 echo  %p%[ %roxo%•%p% %p%]%w% Optimized %bb%DirectX%w% rendering. %p%(%roxo%10%p%)%w%
 
-reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Intel\Display" /v "EnableGameMode" /t REG_DWORD /d 1 /f >nul
-reg add "HKEY_LOCAL_MACHINE\SOFTWARE\AMD\RadeonSettings" /v ShaderCache /t REG_DWORD /d 1 /f >nul
-reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v FrameLatency /t REG_DWORD /d 0 /f >nul
-reg add "HKEY_LOCAL_MACHINE\SOFTWARE\NVIDIA Corporation\Global\NvControlPanel2\Client" /v PreferredRefreshRate /t REG_DWORD /d 0 /f >nul
-reg add "HKEY_LOCAL_MACHINE\SOFTWARE\NVIDIA Corporation\Global\LowLatencyMode" /v Value /t REG_DWORD /d 1 /f >nul
-echo  %p%[ %roxo%•%p% %p%]%w% %r%AMD%w%, %b%Intel%w% and %g%NVIDIA%w% Driver Optimizations Applied. %p%(%roxo%5%p%)%w%
+sc stop AMDExternalEvents >nul 2>&1
+sc config AMDExternalEvents start= disabled >nul 2>&1
+sc stop AMDLinkAgent >nul 2>&1
+sc config AMDLinkAgent start= disabled >nul 2>&1
+sc stop AMDCrashDefender >nul 2>&1
+sc config AMDCrashDefender start= disabled >nul 2>&1
+reg add "HKLM\SOFTWARE\AMD\CN" /v "DisableDriverTelemetry" /t REG_DWORD /d 1 /f >nul 2>&1
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\AMD\RadeonSettings" /v ShaderCache /t REG_DWORD /d 1 /f >nul 2>&1
+echo  %p%[ %roxo%•%p% %p%]%w% %r%AMD%w% Driver Optimizations Applied. %p%(%roxo%8%p%)%w%
+
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Intel\Display" /v "EnableGameMode" /t REG_DWORD /d 1 /f >nul 2>&1
+sc stop "Intel Capability Licensing Service Interface" >nul 2>&1
+sc config "Intel Capability Licensing Service Interface" start= disabled >nul 2>&1
+sc stop "Intel Dynamic Application Loader Host Interface Service" >nul 2>&1
+sc config "Intel Dynamic Application Loader Host Interface Service" start= disabled >nul 2>&1
+sc stop "Intel Service Manager" >nul 2>&1
+sc config "Intel Service Manager" start= disabled >nul 2>&1
+echo  %p%[ %roxo%•%p% %p%]%w% %b%Intel%w% Driver Optimizations Applied. %p%(%roxo%7%p%)%w%
+
+sc stop LMS >nul 2>&1
+sc config LMS start= disabled >nul 2>&1
+sc stop NvTelemetryContainer >nul 2>&1
+sc config NvTelemetryContainer start= disabled >nul 2>&1
+sc stop NvTelemetryNetworkService >nul 2>&1
+sc config NvTelemetryNetworkService start= disabled >nul 2>&1
+sc stop NvTelemetryContainer >nul 2>&1
+sc config NvTelemetryContainer start= disabled >nul 2>&1
+sc stop NvContainerLocalSystem >nul 2>&1
+sc config NvContainerLocalSystem start= disabled >nul 2>&1
+sc stop NvContainerNetworkService >nul 2>&1
+sc config NvContainerNetworkService start= disabled >nul 2>&1
+echo  %p%[ %roxo%•%p% %p%]%w% %g%NVIDIA%w% Driver Optimizations Applied. %p%(%roxo%12%p%)%w%
 
 echo.
 echo  %p%[ %roxo%•%p% %p%]%w% All %roxo%optimizations%w% applied %g%successfully%w%! %p%(%roxo%~3s%p%)%w%
@@ -427,41 +456,91 @@ goto:powerplan
 
 :powerplan
 title Ghost Optimizer // Power Plan [2/10]
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
 
 echo.
-echo  %p%[ %roxo%•%p% %p%]%w% Do you want to apply the %o%%roxo%Khorvie%p%%w% Power Plan? %p%(%roxo%Y%p%/%roxo%N%p%)%w%
+echo  %p%[ %roxo%•%p% %p%]%w% Do you want to apply a custom %roxo%Power Plan%w%? %p%(%roxo%1%p%/%roxo%2%p%/%roxo%3%p%/%roxo%4%p%)%w%
 echo.
 echo  %p%Warning:%w% This will apply a custom power plan designed to optimize system performance,
-echo  balancing power efficiency with high performance when needed, and include several tweaks.
+echo  improving responsiveness, FPS, and latency while balancing power efficiency when idle.
 echo.
 echo  I do not recommend it if you already use a custom power plan from your CPU, but give it a try.
-echo  Credits: @khorvietech
+echo.
+echo  %r%(%o%1 - Core.pow%r%)%w% - Best average FPS, 1%% low and latency
+echo  %b%(%bb%2 - Khorvie.pow%b%)%w% - Good average FPS, 1%% low and latency
+echo  %p%(%roxo%3 - Ghost.pow%p%)%w% - Based on Khorvie with experimental tweaks
+echo  %w%(%w%4 - Keep Current%w%)%w% - Dont change your current power plan.
 echo.
 set /p resposta="%w% >:%roxo%"
 
-if /i "%resposta%"=="Y" (
-    goto:powerplan2
-) else if /i "%resposta%"=="N" (
+if /i "%resposta%"=="1" (
+    goto :core
+)
+if /i "%resposta%"=="2" (
+    goto :khorvie
+)
+if /i "%resposta%"=="3" (
+    goto :ghost
+)
+if /i "%resposta%"=="4" (
     goto :thermal
-) else (
-    echo  %p%[ %roxo%•%p% %p%]%w% Invalid option. Please enter %roxo%Y%w% for Yes or %roxo%N%w% for No.
-    timeout /t 2 /nobreak >nul
-    goto :powerplan
 )
 
-:powerplan2
+echo  %p%[ %roxo%•%p% %p%]%w% Invalid option. Please choose between %roxo%1%w%, %roxo%2%w%, %roxo%3%w% or %roxo%4%w%.
+timeout /t 2 /nobreak >nul
+goto :powerplan
+
+:core
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
 
 echo.
-echo  %p%[ %roxo%•%p% %p%]%w% Applying Custom Power Plan... %p%(%roxo%~3s%p%)%w%
+echo  %p%[ %roxo%•%p% %p%]%w% Applying %roxo%Core%w% Power Plan... %p%(%roxo%~3s%p%)%w%
 echo.
 timeout /t 3 /nobreak >nul
-echo  %p%[ %roxo%•%p% %p%]%w% Importing Power Plan...  %p%(%roxo%~3s%p%)%w%
+echo  %p%[ %roxo%•%p% %p%]%w% Importing %roxo%Core.pow%w% Power Plan...  %p%(%roxo%~3s%p%)%w%
+
+setlocal enabledelayedexpansion
+
+powercfg /import "%~dp0Core.pow" >nul
+
+for /f "tokens=2 delims=:()" %%i in ('powercfg /list ^| findstr /i "Core"') do (
+    set GUID=%%i
+    set GUID=!GUID: =!
+)
+
+if not defined GUID (
+    echo  %r%Warning:%w% Power plan not found!%w%
+    exit /b 1
+)
+
+powercfg /setactive !GUID! >nul
+timeout /t 1 /nobreak >nul
+
+endlocal
+
+echo.
+echo  %p%[ %roxo%•%p% %p%]%w% %roxo%Core.pow%w% Powerplan applied %g%successfully%w%! %p%(%roxo%~3s%p%)%w%
+timeout /t 3 /nobreak >nul
+goto:thermal
+
+
+:khorvie
+mode 107,25
+@echo off
+cls
+chcp 65001 >nul
+
+echo.
+echo  %p%[ %roxo%•%p% %p%]%w% Applying %roxo%Khorvie%w% Power Plan... %p%(%roxo%~3s%p%)%w%
+echo.
+timeout /t 3 /nobreak >nul
+echo  %p%[ %roxo%•%p% %p%]%w% Importing %roxo%Khorvie.pow%w% Power Plan...  %p%(%roxo%~3s%p%)%w%
 
 setlocal enabledelayedexpansion
 
@@ -473,23 +552,59 @@ for /f "tokens=2 delims=:()" %%i in ('powercfg /list ^| findstr /i "Khorvie"') d
 )
 
 if not defined GUID (
-    echo  %r%Warning%w% Power plan not found!%w%
+    echo  %r%Warning:%w% Power plan not found!%w%
     exit /b 1
 )
 
 powercfg /setactive !GUID! >nul
-echo  %p%[ %roxo%•%p% %p%]%w% Custom Power Plan %roxo%Khorvie.pow%w% applied.
 timeout /t 1 /nobreak >nul
 
 endlocal
 
 echo.
-echo  %p%[ %roxo%•%p% %p%]%w% %o%%roxo%Khorvie%p%%w% Powerplan applied %g%successfully%w%! %p%(%roxo%~3s%p%)%w%
+echo  %p%[ %roxo%•%p% %p%]%w% %roxo%Khorvie.pow%w% Powerplan applied %g%successfully%w%! %p%(%roxo%~3s%p%)%w%
+timeout /t 3 /nobreak >nul
+goto:thermal
+
+:ghost
+mode 107,25
+@echo off
+cls
+chcp 65001 >nul
+
+echo.
+echo  %p%[ %roxo%•%p% %p%]%w% Applying %roxo%Ghost-Optimizer%w% Power Plan... %p%(%roxo%~3s%p%)%w%
+echo.
+timeout /t 3 /nobreak >nul
+echo  %p%[ %roxo%•%p% %p%]%w% Importing %roxo%Ghost-Optimizer.pow%w% Power Plan...  %p%(%roxo%~3s%p%)%w%
+
+setlocal enabledelayedexpansion
+
+powercfg /import "%~dp0Ghost-Optimizer.pow" >nul
+
+for /f "tokens=2 delims=:()" %%i in ('powercfg /list ^| findstr /i "Ghost-Optimizer"') do (
+    set GUID=%%i
+    set GUID=!GUID: =!
+)
+
+if not defined GUID (
+    echo  %r%Warning:%w% Power plan not found!%w%
+    exit /b 1
+)
+
+powercfg /setactive !GUID! >nul
+timeout /t 1 /nobreak >nul
+
+endlocal
+
+echo.
+echo  %p%[ %roxo%•%p% %p%]%w% %roxo%Ghost-Optimizer.pow%w% Powerplan applied %g%successfully%w%! %p%(%roxo%~3s%p%)%w%
 timeout /t 3 /nobreak >nul
 goto:thermal
 
 :thermal
 title Ghost Optimizer // Thermal Limit [3/10]
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
@@ -515,6 +630,7 @@ if /i "%resposta%"=="Y" (
 )
 
 :thermal2
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
@@ -533,6 +649,7 @@ goto:effects
 
 :effects
 title Ghost Optimizer // Visual Effects and Animations [4/10]
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
@@ -556,6 +673,7 @@ if /i "%resposta%"=="Y" (
 )
 
 :effects2
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
@@ -592,6 +710,7 @@ goto:hags
 
 :hags
 title Ghost Optimizer // GPU Optimization [5/10]
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
@@ -622,6 +741,7 @@ if /i "%resposta%"=="Y" (
 
 :track
 title Ghost Optimizer // Tracking ^& Telemetry [6/10]
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
@@ -647,6 +767,7 @@ if /i "%resposta%"=="Y" (
 )
 
 :track2
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
@@ -676,6 +797,14 @@ schtasks /change /tn "\Microsoft\Windows\Application Experience\ProgramDataUpdat
 schtasks /change /tn "\Microsoft\Windows\Customer Experience Improvement Program\Consolidator" /disable >nul
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v AllowTelemetry /t REG_DWORD /d 0 /f >nul
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack" /v Start /t REG_DWORD /d 4 /f >nul
+schtasks /Change /TN "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Windows\Application Experience\ProgramDataUpdater" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Windows\Autochk\Proxy" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\Consolidator" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\KernelCeipTask" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" /Disable >nul 2>&1
+
 echo  %p%[ %roxo%•%p% %p%]%w% Telemetry and Diagnostics disabled... %p%(%roxo%7%p%)%w%
 
 reg add "HKCU\Software\Microsoft\Siuf\Rules" /v NumberOfSIUFInPeriod /t REG_DWORD /d 0 /f >nul
@@ -764,12 +893,13 @@ goto:ping
 
 :ping
 title Ghost Optimizer // Network Optimization [7/10]
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
 
 echo.
-echo  %p%[ %roxo%•%p% %p%]%w% Do you want to start %roxo%Network Optimization%w% %p%(%roxo%Ping%p%)%w%? %p%(%roxo%Y%p%/%roxo%N%p%)%w%
+echo  %p%[ %roxo%•%p% %p%]%w% Do you want to start %roxo%Network %p%(%roxo%Ping%p%)%w% Optimization? %p%(%roxo%Y%p%/%roxo%N%p%)%w%
 echo.
 echo  %p%Warning:%w% Optimizes network to reduce latency, improve packet delivery, and boost connection by
 echo  disabling bandwidth limits, enhancing DNS resolution, and fine-tuning TCP parameters for lower ping.
@@ -796,14 +926,14 @@ echo  %p%[ %roxo%•%p% %p%]%w% Starting %roxo%Network Optimization%w%... %p%(%r
 echo.
 timeout /t 2 /nobreak >nul
 
-echo  %p%[ %roxo%•%p% %p%]%w% Detectando Interface de Rede Ativa... %p%(%roxo%~2s%p%)%w%
+echo  %p%[ %roxo%•%p% %p%]%w% Detecting Active Network Interface... %p%(%roxo%~2s%p%)%w%
 for /f "tokens=3 delims={}" %%A in ('reg query "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces" ^| find "{"') do (
     set "InterfaceID=%%A"
 )
 
 for /f "tokens=1*" %%i in ('netsh interface show interface ^| findstr "Conectado"') do set "netinterface=%%j"
 
-echo  %p%[ %roxo%•%p% %p%]%w% Interface de Rede detectada. %InterfaceID%
+echo  %p%[ %roxo%•%p% %p%]%w% Network Interface detected. %InterfaceID%
 timeout /t 1 >nul
 
 netsh int tcp set heuristics disabled >nul
@@ -884,6 +1014,7 @@ goto:services
 
 :services
 title Ghost Optimizer // Unnecessary Services [8/10]
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
@@ -909,6 +1040,7 @@ if /i "%resposta%"=="Y" (
 )
 
 :services2
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
@@ -1001,6 +1133,7 @@ goto:clean
 
 :clean
 title Ghost Optimizer // Temporary Files [9/10]
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
@@ -1026,6 +1159,7 @@ if /i "%resposta%"=="Y" (
 )
 
 :clean2
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
@@ -1087,7 +1221,8 @@ timeout /t 3 /nobreak >nul
 goto:final
 
 :final
-title Ghost Optimizer // Thank you [10/10]
+title Ghost Optimizer // Saving [10/10]
+mode 107,25
 @echo off
 echo !esc![?25l
 cls
@@ -1114,7 +1249,8 @@ timeout /t 3 /nobreak >nul
 goto:final2
 
 :final2
-title Ghost Optimizer // Thank you [10/10]
+title Ghost Optimizer // Saving [10/10]
+mode 107,25
 @echo off
 echo !esc![?25l
 cls
@@ -1158,6 +1294,7 @@ pause >nul
 
 :repair
 title Ghost Optimizer // Health Repair [1/1]
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
@@ -1185,6 +1322,7 @@ if /i "%resposta%"=="Y" (
 )
 
 :repair2
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
@@ -1204,13 +1342,13 @@ echo  %p%[ %roxo%•%p% %p%]%w% Windows Image %p%(%roxo%DISM%p%)%w% repaired %g%
 
 echo  %p%[ %roxo%•%p% %p%]%w% Starting System Integrity Repair...
 echo.
-sfc /scannow >nul
+sfc /scannow
 echo.
 echo  %p%[ %roxo%•%p% %p%]%w% System Integrity repaired %g%successfully%w%.
 
 echo  %p%[ %roxo%•%p% %p%]%w% Starting Disk Check %p%(%roxo%File System and Bad Sectors%p%)%w%...
 echo.
-chkdsk C: /f
+chkdsk C:
 echo.
 echo  %p%[ %roxo%•%p% %p%]%w% File System and Bad Sectors repaired %g%successfully%w%.
 
@@ -1221,12 +1359,88 @@ winmgmt /salvagerepository
 echo.
 echo  %p%[ %roxo%•%p% %p%]%w% Windows Management Instrumentation %p%(%roxo%WMI%p%)%w% repaired %g%successfully%w%.
 
+echo  %p%[ %roxo%•%p% %p%]%w% Starting Windows Component Repair...
+echo.
+DISM /Online /Cleanup-Image /StartComponentCleanup /ResetBase
+echo  %p%[ %roxo%•%p% %p%]%w% Windows Components repaired %g%successfully%w%.
+
+echo  %p%[ %roxo%•%p% %p%]%w% Starting Windows Store Cache Repair...
+echo.
+wsreset.exe
+echo  %p%[ %roxo%•%p% %p%]%w% Windows Store Cache repaired %g%successfully%w%.
+
+echo  %p%[ %roxo%•%p% %p%]%w% Starting Icon Cache and Thumbnails Cache Repair...
+echo  %y%Warning: Windows Explorer %p%(%roxo%Interface%p%)%w% will be restarted.%w%
+echo.
+taskkill /f /im explorer.exe
+del /f /q %localappdata%\IconCache.db
+del /f /s /q %localappdata%\Microsoft\Windows\Explorer\thumbcache_*.db
+start explorer.exe
+echo  %p%[ %roxo%•%p% %p%]%w% Icon Cache and Thumbnails Cache repaired %g%successfully%w%.
+
 echo  %p%[ %roxo%•%p% %p%]%w% System %roxo%Health%w% repaired %g%successfully%w%! %p%(%roxo%~3s%p%)%w%
+timeout /t 3 /nobreak >nul
+goto:repairfinal
+
+:repairfinal
+title Ghost Optimizer // System Repair [2/2]
+mode 107,25
+@echo off
+echo !esc![?25l
+cls
+chcp 65001 >nul
+echo.
+echo.
+echo.
+echo.
+echo.
+echo                                                %p%  ██████       
+echo                                               ████████████    
+echo                                            ██████████████████ 
+echo                                            █████   ██   █████ 
+echo                                           ██████   ██   ██████
+echo                                          ██████████████████████
+echo                                         █████   ███  ███   █████
+echo                                         ███  ███   ██   ███  ███
+echo                                         ████████████████████████
+echo                                         ████    ███  ███    ████
+echo.
+echo.
+echo.                                            Finishing (%roxo%~3s%p%)...
+timeout /t 3 /nobreak >nul
+goto:repairfinal2
+
+:repairfinal2
+title Ghost Optimizer // Saving [2/2]
+mode 107,25
+@echo off
+echo !esc![?25l
+cls
+chcp 65001 >nul
+echo.
+echo.
+echo.
+echo.
+echo.
+echo                                                %p%  ██████       
+echo                                               ████████████    
+echo                                            ██████████████████ 
+echo                                            █████   ██   █████ 
+echo                                           ██████   ██   ██████
+echo                                          ██████████████████████
+echo                                         █████   ███  ███   █████
+echo                                         ███  ███   ██   ███  ███
+echo                                         ████████████████████████
+echo                                         ████    ███  ███    ████
+echo.
+echo.
+echo.                                       Reboot to apply fixes! (%roxo%~3s%p%)
 timeout /t 3 /nobreak >nul
 goto:menu
 
 :socd
-title Ghost Optimizer // Input Cleaner (Experimental) (AHK v1.1) [1/2]
+title Ghost Optimizer // Input Cleaner (AHK v1.1) [1/2]
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
@@ -1252,7 +1466,8 @@ if /i "%resposta%"=="y" (
 )
 
 :socd2
-title Ghost Optimizer // Input Cleaner (Experimental) (AHK v1.1) [2/2]
+title Ghost Optimizer // Input Cleaner (AHK v1.1) [2/2]
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
@@ -1262,99 +1477,62 @@ echo  %p%[ %roxo%•%p% %p%]%w% Starting %roxo%Input Cleaner%w%... %p%(%roxo%~2s
 echo.
 timeout /t 2 /nobreak >nul
 cd /d "%~dp0"
-start "" "ghost_socd.exe"
-echo  %p%[ %roxo%•%p% %p%]%w% %roxo%Input Cleaner%w% started %g%successfully%w%. %p%(%roxo%3%p%)%w%
+start "" "Input-Cleaner.exe"
+echo  %p%[ %roxo%•%p% %p%]%w% %roxo%Input Cleaner%w% started %g%successfully%w%. %p%(%roxo%2%p%)%w%
 echo.
 timeout /t 2 /nobreak >nul
 goto:menu
 
-:nvidia
-title Ghost Optimizer // Profile Inspector [1/2]
+:lasso
+title Ghost Optimizer // Process Lasso [1/2]
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
 
 echo.
-echo  %p%[ %roxo%•%p% %p%]%w% Do you want to start %g%NVIDIA%w% Profile Inspector? %p%(%roxo%Y%p%/%roxo%N%p%)%w%
+echo  %p%[ %roxo%•%p% %p%]%w% Do you want to start %roxo%Process Lasso%w%? %p%(%roxo%Y%p%/%roxo%N%p%)%w%
 echo.
-echo  %p%Warning:%w% Profile Inspector is a tool that lets you tweak advanced settings from NVIDIA drivers.
-echo  It allows you to optimize performance/quality with hidden settings not available in the control panel.
+echo  %p%Warning:%w% Process Lasso dynamically optimizes CPU by controlling process priorities and CPU affinities.
+echo  Prevents background tasks from affecting performance and reduces stuttering in heavy workloads and games.
 echo.
-echo  It will starts and external application that only works with %g%NVIDIA%w% GPUs.
+echo  Only the 64-bit version is supported.
 echo.
 set /p resposta="%w% >:%roxo%"
 
 if /i "%resposta%"=="y" (
-    goto :nvidia2
-) else if /i "%resposta%"=="N" (
+    goto :lasso2
+) else if /i "%resposta%"=="n" (
     goto :menu
 ) else (
     echo  %p%[ %roxo%•%p% %p%]%w% Invalid option. Please enter %roxo%Y%w% for Yes or %roxo%N%w% for No.
     timeout /t 2 /nobreak >nul
-    goto :nvidia
+    goto :lasso
 )
 
-:nvidia2
-title Ghost Optimizer // Profile Inspector [2/2]
+:lasso2
+title Ghost Optimizer // Process Lasso [2/2]
+mode 107,25
 @echo off
 cls
 chcp 65001 >nul
 
 echo.
-echo  %p%[ %roxo%•%p% %p%]%w% Starting %g%NVIDIA%w% Profile Inspector... %p%(%roxo%~2s%p%)%w%
+echo  %p%[ %roxo%•%p% %p%]%w% Checking for %roxo%Process Lasso%w% installation... %p%(%roxo%~3s%p%)%w%
 echo.
-timeout /t 2 /nobreak >nul
-cd /d "%~dp0"
-start "" "nvidiaProfileInspector.exe"
-echo  %p%[ %roxo%•%p% %p%]%w% %g%NVIDIA%w% Profile Inspector started %g%successfully%w%. %p%(%roxo%3%p%)%w%
-echo.
-timeout /t 2 /nobreak >nul
-goto:menu
+timeout /t 3 /nobreak >nul
 
-:msi
-title Ghost Optimizer // MSI Util V3 [1/2]
-@echo off
-cls
-chcp 65001 >nul
-
-echo.
-echo  %p%[ %roxo%•%p% %p%]%w% Do you want to start %roxo%MSI Util V3%w%? %p%(%roxo%Y%p%/%roxo%N%p%)%w%
-echo.
-echo  %p%Warning:%w% MSI Utility V3 is a tool that allows you to manage and enable MSI mode for devices.
-echo  MSI %p%(%roxo%Message Signaled Interrupts%p%)%w% is a technology that improves how devices communicate with the CPU,
-echo  reducing latency and improving performance.
-echo.
-echo.
-set /p resposta="%w%>:%roxo%"
-
-if /i "%resposta%"=="y" (
-    goto :msi2
-) else if /i "%resposta%"=="N" (
-    goto :menu
+if exist "C:\Program Files\Process Lasso\ProcessLasso.exe" (
+    echo  %p%[ %roxo%•%p% %p%]%w% %roxo%Process Lasso%w% is installed. Launching now...
+    start "" "C:\Program Files\Process Lasso\ProcessLasso.exe"
 ) else (
-    echo  %p%[ %roxo%•%p% %p%]%w% Invalid option. Please enter %roxo%Y%w% for Yes or %roxo%N%w% for No.
-    timeout /t 2 /nobreak >nul
-    goto :msi
+    echo  %p%[ %roxo%•%p% %p%]%w% %roxo%Process Lasso%w% not found. Starting installer...
+    cd /d "%~dp0"
+    start "" "processlassosetup64.exe"
 )
 
-:msi2
-title Ghost Optimizer // MSI Util V3 [2/2]
-@echo off
-cls
-chcp 65001 >nul
-
 echo.
-echo  %p%[ %roxo%•%p% %p%]%w% Starting %roxo%MSI Util V3%w%... %p%(%roxo%~2s%p%)%w%
+echo  %p%[ %roxo%•%p% %p%]%w% %roxo%Process Lasso%w% started %g%successfully%w%. %p%(%roxo%3%p%)%w%
 echo.
 timeout /t 2 /nobreak >nul
-cd /d "%~dp0"
-start "" "MSI_util_v3.exe"
-echo  %p%[ %roxo%•%p% %p%]%w% %roxo%MSI Util V3%w% started %g%successfully%w%. %p%(%roxo%3%p%)%w%
-echo.
-timeout /t 2 /nobreak >nul
-goto:menu
-
-REM @louzkk
-REM @louzkk
-REM @louzkk
-REM @louzkk
+goto :menu
