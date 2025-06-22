@@ -61,7 +61,7 @@ Este script aplica mudanças a nível de sistema e oferece a opção de criar um
 Quer ainda mais desempenho além do Ghost-Optimizer? Veja algumas dicas para o hardware:  
 
 - **Undervolt:** Reduza a voltagem da CPU/GPU para diminuir temperatura e evitar throttling. (ThrottleStop, Ryzen Master ou XTU)  
-- **Overclock:** Aumente o clock da CPU, GPU ou RAM para ganhar desempenho (Afterburner ou Adrenalin)  
+- **Overclock:** Aumente o clock da CPU, GPU ou RAM para ganhar desempenho (Afterburner, GPU Tweak III ou Adrenalin)  
 - **Mantenha Tudo Atualizado:** Windows, BIOS e drivers sempre nas últimas versões.  
 - **Manutenção de Hardware:** Limpe poeira, troque pasta térmica e melhore o fluxo de ar.
 
