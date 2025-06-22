@@ -8,6 +8,7 @@ It removes bloatware, disables unnecessary services, blocks telemetry/ads, optim
 Ideal for those who want **more FPS in games**, **less resource usage**, and **lower ping** — whether on low-end or high-end PCs.
 
 Now includes **deep-level optimizations** and a custom **SOCD Cleaner** (like Razer Snaptap), which fixes multi-key inputs to avoid blocking or delay — improving movement control in competitive games.
+This script applies system-level changes and offers an option to create a system restore point before proceeding.
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg) 
 ![Platform](https://img.shields.io/badge/platform-Windows-blue) 
@@ -15,6 +16,7 @@ Now includes **deep-level optimizations** and a custom **SOCD Cleaner** (like Ra
 ![Version](https://img.shields.io/badge/version-3.0.0-blue) 
 
 [Alterar para Português (PT-BR)](README.ptbr.md)
+
 
 ## 🚀 Features
 
@@ -32,14 +34,14 @@ Now includes **deep-level optimizations** and a custom **SOCD Cleaner** (like Ra
 ✔️ Disables automatic background updates   
 ✔️ Disables Cortana, Copilot, OneDrive and Widgets   
 ✔️ Input Cleaner for better input response  
-✔️ Include: MSI Util, NVIDIA Profile Inspector   
+✔️ Include: Process Lasso   
+
 
 ## 💻 Requirements
 
 - Windows 10 or 11  
 - 32/64-bit operating system  
 
-⚠️ This script applies system-level changes and offers an option to create a system restore point before proceeding.
 
 ## 📥 How to use / Download
 
@@ -47,10 +49,21 @@ Now includes **deep-level optimizations** and a custom **SOCD Cleaner** (like Ra
 2. Run **Ghost-Optimizer.exe** as **Administrator**.
    *(You may need to temporarily disable your antivirus to avoid false positives)*
 
+
 ## ❤️ Acknowledgements
 
 - Beta Tester: [@MysteryNich](https://github.com/MysteryNich)
 - https://github.com/MarcoRavich/Opendows
+
+
+## 🔧 Take It Even Further
+
+Want even more performance outside of Ghost-Optimizer? Here are some things you can do on the hardware side:  
+
+- **Undervolt:** Lower CPU/GPU voltage to reduce temps, avoid throttling. (ThrottleStop, Ryzen Master or XTU)
+- **Overclock:** Push your CPU, GPU, or RAM clock for performance boost (Afterburner or Adrenalin)
+- **Keep Everything Updated:** Latest Windows, BIOS, and driver updates.
+- **Hardware Maintenance:** Clean dust, replace thermal paste, and improve airflow.
 
 ---
 
