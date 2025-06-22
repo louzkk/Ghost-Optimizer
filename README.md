@@ -13,7 +13,7 @@ This script applies system-level changes and offers an option to create a system
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg) 
 ![Platform](https://img.shields.io/badge/platform-Windows-blue) 
 ![Status](https://img.shields.io/badge/status-beta-red) 
-![Version](https://img.shields.io/badge/version-3.0.0-blue) 
+![Version](https://img.shields.io/badge/version-3.5-blue) 
 
 [Alterar para Português (PT-BR)](README.ptbr.md)
 
