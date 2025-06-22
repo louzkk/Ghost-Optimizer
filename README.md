@@ -56,7 +56,7 @@ This script applies system-level changes and offers an option to create a system
 - https://github.com/MarcoRavich/Opendows
 
 
-## 🔧 Take It Even Further
+## 🔧 Hardware Optimization
 
 Want even more performance outside of Ghost-Optimizer? Here are some things you can do on the hardware side:  
 
