@@ -23,7 +23,7 @@ This script applies system-level changes and offers an option to create a system
 ✔️ Boosts overall system performance   
 ✔️ Lowers RAM, CPU, and disk usage   
 ✔️ Optimizes memory management    
-✔️ Applies Khorvie's power plan   
+✔️ Applies custom power plans   
 ✔️ Optimizes network for lower latency   
 ✔️ Reduces unnecessary background activity   
 ✔️ Blocks telemetry from Windows and drivers   
