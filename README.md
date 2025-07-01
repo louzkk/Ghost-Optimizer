@@ -40,7 +40,8 @@ This script applies system-level changes and offers an option to create a system
 ## 💻 Requirements
 
 - Windows 10 or 11  
-- 32/64-bit operating system  
+- 32/64-bit operating system
+- Windows CMD or Windows Terminal
 
 
 ## 📥 How to use / Download
