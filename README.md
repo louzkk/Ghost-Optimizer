@@ -20,7 +20,7 @@ Whether you're on a low-end laptop or a high-end PC, Ghost Optimizer helps you g
 <p align="right"><a href="README.ptbr.md">Switch to Portuguese (PT-BR)</a></p>
 
 ---
-![Preview](Resources/Preview2.png)
+![Preview](Resources/preview2.png)
 ---
 
 ## ⚙️ Features
