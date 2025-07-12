@@ -38,6 +38,8 @@ set bn=[1;38;5;129m
 set ha=[38;5;203m
 set frr=[38;2;0;255;255m
 set fw=[97m
+set z=[97;45m
+set reset=[0m
 
 :loading
 title Ghost-Optimizer // Loading Script
@@ -86,7 +88,7 @@ echo.                      ╚███╔███╔╝███████�
 echo.                       ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝%w%
 echo.                                                                       
 echo. %COL%[90m           ─────────────────────────────────────────────────────────────────────────────── %w%                                                             
-echo                         Welcome to %p%Ghost-Optimizer%w% %p%(%roxo%v3.6%p%)%w%, made by %p%@louzkk%w%.
+echo                         Welcome to %p%Ghost-Optimizer%w% %p%(%roxo%v3.6.2%p%)%w%, made by %p%@louzkk%w%.
 echo.
 echo                I am not responsible for any problems that this tool may cause to your PC
 echo           It is strictly prohibited to resell this script; doing so may lead to consequences
@@ -94,11 +96,13 @@ echo           To select an option, type the corresponding number on your keyboa
 echo                     Make sure to carefully read all warnings, titles, and messages
 echo.
 echo          Minimizing the script may cause bugs in the flow, so it is recommended to keep it open
+echo                         This Script is designed to run on Windows %roxo%10%w% and %roxo%11%w%
 echo.
 echo                            Press any key to first create a restore point...
 echo.
 echo. %COL%[90m           ─────────────────────────────────────────────────────────────────────────────── %w%                                                                                                   
 set /p answer=""
+if exist "%appdata%\GhostOptimizerFirstRun.txt" goto menu
 goto:restore
 
 :restore
@@ -111,23 +115,24 @@ chcp 65001 >nul
 echo.
 echo  %p%[ %roxo%•%p% %p%]%w% You want to create a Restore Point first? %p%(%roxo%Y%p%/%roxo%N%p%)%w%
 echo.
-echo  %p%Warning:%w% If any optimization causes any problem in the system or disables something important,
-echo  you can restore the system to the previous state without losing files.
+echo  %p%Warning:%w% %z%If any optimization causes any problem%reset% in the system or disables something important,
+echo  %z%you can restore the system%reset% to the previous state without losing files.
 echo.
 echo  This script does not include an option to revert the optimizations.
+echo  To create a restore point, you can type %roxo%create%w% in Main Menu.
 echo  To restore the system, you can type %roxo%restore%w% in Main Menu.
 echo.
 set /p answer="%w% >:%roxo%"
 
 if /i "%answer%"=="y" (
     start /wait SystemPropertiesProtection.exe
+    echo FirstRunDone>"%appdata%\GhostOptimizerFirstRun.txt"
+    attrib +h "%appdata%\GhostOptimizerFirstRun.txt"
     goto :menu
 ) else if /i "%answer%"=="N" (
+    echo FirstRunDone>"%appdata%\GhostOptimizerFirstRun.txt"
+    attrib +h "%appdata%\GhostOptimizerFirstRun.txt"
     goto :menu
-) else (
-    echo  %p%[ %roxo%•%p% %p%]%w% Invalid option. Please enter %roxo%Y%w% for Yes or %roxo%N%w% for No.
-    timeout /t 2 /nobreak >nul
-    goto :restore
 )
 
 :menu
@@ -174,6 +179,7 @@ if "%answer%"=="ipconfig" goto:ipconfig
 if "%answer%"=="systeminfo" goto:systeminfo
 if "%answer%"=="taskinfo" goto:taskinfo
 if "%answer%"=="restore" start /wait rstrui.exe
+if "%answer%"=="create" start /wait SystemPropertiesProtection.exe
 
 :wronginput
 goto:menu
@@ -287,7 +293,7 @@ chcp 65001 >nul
 echo.
 echo  %p%[ %roxo%•%p% %p%]%w% Do you want to start %roxo%General%w%/%roxo%Advanced%w% Optimizations? %p%(%roxo%Y%p%/%roxo%N%p%)%w%
 echo.
-echo  %p%Warning:%w% The script optimizes Windows with regedits, improving overall performance,
+echo  %p%Warning:%w% The script optimizes Windows with regedits, %z%improving overall performance,%reset%
 echo  reducing resource usage, latency and input lag, as well as improving gaming performance.
 echo.
 echo  %p%Recommended:%w% Perform basic and advanced system optimizations for better performance %p%(%roxo%Y%p%)%w%
@@ -339,7 +345,19 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" 
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /v ExcludeWUDriversInQualityUpdate /t REG_DWORD /d 1 /f >nul 2>nul
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\DriverSearching" /v SearchOrderConfig /t REG_DWORD /d 0 /f >nul 2>nul
 fsutil behavior set DisableDeleteNotify 0 >nul 2>nul
-echo  %p%[ %roxo%•%p% %p%]%w% General System Optimizations Applied. %p%(%roxo%30%p%)%w%
+fsutil behavior set memoryusage 2 >nul 2>nul
+fsutil behavior set mftzone 4 >nul 2>nul
+fsutil behavior set disablelastaccess 1 >nul 2>nul
+fsutil behavior set disabledeletenotify 0 >nul 2>nul
+fsutil behavior set encryptpagingfile 0 >nul 2>nul
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Internet Explorer\Main" /v "DEPOff" /t REG_DWORD /d "1" /f >nul 2>nul
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "BingSearchEnabled" /t REG_DWORD /d "0" /f >nul 2>nul
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" /v "Disabled" /t REG_DWORD /d "1" /f >nul 2>nul
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" /v "DoReport" /t REG_DWORD /d "0" /f >nul 2>nul
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" /v "LoggingDisabled" /t REG_DWORD /d "1" /f >nul 2>nul
+reg add "HKLM\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting" /v "DoReport" /t REG_DWORD /d "0" /f >nul 2>nul
+reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v "Disabled" /t REG_DWORD /d "1" /f >nul 2>nul
+echo  %p%[ %roxo%•%p% %p%]%w% General System Optimizations Applied. %p%(%roxo%42%p%)%w%
 
 wmic computersystem >nul 2>&1
 wmic computersystem where name="%computername%" set AutomaticManagedPagefile=True >nul 2>&1
@@ -428,7 +446,7 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "Monito
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "TransitionLatency" /t REG_DWORD /d 1 /f >nul
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoComplete" /v "Append Completion" /t REG_SZ /d "yes" /f >nul
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoComplete" /v "AutoSuggest" /t REG_SZ /d "yes" /f >nul
-reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v MenuShowDelay /t REG_SZ /d 10 /f >nul
+reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "MenuShowDelay" /t REG_SZ /d 0 /f >nul
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v ExtendedUIHoverTime /t REG_DWORD /d 0 /f >nul
 reg add "HKCU\Control Panel\Mouse" /v "MouseHoverTime" /t REG_SZ /d "10" /f >nul
 reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v MouseHoverTime /t REG_SZ /d 10 /f >nul
@@ -584,7 +602,7 @@ chcp 65001 >nul
 echo.
 echo  %p%[ %roxo%•%p% %p%]%w% Do you want to apply a custom %roxo%Power Plan%w%? %p%(%roxo%1%p%/%roxo%2%p%/%roxo%3%p%/%roxo%4%p%%p%/%roxo%N%p%)%w%
 echo.
-echo  %p%Warning:%w% This will apply a custom power plan designed to optimize system performance,
+echo  %p%Warning:%w% This will apply a custom power plan designed to %z%optimize system performance,%reset%
 echo  improving responsiveness, FPS, and latency while balancing power efficiency when idle.
 echo.
 echo  %p%Recommended%w% Chose a power plan based on your system's capabilities and needs.
@@ -883,7 +901,7 @@ echo.
 echo  %p%Warning:%w% The GPU scheduler %p%(%roxo%HwSchMode%p%)%w% lets the GPU handle its own task
 echo  scheduling, reducing CPU load and potentially improving performance and latency.
 echo.
-echo  %p%Recommended:%w% It's relative, in some systems there may be improvements, in others there may be stuttering.
+echo  %p%Recommended:%w% It's relative, in some systems there may be stuttering.
 echo.
 set /p answer="%w% >:%roxo%"
 
@@ -920,7 +938,7 @@ echo.
 echo  %p%[ %roxo%•%p% %p%]%w% Do you want to disable and block %roxo%Tracking %w%^& %roxo%Telemetry%w%? %p%(%roxo%Y%p%/%roxo%N%p%)%w%
 echo.
 echo  %p%Warning:%w% Disables Windows telemetry, tracking services, diagnostics, location
-echo  and targeted ads while improving system privacy by blocking data collection and telemetry domains.
+echo  and targeted ads while %z%improving system privacy%reset% by blocking data collection and telemetry domains.
 echo.
 echo  %p%Recommended%w% Proceed %p%(%roxo%Y%p%)%w% for better privacy and less resource usage.
 echo.
@@ -974,8 +992,8 @@ schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\
 schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\KernelCeipTask" /Disable >nul 2>&1
 schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" /Disable >nul 2>&1
 schtasks /Change /TN "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" /Disable >nul 2>&1
-
-echo  %p%[ %roxo%•%p% %p%]%w% Telemetry and Diagnostics disabled... %p%(%roxo%7%p%)%w%
+reg add "HKLM\SOFTWARE\Policies\Microsoft\FVE" /v "DisableExternalDMAUnderLock" /t REG_DWORD /d "0" /f >nul 2>&1
+echo  %p%[ %roxo%•%p% %p%]%w% Telemetry and Diagnostics disabled... %p%(%roxo%8%p%)%w%
 
 reg add "HKCU\Software\Microsoft\Siuf\Rules" /v NumberOfSIUFInPeriod /t REG_DWORD /d 0 /f >nul
 reg add "HKCU\Software\Microsoft\Siuf\Rules" /v PeriodInDays /t REG_DWORD /d 0 /f >nul
@@ -1039,6 +1057,18 @@ echo  %p%[ %roxo%•%p% %p%]%w% Microsoft Edge Webview tracking disabled. %p%(%r
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\NVIDIA Corporation\Global\NvTelemetry" /v "Enabled" /t REG_DWORD /d 0 /f >nul
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\AMD\ACE\Settings\General" /v "EnableTelemetry" /t REG_DWORD /d 0 /f >nul
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Intel\Display\igfxcui\Telemetry" /v "EnableTelemetry" /t REG_DWORD /d 0 /f >nul
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "NvBackend" /f >nul 2>nul
+reg add "HKLM\SOFTWARE\NVIDIA Corporation\NvControlPanel2\Client" /v "OptInOrOutPreference" /t REG_DWORD /d "0" /f >nul 2>nul
+reg add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID66610" /t REG_DWORD /d "0" /f >nul 2>nul
+reg add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID64640" /t REG_DWORD /d "0" /f >nul 2>nul
+reg add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID44231" /t REG_DWORD /d "0" /f >nul 2>nul
+schtasks /change /disable /tn "NvTmRep_CrashReport1_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >nul 2>nul
+schtasks /change /disable /tn "NvTmRep_CrashReport2_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >nul 2>nul
+schtasks /change /disable /tn "NvTmRep_CrashReport3_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >nul 2>nul
+schtasks /change /disable /tn "NvTmRep_CrashReport4_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >nul 2>nul
+schtasks /change /disable /tn "NvDriverUpdateCheckDaily_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >nul 2>nul
+schtasks /change /disable /tn "NVIDIA GeForce Experience SelfUpdate_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >nul 2>nul
+schtasks /change /disable /tn "NvTmMon_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >nul 2>nul
 echo  %p%[ %roxo%•%p% %p%]%w% %r%AMD%w%, %b%Intel%w% and %g%NVIDIA%w% Driver telemetry disabled. %p%(%roxo%3%p%)%w%
 
 echo  %p%[ %roxo%•%p% %p%]%w% Blocking telemetry domains... %p%(%roxo%11%p%)%w%
@@ -1077,7 +1107,7 @@ chcp 65001 >nul
 echo.
 echo  %p%[ %roxo%•%p% %p%]%w% Do you want to start %roxo%Network%w%/%roxo%Ping%w% Optimizations? %p%(%roxo%Y%p%/%roxo%N%p%)%w%
 echo.
-echo  %p%Warning:%w% Optimizes network to reduce latency, improve packet delivery, and boost connection by
+echo  %p%Warning:%w% %z%Optimizes network to reduce latency%reset%, improve packet delivery, and boost connection by
 echo  disabling bandwidth limits, enhancing DNS resolution, and fine-tuning TCP parameters for lower ping.
 echo.
 echo  %p%Recommended%w% Proceed %p%(%roxo%Y%p%)%w% to improve the connection and security.
@@ -1206,7 +1236,7 @@ chcp 65001 >nul
 echo.
 echo  %p%[ %roxo%•%p% %p%]%w% Do you want to disable %roxo%Unnecessary Services%w%? %p%(%roxo%Y%p%/%roxo%N%p%)%w%
 echo.
-echo  %p%Warning:%w% Disables unnecessary Windows services to reduce background resource usage.
+echo  %p%Warning:%w% Disables unnecessary Windows services to %z%reduce background resource usage%reset%.
 echo  Include tracking, xbox services, printer service, search indexing and background update.
 echo.
 echo  %p%Recommended%w% Proceed %p%(%roxo%Y%p%)%w% to free up resources. You can manually activate them later.
@@ -1331,7 +1361,7 @@ chcp 65001 >nul
 echo.
 echo  %p%[ %roxo%•%p% %p%]%w% Do you want to start %roxo%Disk Cleanup%w%? %p%(%roxo%Y%p%/%roxo%N%p%)%w%
 echo.
-echo  %p%Warning:%w% Disk Cleanup removes temporary and unnecessary files, logs, junk files,
+echo  %p%Warning:%w% Disk Cleanup %z%removes temporary and unnecessary files%reset%, logs, junk files,
 echo  and caches to free up storage and improve system performance. Does not affect personal files.
 echo.
 echo  %p%Recommended%w% Only perform this process every %p%2%roxo%-%p%3%w% months.
@@ -1422,7 +1452,7 @@ echo  %p%[ %roxo%•%p% %p%]%w% %bb%DirectX%w% ^& %o%Vulkan%w% temp files cleane
 echo.
 echo  %p%[ %roxo%•%p% %p%]%w% %roxo%Temporary files%w% cleaned %g%successfully%w%! %p%(%roxo%~3s%p%)%w%
 timeout /t 3 /nobreak >nul
-goto:final
+goto:CleanSkip
 
 :CleanSkip
 if /i "%flow%"=="auto" (
@@ -1441,17 +1471,18 @@ chcp 65001 >nul
 echo.
 echo  %p%[ %roxo%•%p% %p%]%w% Do you want to disable %roxo%Disk Compression%w%? %p%(%roxo%Y%p%/%roxo%N%p%)%w%
 echo.
-echo  %p%Warning:%w% Disabling Disk Compression reduces CPU usage on file access, improves loading times,
+echo  %p%Warning:%w% Disabling Disk Compression %z%reduces CPU usage on file access%reset%, improves loading times,
 echo  reduces stuttering, and increases system responsiveness. It will decompress every compressed file.
 echo.
 echo  %p%Recommended%w% Only perform this process %p%1%w% time. It can increase storage usage.
+echo  This process can take a long time depending on the size of your disk and files.
 echo.
 set /p answer="%w% >:%roxo%"
 
 if /i "%answer%"=="y" (
     goto:DskCompSkip
 ) else if /i "%answer%"=="n" (
-    goto:menu2
+    goto:DskCompSkip
 ) else (
     echo  %p%[ %roxo%•%p% %p%]%w% Invalid option. Please enter %roxo%Y%w% for Yes or %roxo%N%w% for No.
     timeout /t 2 /nobreak >nul
@@ -1584,9 +1615,9 @@ echo.                             ╚██████╔╝██║  ██�
 echo.                              ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚══════╝%w%
 echo.                                                                       
 echo. %COL%[90m           ─────────────────────────────────────────────────────────────────────────────── %w%                                                             
-echo                        %w%Quick tweaks focused on optimizing specific game priority. %w%
+echo                        %w%Quick tweaks focused on optimizing %z%specific game priority%reset%. %w%
 echo.
-echo                                             %w%Coming soon... %w%
+echo                                             Coming soon...
 echo.
 echo.
 echo                                       %p%[%roxo%menu%p%]%w% Back to Main Menu
@@ -1626,7 +1657,7 @@ chcp 65001 >nul
 echo.
 echo  %p%[ %roxo%•%p% %p%]%w% Do you want to start System %roxo%Health Repair%w%? %p%(%roxo%Y%p%/%roxo%N%p%)%w%
 echo.
-echo  %p%Warning:%w% Performs a full system health repair by scanning and fixing corrupted system files,
+echo  %p%Warning:%w% Performs a full system health repair by %z%scanning and fixing corrupted system files%reset%,
 echo  repairing Windows image, and checking disk errors to ensure stability and performance.
 echo  It is recommended to perform this process every %p%3%roxo%-%p%6%w% months. It does not affect your personal files.
 echo.
@@ -1768,7 +1799,7 @@ echo.
 echo  %p%Warning:%w% SOCD Cleaner removes simultaneous opposite keyboard inputs (like left - right),
 echo  simulating precise commands like %g%Razer Snaptap%w% to improve playability in competitive games.
 echo.
-echo. SOCD Cleaner may be detected by some Anti-Cheats/Anti-Virus.
+echo. %z%SOCD Cleaner may be detected by some Anti-Cheats/Anti-Virus.%reset%
 echo  %p%(%roxo%AHK 1.1%p%)%w% %p%(%roxo%It will run in the background%p%)%w%
 echo.
 set /p answer="%w% >:%roxo%"
@@ -1811,7 +1842,7 @@ chcp 65001 >nul
 echo.
 echo  %p%[ %roxo%•%p% %p%]%w% Do you want to start %roxo%MSI Utility%w%? %p%(%roxo%Y%p%/%roxo%N%p%)%w%
 echo.
-echo  %p%Warning:%w% MSI Utility V3 optimizes device interrupt handling by enabling MSI Mode.
+echo  %p%Warning:%w% MSI Utility V3 %z%optimizes device interrupt handling by enabling MSI Mode%reset%.
 echo  Reduces system latency, improves responsiveness, and helps eliminate stuttering or audio crackling.
 echo.
 echo  %p%Recommended:%w% Set your GPU and Audio Device to 'MSI' mode with 'High' priority and apply.
@@ -1887,3 +1918,5 @@ chcp 65001 >nul
 tasklist
 pause >nul
 goto:menu
+
+REM Are you looking for something?
