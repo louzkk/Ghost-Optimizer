@@ -84,7 +84,7 @@ Feito para quem quer **mais FPS**, **menor latência** e **uso reduzido de recur
 ## 🙌 Agradecimentos
 
 - Testes Beta: [@MysteryNich](https://github.com/MysteryNich)  
-- Agradecimento especial a [MarcoRavich/Opendows](https://github.com/MarcoRavich/Opendows) por ajudar a ampliar a visibilidade  
+- Agradecimento especial a [MarcoRavich/Opendows](https://github.com/MarcoRavich/Opendows)
 
 ---
 
