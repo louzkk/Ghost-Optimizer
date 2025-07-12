@@ -21,7 +21,7 @@ Whether you're on a low-end laptop or a high-end PC, Ghost Optimizer helps you g
 
 ---
 <p align="center">
-  <img src="https://github.com/louzkk/Ghost-Optimizer/blob/e70941415963195a2192215ff950054b26ade25b/Resources/preview2.png">
+  <img src="[https://github.com/louzkk/Ghost-Optimizer/blob/e70941415963195a2192215ff950054b26ade25b/Resources/preview2.png](https://github.com/louzkk/Ghost-Optimizer/blob/833cf8fa48b68e997646b7ded12240e810e3bb10/Resources/preview2.png)">
 </p>
 ---
 
