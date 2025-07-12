@@ -85,7 +85,7 @@ Designed for those who want **more FPS**, **lower latency**, and **reduced resou
 ## 🙌 Acknowledgements
 
 - Beta Testing: [@MysteryNich](https://github.com/MysteryNich)  
-- Special thanks to [MarcoRavich/Opendows](https://github.com/MarcoRavich/Opendows) for helping expand visibility
+- Special thanks to [MarcoRavich/Opendows](https://github.com/MarcoRavich/Opendows)
 
 ---
 
