@@ -41,7 +41,7 @@ Feito para quem quer **mais FPS**, **menor latência** e **uso reduzido de recur
 
 ## 📈 Resultados da Otimização
 
-*Testado no hardware:* GeForce MX150 4GB, Intel i5-8250U, 16 GB RAM, SSD NVMe 512 GB.  
+**Testado no hardware:** GeForce MX150 4GB, Intel i5-8250U, 16 GB RAM, SSD NVMe 512 GB.  
 *Os resultados podem variar conforme o hardware e uso.*
 
 #### Métricas/Benchmark
