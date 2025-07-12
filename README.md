@@ -8,7 +8,7 @@ Ghost Optimizer applies **advanced deep-level tweaks** to make Windows faster, l
 It removes bloatware, disables unnecessary services, blocks telemetry and ads, and optimizes the network — all in one go.  
 Designed for those who want **more FPS**, **lower latency**, and **reduced resource usage** — whether on low-end laptops or high-end PCs.
 
-> A new, modern GUI version of the app — a complete reboot of the current app — is currently in development.
+> A new, modern GUI version of the script — a complete reboot of the current app — is currently in development.
 
 ![Status](https://img.shields.io/badge/Status-Stable-purple?logo=ghostery&logoColor=white)
 ![Platform](https://img.shields.io/badge/Platform-Windows-purple?logo=flatpak&logoColor=white)
