@@ -8,7 +8,7 @@ Ghost Optimizer aplica **tweaks avançados em nível profundo** para deixar o Wi
 Remove bloatware, desativa serviços desnecessários, bloqueia telemetria e anúncios, e otimiza a rede — tudo de uma vez só.  
 Feito para quem quer **mais FPS**, **menor latência** e **uso reduzido de recursos** — seja em notebooks simples ou PCs potentes.
 
-> Uma nova versão moderna do Ghost Optimizer — um reboot completo do app atual — está em desenvolvimento.
+> Uma nova versão moderna do script — um reboot completo do app atual — está em desenvolvimento.
 
 ![Status](https://img.shields.io/badge/Status-Stable-purple?logo=ghostery&logoColor=white)  
 ![Platform](https://img.shields.io/badge/Platform-Windows-purple?logo=flatpak&logoColor=white)  
