@@ -1,71 +1,96 @@
-![Logo](https://github.com/louzkk/Ghost-Optimizer/blob/e70941415963195a2192215ff950054b26ade25b/Resources/newbanner.png)
+<p align="center">
+  <img src="https://github.com/louzkk/Ghost-Optimizer/blob/e70941415963195a2192215ff950054b26ade25b/Resources/newbanner.png" alt="Banner">
+</p>
 
 # 👻 Ghost Optimizer
 
-**Ghost Optimizer** is a free tool to optimize Windows 10 and 11, focused on **performance**, **privacy**, and **competitive games**.
+Ghost Optimizer applies **advanced deep-level tweaks** to make Windows faster, lighter, and cleaner.  
+It removes bloatware, disables unnecessary services, blocks telemetry and ads, and optimizes the network — all in one go.  
+Designed for those who want **more FPS**, **lower latency**, and **reduced resource usage** — whether on low-end laptops or high-end PCs.
 
-It removes bloatware, disables unnecessary services, blocks telemetry/ads, optimizes the connection, and applies advanced tweaks to make the system lighter and more responsive.  
-Ideal for those who want **more FPS in games**, **less resource usage**, and **lower ping** — whether on low-end or high-end PCs.
+> A new, modern GUI version of Ghost Optimizer — a complete reboot of the current app — is currently in development.
 
-Now includes **deep-level optimizations** and a custom **SOCD Cleaner** (like Razer Snaptap), which fixes multi-key inputs to avoid blocking or delay — improving movement control in competitive games.
-This script applies system-level changes and offers an option to create a system restore point before proceeding.
-
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg) 
-![Platform](https://img.shields.io/badge/platform-Windows-blue) 
-![Status](https://img.shields.io/badge/status-beta-red) 
-![Version](https://img.shields.io/badge/version-3.5-blue) 
-
-[Alterar para Português (PT-BR)](README.ptbr.md)
+![Status](https://img.shields.io/badge/Status-Stable-purple?logo=ghostery&logoColor=white)
+![Platform](https://img.shields.io/badge/Platform-Windows-purple?logo=flatpak&logoColor=white)
+![Input Cleaner](https://img.shields.io/badge/SOCD-1.1-purple?logo=autohotkey&logoColor=white)
+[![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg?logo=git&logoColor=white)](LICENSE)
 
 
-## 🚀 Features
+<p align="right"><a href="README.ptbr.md">Switch to Portuguese (PT-BR)</a></p>
 
-✔️ Boosts overall system performance   
-✔️ Lowers RAM, CPU, and disk usage   
-✔️ Optimizes memory management    
-✔️ Applies custom power plans   
-✔️ Optimizes network for lower latency   
-✔️ Reduces unnecessary background activity   
-✔️ Blocks telemetry from Windows and drivers   
-✔️ Disables tracking services and ads   
-✔️ Fixes common Windows bugs and glitches   
-✔️ Maintains the integrity of Windows files    
-✔️ Clears system temporary memory   
-✔️ Disables automatic background updates   
-✔️ Disables Cortana, Copilot, OneDrive and Widgets   
-✔️ Input Cleaner for better input response  
-✔️ Include: Process Lasso   
+---
 
+## ⚙️ Features
 
-## 💻 Requirements
+- Boosts overall system performance  
+- Lowers RAM, CPU, and disk usage  
+- Optimizes memory management  
+- Applies custom power plans  
+- Optimizes network for lower latency  
+- Reduces unnecessary background activity  
+- Blocks telemetry from Windows and drivers  
+- Disables tracking services and ads  
+- Fixes common Windows bugs and glitches  
+- Maintains Windows file integrity  
+- Clears system temporary memory  
+- Disables Cortana, Copilot, OneDrive and Widgets  
+- Disables automatic background updates  
+- Input Cleaner for better input response  
+- Includes: Process Lasso integration  
+
+---
+
+## 📈 Optimization Results
+
+*Tested on hardware:* GeForce MX150 4GB, Intel i5-8250U, 16 GB RAM, 512 GB NVMe SSD.  
+*Performance results may vary depending on your system specs and usage.*
+
+#### Metrics/Benchmark
+
+| Metric               | Before | After | Improvement | Note            |
+|:--------------------:|:------:|:-----:|:-----------:|:---------------:|
+| Background Processes  |  170   |  81   |   ~52% ↓   | Lower is better |
+| Memory Usage          |  31%   |  18%  |   ~42% ↓   | Lower is better |
+| LatencyMon µs         |  2595  | 1274  |   ~51% ↓   | Lower is better |
+| Benchmark Score       |  1032  | 1118  |    ~8% ↑   | Higher is better |
+
+#### Average FPS
+
+| Game              | Before  | After   | Improvement | Note             |
+|:-----------------:|:-------:|:-------:|:-----------:|:----------------:|
+| Valorant          |  90 FPS | 160 FPS |   ~78% ↑   | Custom Powerplan  |
+| Counter-Strike 2  |  45 FPS |  80 FPS |   ~78% ↑   | Custom Powerplan  |
+| GTA Enhanced      |  45 FPS |  60 FPS |   ~33% ↑   | Default Powerplan |
+| Warzone 4         |  30 FPS |  42 FPS |   ~40% ↑   | Default Powerplan |
+| Overwatch 2       |  60 FPS |  97 FPS |   ~62% ↑   | Default Powerplan |
+
+---
+
+## 🧰 Requirements
 
 - Windows 10 or 11  
-- 32/64-bit operating system
-- Windows CMD or Windows Terminal
+- 32 or 64-bit version
 
+---
 
-## 📥 How to use / Download
+## 📥 How to Download
 
-1. Go to the [Releases](https://github.com/louzkk/Ghost-Optimizer/releases) and download **Ghost-Optimizer.rar**  
-2. Run **Ghost-Optimizer.exe** as **Administrator**.
-   *(You may need to temporarily disable your antivirus to avoid false positives)*
+1. Go to the [Releases](https://github.com/louzkk/Ghost-Optimizer/releases) page  
+2. Download **Ghost-Optimizer.rar**  
+3. Extract and run **Ghost-Optimizer.exe** as **Administrator**  
+   *You may need to temporarily disable antivirus to avoid false positives*
 
+---
 
-## ❤️ Acknowledgements
+## 🙌 Acknowledgements
 
-- Beta Tester: [@MysteryNich](https://github.com/MysteryNich)
-- https://github.com/MarcoRavich/Opendows
-
-
-## 🔧 Hardware Optimization
-
-Want even more performance outside of Ghost-Optimizer? Here are some things you can do on the hardware side:  
-
-- **Undervolt:** Lower CPU/GPU voltage to reduce temps, avoid throttling. (ThrottleStop, Ryzen Master or XTU)
-- **Overclock:** Push your CPU, GPU, or RAM clock for performance boost (Afterburner, GPU Tweak III or Adrenalin)
-- **Keep Everything Updated:** Latest Windows, BIOS, and driver updates.
-- **Hardware Maintenance:** Clean dust, replace thermal paste, and improve airflow.
+- Beta Testing: [@MysteryNich](https://github.com/MysteryNich)  
+- Special thanks to [MarcoRavich/Opendows](https://github.com/MarcoRavich/Opendows) for helping expand visibility
 
 ---
 
 💬 Found a bug or have a suggestion? [Open an issue](https://github.com/louzkk/Ghost-Optimizer/issues)
+
+---
+
+© 2025 Ghost Optimizer. Licensed under MIT License.
