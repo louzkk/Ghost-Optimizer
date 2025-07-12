@@ -4,9 +4,10 @@
 
 # 👻 Ghost Optimizer
 
-Ghost Optimizer applies **advanced deep-level tweaks** to make Windows faster, lighter, and cleaner.  
-It removes bloatware, disables unnecessary services, blocks telemetry and ads, and optimizes the network — all in one go.  
-Designed for those who want **more FPS**, **lower latency**, and **reduced resource usage** — whether on low-end laptops or high-end PCs.
+**Ghost Optimizer** is an **open-source**, interactive optimization script designed to **improve system performance**, **reduce latency**, and **make Windows faster**, **lighter**, and **more responsive**.
+It applies deep system tweaks, **removes bloatware**, **disables unnecessary services**, **blocks tracking and ads**, and **optimizes network** settings — all in one streamlined process.
+
+Whether you're on a low-end laptop or a high-end PC, Ghost Optimizer helps you get the most out of your hardware with minimal resource usage.
 
 > A new, modern GUI version of the script — a complete reboot of the current app — is currently in development.
 
