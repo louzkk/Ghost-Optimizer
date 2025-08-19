@@ -17,9 +17,9 @@ Tester: [@MysteryNich](https://github.com/MysteryNich)
 # ❓ How to Use?
 
 1. Go to the [Releases](https://github.com/louzkk/Ghost-Optimizer/releases)  
-2. Download **Ghost-Optimizer.bat**  
-3. Run **Ghost-Optimizer.bat** as **Administrator**  
+2. Download **Ghost Optimizer.bat**  
+3. Run **Ghost Optimizer.bat** as **Administrator**  
 
-# 💬 Found a bug or have a suggestion?
+# 💬 Bug or Suggestion?
 Send me a message on Discord or [Open an issue](https://github.com/louzkk/Ghost-Optimizer/issues)     
 @louzkk
