@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-16"?>
 <ArrayOfProfile>
   <Profile>
-    <ProfileName>Base Profile</ProfileName>
+    <ProfileName>GhostOPX</ProfileName>
     <Executeables />
     <Settings>
       <ProfileSetting>
@@ -120,4 +120,5 @@
       </ProfileSetting>
     </Settings>
   </Profile>
+
 </ArrayOfProfile>
