@@ -1,4 +1,4 @@
-# 👻 About
+# 💜 About
 
 **Ghost Optimizer** is a lightweight open source tweaker/optimizer designed to improve system **performance**, **network stability**, **reduce latency**, and maintain **file integrity**. The script is interactive, allowing users to customize their pc optimizations according to their needs.
 
@@ -11,8 +11,8 @@ Performance results may vary depending on your system specs and usage.
 
 # 🤝 Credits
 
+Opendows: [MarcoRavich/Opendows](https://github.com/MarcoRavich/Opendows)  
 Tester: [@MysteryNich](https://github.com/MysteryNich)  
-[MarcoRavich/Opendows](https://github.com/MarcoRavich/Opendows)
 
 # ❓ How to Use?
 
@@ -21,5 +21,4 @@ Tester: [@MysteryNich](https://github.com/MysteryNich)
 3. Run **Ghost Optimizer.bat** as **Administrator**  
 
 # 💬 Bug or Suggestion?
-Send me a message on Discord or [Open an issue](https://github.com/louzkk/Ghost-Optimizer/issues)     
-@louzkk
+Send me a message on [Discord](https://github.com/louzkk) or [Open an issue](https://github.com/louzkk/Ghost-Optimizer/issues).
