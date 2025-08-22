@@ -1,7 +1,7 @@
 :: Ghost Optimizer Batch Script
 :: Created by: @louzkk
 :: Feel free to use, just keep the credits :)
-:: Version: 5.0
+:: Version: 4.1 (unreleased)
 
 :start
 @echo off
