@@ -4,7 +4,6 @@
 
 *Whether you're on a low-end laptop or a high-end PC, Ghost Optimizer helps you get the most out of your hardware with minimal resource usage.*
 
-
 # 🚨 Disclaimer
 Use this script at your own risk. The author is not responsible for any damage or data loss.
 Performance results may vary depending on your system specs and usage.
