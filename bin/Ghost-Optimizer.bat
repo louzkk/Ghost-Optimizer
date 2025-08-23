@@ -1,7 +1,7 @@
 :: Ghost Optimizer Batch Script
 :: Created by: @louzkk
 :: Feel free to use, just keep the credits :)
-:: Version: 4.1 (in work - unreleased)
+:: Version: 4.2 (unreleased)
 
 :start
 @echo off
@@ -56,7 +56,6 @@
     set roxo=[38;5;129m
     set cinza=[38;5;8m
     set highlight=[97;48;5;93m
-
 
 :: Gradient setup
     set "colorBaseR=128"
@@ -149,7 +148,7 @@
     timeout /t 3 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     goto:menu
 
-:: Main Menu
+:: Script Main Menu
     :menu
     cls
     echo.
@@ -417,6 +416,9 @@
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v HiberBootEnabled /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v HibernateEnabled /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "HibernateEnabled" /t REG_DWORD /d "0" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "SleepReliabilityDetailedDiagnostics" /t REG_DWORD /d "0" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "HiberbootEnabled" /t REG_DWORD /d "0" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Hibernation disabled.
 
     reg add "HKEY_CURRENT_USER\System\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
@@ -686,8 +688,6 @@
     timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo --- Starting Performance Optimizations --- >> Ghost_Log.txt
 
-    reg add "HKEY_CURRENT_USER\Software\Microsoft\GameBar" /v "AllowAutoGameMode" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKEY_CURRENT_USER\Software\Microsoft\GameBar" /v "AutoGameModeEnabled" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Affinity" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Background Only" /t REG_SZ /d False /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
@@ -697,7 +697,11 @@
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Scheduling Category" /t REG_SZ /d High /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "SFIO Priority" /t REG_SZ /d High /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Latency Sensitive" /t REG_SZ /d True /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Gaming Optimizations applied.
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Game Priorities Optimized.
+
+    reg add "HKEY_CURRENT_USER\Software\Microsoft\GameBar" /v "AllowAutoGameMode" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKEY_CURRENT_USER\Software\Microsoft\GameBar" /v "AutoGameModeEnabled" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Game Mode enabled.
 
     reg add "HKCU\SYSTEM\GameConfigStore" /v "GameDVR_DSEBehavior" /t REG_DWORD /d "0" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKCU\SYSTEM\GameConfigStore" /v "GameDVR_FSEBehaviorMode" /t REG_DWORD /d "0" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
@@ -708,6 +712,12 @@
 
     reg delete "HKLM\SOFTWARE\Microsoft\Windows\Dwm" /v "OverlayTestMode" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% MPO (Multiple Plane Overlay) enabled.
+
+    for /f %%g in ('wmic path win32_videocontroller get PNPDeviceID ^| findstr /L "VEN_"') do (
+    reg add "HKLM\SYSTEM\CurrentControlSet\Enum\%%g\Device Parameters\Interrupt Management\MessageSignaledInterruptProperties" /v "MSISupported" /t REG_DWORD /d "1" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Enum\%%g\Device Parameters\Interrupt Management\Affinity Policy" /v "DevicePriority" /t REG_DWORD /d "0" /f >> APB_Log.txt
+    )
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% MSI (Message Signaled Interrupts) enabled.
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\PriorityControl" /v "Win32PrioritySeparation" /t REG_DWORD /d 38 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Priority Separation Optimized.
@@ -771,15 +781,11 @@
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "TimerResolution" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Timer Resolution Optimized.
 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "DistributeTimers" /t REG_DWORD /d "1" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo  %purple%[ %roxo%•%purple% %purple%]%white% Timer Distribution enabled.
+
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "HwSchMode" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Hardware-Accelerated GPU Scheduling disabled.
-
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "TdrDelay" /t REG_DWORD /d 10 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "TdrDdiDelay" /t REG_DWORD /d 10 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\Direct3D\Drivers" /v "SoftwareOnly" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\DirectInput" /v "EnableBackgroundProcessing" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKCU\Software\Microsoft\Direct3D" /v "DisableDebugLayer" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% DirectX/Vulkan Optimized.
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "LargeSystemCache" /t REG_DWORD /d "1" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Largue System Cache Optimized.
@@ -796,6 +802,13 @@
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v FeatureSettingsOverride /t REG_DWORD /d 3 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v FeatureSettingsOverrideMask /t REG_DWORD /d 3 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Spectre/Meltdown algorithms disabled.
+
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "TdrDelay" /t REG_DWORD /d 10 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "TdrDdiDelay" /t REG_DWORD /d 10 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Direct3D\Drivers" /v "SoftwareOnly" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\DirectInput" /v "EnableBackgroundProcessing" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKCU\Software\Microsoft\Direct3D" /v "DisableDebugLayer" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% DirectX/Vulkan Optimized.
 
     echo.
     timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
@@ -899,7 +912,7 @@
     reg delete "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v FrameLatency /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg delete "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v ClockTimerResolution /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "TimerResolution" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Timer Resolution Reverted.
+    echo    %purple%[ %roxo%•%purple% %purple%]%white% Timer Resolution Reverted.
 
     reg delete "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "HwSchMode" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Hardware-Accelerated GPU Scheduling enabled.
@@ -1048,6 +1061,12 @@
     netsh int tcp set global timestamps=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% General Network Tweaks applied.
 
+    netsh int tcp set global netdma=enabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo  %purple%[ %roxo%•%purple% %purple%]%white% Direct Memory Access enabled.
+
+    netsh int tcp set global dca=enabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo  %purple%[ %roxo%•%purple% %purple%]%white% Direct Cache Access enabled.
+
     netsh int ip set global taskoffload=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Task Offload disabled.
 
@@ -1092,6 +1111,7 @@
 
     netsh int tcp set global congestionprovider=ctcp >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     netsh int tcp set supplemental template=Internet congestionprovider=ctcp >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    netsh int tcp set supplemental Internet congestionprovider=ctcp >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% CTCP Optimized.
 
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Psched" /v NonBestEffortLimit /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
@@ -1397,6 +1417,48 @@
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v DisableTailoredExperiencesWithDiagnosticData /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Experience Feedback disabled.
 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\AppModel" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\Cellcore" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\Circular Kernel Context Logger" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\CloudExperienceHostOobe" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\DataMarket" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\DefenderApiLogger" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\DefenderAuditLogger" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\DiagLog" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\HolographicDevice" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\iclsClient" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\iclsProxy" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\LwtNetLog" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\Mellanox-Kernel" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\Microsoft-Windows-AssignedAccess-Trace" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\Microsoft-Windows-Setup" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\NBSMBLOGGER" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\PEAuthLog" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\RdrLog" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\ReadyBoot" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\SetupPlatform" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\SetupPlatformTel" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\SocketHeciServer" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\SpoolerLogger" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\SQMLogger" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\TCPIPLOGGER" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\TileStore" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\Tpm" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\TPMProvisioningService" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\UBPM" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\WdiContextLog" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\WFP-IPsec Trace" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\WiFiDriverIHVSession" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\WiFiDriverIHVSessionRepro" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\WiFiSession" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\WinPhoneCritical" /v "Start" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WUDF" /v "LogEnable" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WUDF" /v "LogLevel" /t REG_DWORD /d "0" /f >> APB_Log.txt 
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableThirdPartySuggestions" /t REG_DWORD /d "1" /f >> APB_Log.txt
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t REG_DWORD /d "1" /f >> APB_Log.txt
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa\Credssp" /v "DebugLogLevel" /t REG_DWORD /d "0" /f >> APB_Log.txt
+    echo  %purple%[ %roxo%•%purple% %purple%]%white% Autologgers disabled.
+
     sc config DiagTrack start= disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     sc config dmwappushservice start= disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     sc config DPS start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
@@ -1553,7 +1615,7 @@
 
     echo.
     set "lines[0]=                                         Applies a custom power plan for highest performance"
-    set "lines[1]=                                               Balances speed, stability, and latency"
+    set "lines[1]=                                               Reduces system latency and increases FPS"
 
     for /L %%i in (0,1,1) do (
         set "text=!lines[%%i]!"
@@ -1612,7 +1674,11 @@
     timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo --- Starting Power Plan --- >> Ghost_Log.txt
 
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Checking repository.
+
     if not exist "C:\GhostOPX\" mkdir "C:\GhostOPX\" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Importing Power Plan...
 
     curl -g -k -L -# -o "C:\GhostOPX\GhostOPX-POWERPLAN.pow" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostOPX-POWERPLAN.pow" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     if not exist "C:\GhostOPX\GhostOPX-POWERPLAN.pow" (
@@ -1629,6 +1695,8 @@
         timeout /t 2 >nul
         goto:menu
     )
+
+    timeout /t 2 /nobreak >nul
 
     set "GUID="
     for /f "tokens=2 delims=:()" %%i in ('powercfg /list ^| findstr /i "GhostOPX"') do (
@@ -1650,6 +1718,8 @@
         timeout /t 2 >nul
         goto:menu
     )
+
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% GhostOPX Power Plan applied.
 
     timeout /t 1 /nobreak >nul
 
@@ -2576,6 +2646,9 @@
 
     PowerShell -Command "Get-AppxPackage -allusers *zune* | Remove-AppxPackage" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Zune uninstalled.
+
+    Powershell -Command "Get-appxpackage -allusers *Microsoft.549981C3F5F10* | Remove-AppxPackage" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Cortana uninstalled.
 
     echo.
     timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
