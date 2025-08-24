@@ -10,8 +10,10 @@ Performance results may vary depending on your system specs and usage.
 
 # 🤝 Credits
 
-Opendows: [MarcoRavich/Opendows](https://github.com/MarcoRavich/Opendows)  
-Tester: [@MysteryNich](https://github.com/MysteryNich)  
+[Opendows](https://github.com/MarcoRavich/Opendows) for mention script 
+[@MysteryNich](https://github.com/MysteryNich) for testing script
+[Ancel](https://github.com/ancel1x/Ancels-Performance-Batch) for some regedit values 
+
 
 # ❓ How to Use?
 
