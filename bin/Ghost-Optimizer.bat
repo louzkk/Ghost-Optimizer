@@ -2488,7 +2488,7 @@
         echo   %nvidia%[ %verde%%underline%•%reset% %nvidia%]%white% %red% Failed to download NVIDIA Profile Inspector.%reset% >> Ghost_Log.txt
         echo   %nvidia%[ %verde%%underline%•%reset% %nvidia%]%white% %red% Download failed. Aborting...%reset%
         timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-        goto :nvidia
+        goto:nvidia
     )
 
     if not exist "C:\Ghost Optimizer\NvidiaProfileInspector\" (
@@ -2502,7 +2502,7 @@
         echo   %nvidia%[ %verde%%underline%•%reset% %nvidia%]%white% %red% Failed to download NVIDIA profile.%reset% >> Ghost_Log.txt
         echo   %nvidia%[ %verde%%underline%•%reset% %nvidia%]%white% %red% Download failed. Aborting...%reset%
         timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-        goto :nvidia
+        goto:nvidia
     )
 
     "C:\Ghost Optimizer\nvidiaProfileInspector.exe" "C:\Ghost Optimizer\GhostOPX-NVIDIA.nip" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
@@ -2512,6 +2512,7 @@
     echo --- Finishing NVIDIA Tweaks --- >> Ghost_Log.txt
     start "" "%~f0"
     exit
+    goto:menu
 
     :nvidia3
     cls
@@ -2592,9 +2593,9 @@
 
     echo.
     echo.
-    echo                                                       %purple%[ %roxo%%underline%1%reset% %purple%]%white% Remove Bloatware
+    echo                                                       %purple%[ %roxo%%underline%1%reset% %purple%]%white% Uninstall Bloatware Apps
     echo.
-    echo                                                       %purple%[ %roxo%%underline%2%reset% %purple%]%white% Revert Bloatware      
+    echo                                                       %purple%[ %roxo%%underline%2%reset% %purple%]%white% Reinstall Bloatware Apps      
     echo.
     echo.
     echo                                                         %purple%[ %roxo%%underline%M%reset% %purple%]%white% Back to Menu
@@ -2613,10 +2614,10 @@
     :bloatware2
     cls
     echo.
-    echo   %purple%[ %roxo%%underline%•%reset% %purple%]%white% Starting %purple%Services ^& Bloatware%reset% Removal... %purple%(%roxo%~2s%purple%)%reset%
+    echo   %purple%[ %roxo%%underline%•%reset% %purple%]%white% Starting %purple%Bloatware Apps%reset% uninstall... %purple%(%roxo%~2s%purple%)%reset%
     echo.
     timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo --- Removing bloatware --- >> Ghost_Log.txt
+    echo --- Uninstalling Bloatware Apps --- >> Ghost_Log.txt
 
     PowerShell -Command "Get-AppxPackage -allusers *3DBuilder* | Remove-AppxPackage" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% 3DBuilder uninstalled.
@@ -2715,10 +2716,10 @@
     echo.
     timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     title Ghost Optimizer (Reboot Required)
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Services ^& Bloatware removed %green%successfully%white%.
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Bloatware Apps uninstalled %green%successfully%white%.
     timeout /t 1 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo --- Bloatware removed --- >> Ghost_Log.txt
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Restarting %purple%%underline%Ghost Optimizer%white%... %nvidia%(%verde%~2s%nvidia%)%white%
+    echo --- Bloatware Apps uninstalled --- >> Ghost_Log.txt
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Restarting %purple%%underline%Ghost Optimizer%white%... %purple%(%roxo%~2s%purple%)%reset%
     timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     start "" "%~f0"
     exit
@@ -2726,10 +2727,10 @@
     :bloatware3
     cls
     echo.
-    echo   %purple%[ %roxo%%underline%•%reset% %purple%]%white% Reverting %purple%Bloatware%reset%... %purple%(%roxo%~2s%purple%)%reset%
+    echo   %purple%[ %roxo%%underline%•%reset% %purple%]%white% Reinstalling %purple%Bloatware Apps%reset%... %purple%(%roxo%~2s%purple%)%reset%
     echo.
     timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo --- Reverting Bloatware --- >> Ghost_Log.txt
+    echo --- Reinstalling Bloatware Apps --- >> Ghost_Log.txt
 
     PowerShell -Command "Get-AppxPackage -allusers *3DBuilder* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% 3DBuilder reinstalled.
@@ -2826,11 +2827,12 @@
     title Ghost Optimizer (Reboot Required)
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Bloatware reverted %green%successfully%white%.
     timeout /t 1 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo --- Bloatware reverted --- >> Ghost_Log.txt
+    echo --- Bloatware Apps reinstalled --- >> Ghost_Log.txt
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Restarting %purple%%underline%Ghost Optimizer%white%... %nvidia%(%verde%~2s%nvidia%)%white%
     timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     start "" "%~f0"
     exit
+    goto:menu
 
 :: Restart
     :restart
@@ -2841,6 +2843,7 @@
     echo --- Restarting Ghost Optimizer --- >> Ghost_Log.txt
     start "" "%~f0"
     exit
+    goto:menu
 
 :: Reboot
     :reboot
