@@ -1,11 +1,9 @@
-:: Ghost Optimizer Batch Script
+:: Ghost Optimizer
 :: Created by: @louzkk
-:: Feel free to use, just keep the credits :)
 
-:start
 @echo off
 
-:: Window Proprieties
+:: Window
     title Ghost Optimizer
     mode 135,30
 
@@ -15,7 +13,7 @@
 :: Execution Policy
     powershell "Set-ExecutionPolicy Unrestricted"
 
-:: Script Outputs
+:: Log File
     if not exist "C:\Ghost Optimizer" md "C:\Ghost Optimizer"
     if not exist "C:\Ghost Optimizer" mkdir "C:\Ghost Optimizer"
     echo Ghost Optimizer (Outputs) > "C:\Ghost Optimizer\Ghost_Log.txt"
@@ -23,22 +21,21 @@
     echo Created on %date% at %time% >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo. >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
 
-:: ANSI Escape
+:: ANSI
     reg add "HKCU\CONSOLE" /v "VirtualTerminalLevel" /t REG_DWORD /d "1" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     for /F "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1) do rem"') do (set "DEL=%%a" & set "COL=%%b")
     (for /f %%a in ('echo prompt $E^| cmd') do set "esc=%%a")
 
-:: Disable UAC
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "EnableLUA" /t REG_DWORD /d "0" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-
 :: Restore Point
-    reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" /v "SystemRestorePointCreationFrequency" /t REG_DWORD /d "0" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    powershell -ExecutionPolicy Bypass -Command "Checkpoint-Computer -Description 'Ghost Optimizer | Restore Point' -RestorePointType 'MODIFY_SETTINGS'" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    if not exist "C:\Ghost Optimizer\restore.flag" (
+        powershell -ExecutionPolicy Bypass -Command "Checkpoint-Computer -Description 'Ghost Optimizer | Restore Point' -RestorePointType 'MODIFY_SETTINGS'" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
+        echo Restore point created on %date% %time% > "C:\Ghost Optimizer\restore.flag"
+    )
 
-:: UTF-8 Encoding
+:: Encode
     chcp 65001 >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
 
-:: Setting Colors
+:: Colors
     set red=[38;2;255;0;0m
     set blue=[94m
     set purple=[38;5;93m
@@ -56,7 +53,7 @@
     set cinza=[38;5;8m
     set highlight=[97;48;5;93m
 
-:: Gradient setup
+:: Gradients
     set "colorBaseR=128"
     set "colorBaseG=0"
     set "colorBaseB=255"
@@ -81,7 +78,7 @@
         set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
     )
 
-:: Check for Admin
+:: Admin
     echo.
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Starting %purple%%underline%Ghost Optimizer%reset%...
     timeout /t 3 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
@@ -108,7 +105,10 @@
         pushd "%CD%"
         CD /D "%~dp0"
 
-:: Loading Screen
+:: UAC
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "EnableLUA" /t REG_DWORD /d "0" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+
+:: Loading
     :loading
     cls
     echo !esc![?25l
@@ -147,7 +147,7 @@
     timeout /t 3 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     goto:menu
 
-:: Script Main Menu
+:: Menu
     :menu
     cls
     echo.
@@ -186,8 +186,8 @@
     )
 
     echo.
-    set "lines[0]=                                                        Created by: @louzkk"
-    set "lines[1]=                                                            Version: 5.0"
+    set "lines[0]=                                                          Created by: @louzkk                                             "
+    set "lines[1]=                                                             Version: 5.0"
 
     for /L %%i in (0,1,1) do (
         set "text=!lines[%%i]!"
@@ -202,7 +202,7 @@
 
     echo.
     set "lineGradient="
-    set /a "BeforeSpace=(134 - 108) / 2"
+    set /a "BeforeSpace=(135 - 109) / 2"
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
     for /L %%j in (0,1,108) do (
         set /a "colorR=colorBaseR + (variationR * %%j / 108)"
@@ -216,15 +216,15 @@
     echo.
     echo.
 
-    echo                           %purple%[ %roxo%%underline%1%reset% %purple%]%white% System Optimizations                       %purple%[ %roxo%%underline%2%reset% %purple%]%white% Performance Optimizations        
+    echo                            %purple%[ %roxo%%underline%1%reset% %purple%]%white% System Optimizations                       %purple%[ %roxo%%underline%2%reset% %purple%]%white% Performance Optimizations        
     echo.
-    echo                           %purple%[ %roxo%%underline%3%reset% %purple%]%white% Network Optimizations                      %purple%[ %roxo%%underline%4%reset% %purple%]%white% Disable/Block Telemetry        
+    echo                            %purple%[ %roxo%%underline%3%reset% %purple%]%white% Network Optimizations                      %purple%[ %roxo%%underline%4%reset% %purple%]%white% Integrity ^& Health Fixes        
     echo.
-    echo                           %purple%[ %roxo%%underline%5%reset% %purple%]%white% GhostOPX Power Plan                        %purple%[ %roxo%%underline%6%reset% %purple%]%white% System Health Repair    
+    echo                            %purple%[ %roxo%%underline%5%reset% %purple%]%white% GhostOPX Power Plan                        %purple%[ %roxo%%underline%6%reset% %purple%]%white% Telemetry Disable (OOSU10)   
     echo.
-    echo                           %purple%[ %roxo%%underline%7%reset% %purple%]%white% System Cache Cleaner                       %purple%[ %roxo%%underline%8%reset% %purple%]%white% Unlock Thermal Limits                        
+    echo                            %purple%[ %roxo%%underline%7%reset% %purple%]%white% System Files Cleaner                       %purple%[ %roxo%%underline%8%reset% %purple%]%white% Unecessary Services                        
     echo.
-    echo                           %purple%[ %roxo%%underline%9%reset% %purple%]%white% %g%NVIDIA%reset% Custom Tweaks                       %purple%[ %roxo%%underline%10%reset% %purple%]%white% Disable Services/Bloatware
+    echo                            %purple%[ %roxo%%underline%9%reset% %purple%]%white% %green%NVIDIA%reset% Optimization                        %purple%[ %roxo%%underline%10%reset% %purple%]%white% Remove Bloatware Apps
 
     set /p answer="%white% >:%roxo%"
 
@@ -242,29 +242,28 @@
     if "%answer%"=="reload" goto:variables
     if "%answer%"=="update" goto:variables
     if "%answer%"=="restart" goto:restart
-    if "%answer%"=="reload" goto:start
     if "%answer%"=="exit" exit
     if "%answer%"=="menu" goto:menu
-    if "%answer%"=="hack" call:tree
     if "%answer%"=="reboot" goto:reboot
     if "%answer%"=="rebootcancel" goto:rebootcancel
     if "%answer%"=="cancel" goto:rebootcancel
 
+    :: Option Keys
     if %answer% equ 1 call:system
     if %answer% equ 2 call:performance
     if %answer% equ 3 call:network
-    if %answer% equ 4 call:telemetry
+    if %answer% equ 4 call:health
     if %answer% equ 5 call:powerplan
-    if %answer% equ 6 call:health
-    if %answer% equ 7 call:cachecleaner
-    if %answer% equ 8 call:thermal
+    if %answer% equ 6 call:telemetry
+    if %answer% equ 7 call:cleaner
+    if %answer% equ 8 call:services
     if %answer% equ 9 call:nvidia
-    if %answer% equ 10 call:services
+    if %answer% equ 10 call:bloatware
 
     :: Invalid Input
     goto:menu
 
-:: System Optimizations
+:: Tweaks
     :system
     cls
     echo.
@@ -497,7 +496,7 @@
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Taskbar Tweaks Reverted.
 
     reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v EnableTransparency /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Transparency (Blur) enabled.
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Transparency enabled.
 
     reg delete "HKEY_CURRENT_USER\Control Panel\Mouse" /v "MouseSpeed" /t REG_SZ /d "0" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg delete "HKEY_CURRENT_USER\Control Panel\Mouse" /v "MouseThreshold1" /t REG_SZ /d "0" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
@@ -591,7 +590,7 @@
     echo --- Finished System Optimizations Revert --- >> Ghost_Log.txt
     goto:menu
 
-:: Performance Optimizations
+:: Performance
     :performance
     cls
     echo.
@@ -662,8 +661,6 @@
     echo.
     echo                                                  %purple%[ %roxo%%underline%2%reset% %purple%]%white% Revert Performance Optimizations     
     echo.
-    echo                                                  %cinza%[ 3 ] AMD - NVIDIA - INTEL Tweaks   
-    echo.
     echo.
     echo                                                          %purple%[ %roxo%%underline%M%reset% %purple%]%white% Back to Menu
 
@@ -672,7 +669,6 @@
     :: Option Keys
     if %answer% equ 1 goto:performance2
     if %answer% equ 2 goto:performance_undo
-    if %answer% equ 3 goto:performance
     if "%answer%"=="m" goto:menu
     if "%answer%"=="M" goto:menu
 
@@ -687,6 +683,10 @@
     timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo --- Starting Performance Optimizations --- >> Ghost_Log.txt
 
+    reg add "HKEY_CURRENT_USER\Software\Microsoft\GameBar" /v "AllowAutoGameMode" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKEY_CURRENT_USER\Software\Microsoft\GameBar" /v "AutoGameModeEnabled" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Game Mode enabled.
+
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Affinity" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Background Only" /t REG_SZ /d False /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
@@ -698,16 +698,18 @@
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Latency Sensitive" /t REG_SZ /d True /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Game Priorities Optimized.
 
-    reg add "HKEY_CURRENT_USER\Software\Microsoft\GameBar" /v "AllowAutoGameMode" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKEY_CURRENT_USER\Software\Microsoft\GameBar" /v "AutoGameModeEnabled" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Game Mode enabled.
-
     reg add "HKCU\SYSTEM\GameConfigStore" /v "GameDVR_DSEBehavior" /t REG_DWORD /d "0" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKCU\SYSTEM\GameConfigStore" /v "GameDVR_FSEBehaviorMode" /t REG_DWORD /d "0" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKCU\SYSTEM\GameConfigStore" /v "GameDVR_EFSEFeatureFlags" /t REG_DWORD /d "0" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKCU\SYSTEM\GameConfigStore" /v "GameDVR_DXGIHonorFSEWindowsCompatible" /t REG_DWORD /d "0" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKCU\SYSTEM\GameConfigStore" /v "GameDVR_HonorUserFSEBehaviorMode" /t REG_DWORD /d "1" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Fullscreen Optimizations enabled.
+
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\PriorityControl" /v "Win32PrioritySeparation" /t REG_DWORD /d 38 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Priority Separation Optimized.
+
+    reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power" /v PowerThrottlingOff /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Power Throttling disabled.
 
     reg delete "HKLM\SOFTWARE\Microsoft\Windows\Dwm" /v "OverlayTestMode" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% MPO (Multiple Plane Overlay) enabled.
@@ -717,12 +719,6 @@
     reg add "HKLM\SYSTEM\CurrentControlSet\Enum\%%g\Device Parameters\Interrupt Management\Affinity Policy" /v "DevicePriority" /t REG_DWORD /d "0" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     )
     echo   %purple%[ %roxo%•%purple% %purple%]%white% MSI (Message Signaled Interrupts) enabled.
-
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\PriorityControl" /v "Win32PrioritySeparation" /t REG_DWORD /d 38 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Priority Separation Optimized.
-
-    reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power" /v PowerThrottlingOff /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Power Throttling disabled.
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "ExitLatency" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "ExitLatencyCheckEnabled" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
@@ -775,8 +771,8 @@
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Input-Lag and Latency Optimized.
 
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm" /v "FlipQueueSize" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v FrameLatency /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v ClockTimerResolution /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "FrameLatency" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "ClockTimerResolution" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "TimerResolution" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Timer Resolution Optimized.
 
@@ -789,17 +785,17 @@
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "LargeSystemCache" /t REG_DWORD /d "1" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Largue System Cache Optimized.
 
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v EnableVirtualizationBasedSecurity /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v RequirePlatformSecurityFeatures /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v HVCIMATRequired /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v "EnableVirtualizationBasedSecurity" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v "RequirePlatformSecurityFeatures" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v "HVCIMATRequired" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\HypervisorEnforcedCodeIntegrity" /v Enabled /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard" /v EnableVirtualizationBasedSecurity /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard" /v "EnableVirtualizationBasedSecurity" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" /v Enabled /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     bcdedit /set hypervisorlaunch off >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Virtualization Based Security disabled.
 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v FeatureSettingsOverride /t REG_DWORD /d 3 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v FeatureSettingsOverrideMask /t REG_DWORD /d 3 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverride" /t REG_DWORD /d 3 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverrideMask" /t REG_DWORD /d 3 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Spectre/Meltdown algorithms disabled.
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "TdrDelay" /t REG_DWORD /d 10 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
@@ -926,17 +922,17 @@
     reg delete "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "LargeSystemCache" /t REG_DWORD /d "1" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Largue System Cache Reverted.
 
-    reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v EnableVirtualizationBasedSecurity /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v RequirePlatformSecurityFeatures /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v HVCIMATRequired /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v "EnableVirtualizationBasedSecurity" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v "RequirePlatformSecurityFeatures" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v "HVCIMATRequired" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\HypervisorEnforcedCodeIntegrity" /v Enabled /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard" /v EnableVirtualizationBasedSecurity /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard" /v "EnableVirtualizationBasedSecurity" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg delete "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" /v Enabled /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     bcdedit /set hypervisorlaunch off >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Virtualization Based Security enabled.
 
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v FeatureSettingsOverride /t REG_DWORD /d 3 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v FeatureSettingsOverrideMask /t REG_DWORD /d 3 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverride" /t REG_DWORD /d 3 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverrideMask" /t REG_DWORD /d 3 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Spectre/Meltdown algorithms enabled.
 
     echo.
@@ -949,7 +945,7 @@
     echo --- Finished Performance Optimizations reverted --- >> Ghost_Log.txt
     goto:menu
 
-:: Network Optimizations
+:: Network
     :network
     cls
     echo.
@@ -1054,11 +1050,13 @@
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Network Interface detected. %InterfaceID%
     timeout /t 1 >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
 
-    netsh int tcp set global autotuninglevel=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     netsh int tcp set global ecncapability=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     netsh int tcp set global dca=enabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     netsh int tcp set global timestamps=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% General Network Tweaks applied.
+
+    netsh int tcp set global autotuninglevel=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Autotuning disabled.
 
     netsh int tcp set global netdma=enabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo  %purple%[ %roxo%•%purple% %purple%]%white% Direct Memory Access enabled.
@@ -1080,12 +1078,12 @@
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Network Throttling disabled. 
 
     reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v TCPNoDelay /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters" /v DisableBandwidthThrottling /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters" /v "DisableBandwidthThrottling" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters" /v MaxCmds /t REG_DWORD /d 2048 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Network Throughput Optimized. 
 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{%InterfaceID%}" /v TcpAckFrequency /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{%InterfaceID%}" /v TCPNoDelay /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{%InterfaceID%}" /v "TcpAckFrequency" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{%InterfaceID%}" /v "TCPNoDelay" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces" /v "TcpAckFrequency" /t REG_DWORD /d "1" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces" /v "TCPNoDelay" /t REG_DWORD /d "1" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces" /v "TcpDelAckTicks" /t REG_DWORD /d "0" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
@@ -1096,16 +1094,16 @@
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings" /v "DownloadMode" /t REG_DWORD /d "0" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Delivery Optimization disabled. 
 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v DisableTaskOffload /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v EnableTCPChimney /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v EnableRSS /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v EnableTCPA /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "DisableTaskOffload" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableTCPChimney" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableRSS" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableTCPA" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Tcpip parameters Optimized. 
 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v TcpMaxHalfOpen /t REG_DWORD /d 100 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v TcpMaxHalfOpenRetried /t REG_DWORD /d 80 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v TcpMaxPortsExhausted /t REG_DWORD /d 5 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v TcpNumConnections /t REG_DWORD /d 500 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpMaxHalfOpen" /t REG_DWORD /d 100 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpMaxHalfOpenRetried" /t REG_DWORD /d 80 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpMaxPortsExhausted" /t REG_DWORD /d 5 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpNumConnections" /t REG_DWORD /d 500 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Increased TCP Simultaneous Packets. 
 
     netsh int tcp set global congestionprovider=ctcp >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
@@ -1113,36 +1111,36 @@
     netsh int tcp set supplemental Internet congestionprovider=ctcp >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% CTCP Optimized.
 
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Psched" /v NonBestEffortLimit /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v EnableECN /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Psched" /v "NonBestEffortLimit" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableECN" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Quality of Service Optimized. 
 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v CacheHashTableBucketSize /t REG_DWORD /d 384 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v CacheHashTableSize /t REG_DWORD /d 384 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v MaxCacheEntryTtlLimit /t REG_DWORD /d 64000 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v MaxCacheTtl /t REG_DWORD /d 64000 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "CacheHashTableBucketSize" /t REG_DWORD /d 384 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "CacheHashTableSize" /t REG_DWORD /d 384 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "MaxCacheEntryTtlLimit" /t REG_DWORD /d 64000 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "MaxCacheTtl" /t REG_DWORD /d 64000 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% DNS Cache Optimized. 
 
     ipconfig /flushdns >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% DNS Cache cleared. 
 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v BufferAlignment /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v DefaultReceiveWindow /t REG_DWORD /d 262144 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v DefaultSendWindow /t REG_DWORD /d 262144 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v DisableAddressSharing /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v DisableChainedReceive /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v disabledirectAcceptEx /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v DoNotHoldNICBuffers /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v DynamicSendBufferDisable /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v FastSendDatagramThreshold /t REG_DWORD /d 1024 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v FastCopyReceiveThreshold /t REG_DWORD /d 1024 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v IgnoreOrderlyRelease /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v IgnorePushBitOnReceives /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "BufferAlignment" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "DefaultReceiveWindow" /t REG_DWORD /d 262144 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "DefaultSendWindow" /t REG_DWORD /d 262144 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "DisableAddressSharing" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "DisableChainedReceive" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "disabledirectAcceptEx" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "DoNotHoldNICBuffers" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "DynamicSendBufferDisable" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "FastSendDatagramThreshold" /t REG_DWORD /d 1024 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "FastCopyReceiveThreshold" /t REG_DWORD /d 1024 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "IgnoreOrderlyRelease" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "IgnorePushBitOnReceives" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Buffer and Address Optimized. 
 
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v DODownloadMode /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v DownloadMode /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DODownloadMode" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DownloadMode" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Delivery Optimization disabled. 
 
     echo.
@@ -1191,13 +1189,13 @@
     reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "NetworkThrottlingIndex" /t REG_DWORD /d "4294967295" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Network Throttling enabled. 
 
-    reg delete "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v TCPNoDelay /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters" /v DisableBandwidthThrottling /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters" /v MaxCmds /t REG_DWORD /d 2048 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v "TCPNoDelay" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters" /v "DisableBandwidthThrottling" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters" /v "MaxCmds" /t REG_DWORD /d 2048 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Network Throughput reverted. 
 
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{%InterfaceID%}" /v TcpAckFrequency /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{%InterfaceID%}" /v TCPNoDelay /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{%InterfaceID%}" /v "TcpAckFrequency" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{%InterfaceID%}" /v "TCPNoDelay" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces" /v "TcpAckFrequency" /t REG_DWORD /d "1" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces" /v "TCPNoDelay" /t REG_DWORD /d "1" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces" /v "TcpDelAckTicks" /t REG_DWORD /d "0" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
@@ -1208,30 +1206,30 @@
     reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings" /v "DownloadMode" /t REG_DWORD /d "0" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Delivery Optimization enabled. 
 
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v DisableTaskOffload /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v EnableTCPChimney /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v EnableRSS /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v EnableTCPA /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "DisableTaskOffload" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableTCPChimney" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableRSS" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableTCPA" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% TCP Offload, RSS and NetDMA disabled. 
 
     netsh int tcp set global congestionprovider=ctcp >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     netsh int tcp set supplemental template=Internet congestionprovider=ctcp >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% CTCP reverted.
 
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v TcpMaxHalfOpen /t REG_DWORD /d 100 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v TcpMaxHalfOpenRetried /t REG_DWORD /d 80 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v TcpMaxPortsExhausted /t REG_DWORD /d 5 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v TcpNumConnections /t REG_DWORD /d 500 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpMaxHalfOpen" /t REG_DWORD /d 100 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpMaxHalfOpenRetried" /t REG_DWORD /d 80 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpMaxPortsExhausted" /t REG_DWORD /d 5 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpNumConnections" /t REG_DWORD /d 500 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Reverted TCP Simultaneous Packets. 
 
-    reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\Psched" /v NonBestEffortLimit /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v EnableECN /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\Psched" /v "NonBestEffortLimit" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableECN" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Quality of Service Reverted. 
 
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v CacheHashTableBucketSize /t REG_DWORD /d 384 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v CacheHashTableSize /t REG_DWORD /d 384 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v MaxCacheEntryTtlLimit /t REG_DWORD /d 64000 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v MaxCacheTtl /t REG_DWORD /d 64000 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "CacheHashTableBucketSize" /t REG_DWORD /d 384 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "CacheHashTableSize" /t REG_DWORD /d 384 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "MaxCacheEntryTtlLimit" /t REG_DWORD /d 64000 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "MaxCacheTtl" /t REG_DWORD /d 64000 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% DNS Cache Reverted. 
 
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Flushing DNS Cache...
@@ -1239,22 +1237,22 @@
     timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% DNS Cache cleared. 
 
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v BufferAlignment /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v DefaultReceiveWindow /t REG_DWORD /d 262144 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v DefaultSendWindow /t REG_DWORD /d 262144 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v DisableAddressSharing /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v DisableChainedReceive /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v disabledirectAcceptEx /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v DoNotHoldNICBuffers /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v DynamicSendBufferDisable /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v FastSendDatagramThreshold /t REG_DWORD /d 1024 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v FastCopyReceiveThreshold /t REG_DWORD /d 1024 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v IgnoreOrderlyRelease /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v IgnorePushBitOnReceives /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "BufferAlignment" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "DefaultReceiveWindow" /t REG_DWORD /d 262144 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "DefaultSendWindow" /t REG_DWORD /d 262144 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "DisableAddressSharing" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "DisableChainedReceive" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "disabledirectAcceptEx" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "DoNotHoldNICBuffers" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "DynamicSendBufferDisable" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "FastSendDatagramThreshold" /t REG_DWORD /d 1024 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "FastCopyReceiveThreshold" /t REG_DWORD /d 1024 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "IgnoreOrderlyRelease" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "IgnorePushBitOnReceives" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Buffer and Address Reverted. 
 
-    reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v DODownloadMode /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v DownloadMode /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DODownloadMode" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DownloadMode" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Delivery Optimization enabled. 
 
     echo.
@@ -1267,7 +1265,7 @@
     echo --- Finished Network Optimizations Reverted --- >> Ghost_Log.txt
     goto:menu
 
-:: Telemetry Block
+:: Telemetry
     :telemetry
     cls
     echo.
@@ -1410,10 +1408,10 @@
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableWindowsLocationProvider" /t REG_DWORD /d "1" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Location Sensor disabled.
 
-    reg add "HKCU\Software\Microsoft\Siuf\Rules" /v NumberOfSIUFInPeriod /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKCU\Software\Microsoft\Siuf\Rules" /v PeriodInDays /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKCU\Software\Microsoft\Siuf\Rules" /v NumberOfNotificationsSent /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v DisableTailoredExperiencesWithDiagnosticData /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKCU\Software\Microsoft\Siuf\Rules" /v "NumberOfSIUFInPeriod" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKCU\Software\Microsoft\Siuf\Rules" /v "PeriodInDays" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKCU\Software\Microsoft\Siuf\Rules" /v "NumberOfNotificationsSent" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableTailoredExperiencesWithDiagnosticData" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Experience Feedback disabled.
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\AppModel" /v "Start" /t REG_DWORD /d "0" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1 
@@ -1456,7 +1454,7 @@
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableThirdPartySuggestions" /t REG_DWORD /d "1" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t REG_DWORD /d "1" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa\Credssp" /v "DebugLogLevel" /t REG_DWORD /d "0" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo  %purple%[ %roxo%•%purple% %purple%]%white% Autologgers disabled.
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Autologgers disabled.
 
     sc config DiagTrack start= disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     sc config dmwappushservice start= disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
@@ -1542,10 +1540,10 @@
     reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableWindowsLocationProvider" /t REG_DWORD /d "1" /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Location Sensor enabled.
 
-    reg delete "HKCU\Software\Microsoft\Siuf\Rules" /v NumberOfSIUFInPeriod /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKCU\Software\Microsoft\Siuf\Rules" /v PeriodInDays /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKCU\Software\Microsoft\Siuf\Rules" /v NumberOfNotificationsSent /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v DisableTailoredExperiencesWithDiagnosticData /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKCU\Software\Microsoft\Siuf\Rules" /v "NumberOfSIUFInPeriod" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKCU\Software\Microsoft\Siuf\Rules" /v "PeriodInDays" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKCU\Software\Microsoft\Siuf\Rules" /v "NumberOfNotificationsSent" /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableTailoredExperiencesWithDiagnosticData" /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Experience Feedback enabled.
 
     echo.
@@ -1756,7 +1754,7 @@
     echo --- Finished Power Plan --- >> Ghost_Log.txt
     goto:menu
 
-:: Health Repair
+:: Integrity
     :health
     cls
     echo.
@@ -1970,7 +1968,7 @@
     title Ghost Optimizer (Reboot Required)
     echo --- Finished Full Health Check/Repair --- >> Ghost_Log.txt
     goto:menu
-:: Cache Cleaner
+:: Clean
     :cachecleaner
     cls
     echo.
@@ -2134,8 +2132,8 @@
     title Ghost Optimizer (Reboot Required)
     goto:menu
 
-:: Unlock Thermal
-    :thermal
+:: Services
+    :services
     cls
     echo.
     echo.
@@ -2145,43 +2143,46 @@
     set /a "MID=(W-2)/2"
 
     for /L %%j in (0,1,!LAST!) do (
-        set /a "colorR=255"
-        set /a "colorG=(165 * %%j / !LAST!)"
-        set /a "colorB=0"
-        set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
+    if %%j LEQ !MID! (
+    set /a "colorR=40 + (88 * %%j / !MID!)"
+    ) else (
+    set /a "colorR=128 - (128 * (%%j-!MID!) / (!LAST!-!MID!))"
+    )
+    set /a "colorG=0", "colorB=255"
+    set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
     )
 
-    set "lines[0]=                                     ████████╗██╗  ██╗███████╗██████╗ ███╗   ███╗ █████╗ ██╗     "
-    set "lines[1]=                                     ╚══██╔══╝██║  ██║██╔════╝██╔══██╗████╗ ████║██╔══██╗██║     "
-    set "lines[2]=                                        ██║   ███████║█████╗  ██████╔╝██╔████╔██║███████║██║     "
-    set "lines[3]=                                        ██║   ██╔══██║██╔══╝  ██╔══██╗██║╚██╔╝██║██╔══██║██║     "
-    set "lines[4]=                                        ██║   ██║  ██║███████╗██║  ██║██║ ╚═╝ ██║██║  ██║███████╗"
-    set "lines[5]=                                        ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝"
+    set "lines[0]=                                     ███████╗███████╗██████╗ ██╗   ██╗██╗ ██████╗███████╗███████╗ "
+    set "lines[1]=                                     ██╔════╝██╔════╝██╔══██╗██║   ██║██║██╔════╝██╔════╝██╔════╝"
+    set "lines[2]=                                     ███████╗█████╗  ██████╔╝██║   ██║██║██║     █████╗  ███████╗"
+    set "lines[3]=                                     ╚════██║██╔══╝  ██╔══██╗╚██╗ ██╔╝██║██║     ██╔══╝  ╚════██║"
+    set "lines[4]=                                     ███████║███████╗██║  ██║ ╚████╔╝ ██║╚██████╗███████╗███████║"
+    set "lines[5]=                                     ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝ ╚═════╝╚══════╝╚══════╝"
 
     for /L %%i in (0,1,5) do (
-        set "text=!lines[%%i]!"
-        set "textGradient="
-        for /L %%j in (0,1,!LAST!) do (
-            set "char=!text:~%%j,1!"
-            if "!char!"=="" set "char= "
-            set "textGradient=!textGradient!!esc[%%j]!!char!"
-        )
-        echo !textGradient!!esc![0m
+    set "text=!lines[%%i]!"
+    set "textGradient="
+    for /L %%j in (0,1,!LAST!) do (
+    set "char=!text:~%%j,1!"
+    if "!char!"=="" set "char= "
+    set "textGradient=!textGradient!!esc[%%j]!!char!"
+    )
+    echo !textGradient!!esc![0m
     )
 
     echo.
-    set "lines[0]=                                      Disable thermal Throttling for maximum hardware performance."
-    set "lines[1]=                             Not recomended with poor cooling systems or laptops, may not work in some BIOS."
+    set "lines[0]=                                             Turns off unnecessary services and bloatware."
+    set "lines[1]=                                   Reduces background resource usage without affecting core functions."
 
     for /L %%i in (0,1,1) do (
-        set "text=!lines[%%i]!"
-        set "textGradient="
-        for /L %%j in (0,1,129) do (
-            set "char=!text:~%%j,1!"
-            if "!char!"=="" set "char= "
-            set "textGradient=!textGradient!!esc[%%j]!!char!"
-        )
-        echo !textGradient!!esc![0m
+    set "text=!lines[%%i]!"
+    set "textGradient="
+    for /L %%j in (0,1,129) do (
+    set "char=!text:~%%j,1!"
+    if "!char!"=="" set "char= "
+    set "textGradient=!textGradient!!esc[%%j]!!char!"
+    )
+    echo !textGradient!!esc![0m
     )
 
     echo.
@@ -2189,10 +2190,10 @@
     set /a "BeforeSpace=(134 - 108) / 2"
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
     for /L %%j in (0,1,108) do (
-        set /a "colorR=255"
-        set /a "colorG=(165 * %%j / 108)"
-        set /a "colorB=0"
-        set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
+    set /a "colorR=colorBaseR + (variationR * %%j / 108)"
+    set /a "colorG=colorBaseG + (variationG * %%j / 108)"
+    set /a "colorB=colorBaseB + (variationB * %%j / 108)"
+    set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
     )
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
     echo !lineGradient!!esc![0m
@@ -2200,9 +2201,9 @@
 
     echo.
     echo.
-    echo                                                     %red%[ %orange%%underline%1%reset% %red%]%white% Unlock Thermal Limits
+    echo                                                     %red%[ %orange%%underline%1%reset% %red%]%white% Disable Unecessary Services
     echo.
-    echo                                                     %red%[ %orange%%underline%2%reset% %red%]%white% Lock Thermal Limits   
+    echo                                                     %red%[ %orange%%underline%2%reset% %red%]%white% Enable Unecessary Services   
     echo.
     echo.
     echo                                                        %red%[ %orange%%underline%M%reset% %red%]%white% Back to Menu
@@ -2221,61 +2222,173 @@
     :thermal2
     cls
     echo.
-    echo   %red%[ %orange%•%purple% %red%]%white% Unlocking %red%Thermal%reset% Limit... %red%(%orange%~2s%red%)%white%
+    echo   %red%[ %orange%•%purple% %red%]%white% Disabling %red%Unecessary Services%reset%... %red%(%orange%~2s%red%)%white%
     echo.
     timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo --- Unlocking Thermal Limit --- >> Ghost_Log.txt
+    echo --- Disabling Unecessary Services --- >> Ghost_Log.txt
 
-    reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power" /v PowerThrottlingOff /t REG_DWORD /d 1 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %red%[ %orange%•%purple% %red%]%white% Power Throttling disabled.
+    sc config WerSvc start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Error Reporting disabled.
 
-    timeout /t 1 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    sc config Spooler start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Print Spooler disabled.
 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\be337238-0d82-4146-a960-4f3749d470c7" /v Attributes /t REG_DWORD /d 2 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %red%[ %orange%•%purple% %red%]%white% Thermal Throttling disabled.
+    sc config MapsBroker start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Maps Broker disabled.
+
+    sc config TabletInputService start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    sc config TouchKeyboardAndHandwritingPanelService start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Tablet Input disabled.
+
+    sc config WSearch start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Windows Search disabled.
+
+    sc config bits start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Background Intelligent Transfer disabled.
+
+    sc config CDPSvc start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Connected Devices Platform disabled.
+
+    sc config DiagTrack start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Connected User Experience disabled.
+
+    sc config RemoteRegistry start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Remote Registry disabled.
+
+    sc config WbioSrvc start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Windows Biometric disabled.
+
+    sc config wisvc start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Windows Insider disabled.
+
+    sc config WalletService start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Wallet disabled.
+
+    sc config FrameServer start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Frame Server disabled.
+
+    sc config SysMain start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% SysMain disabled.
+
+    sc config RetailDemo start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Retail Demo disabled.
+
+    sc config xbgm start= disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    sc config XblAuthManager start= disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    sc config XblGameSave start= disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    sc config XboxGipSvc start= disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    sc config XboxNetApiSvc start= disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Xbox Services disabled.
+
+    sc config dmwappushservice start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Device Management Wireless App Push disabled.
+
+    sc config Fax start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Fax service disabled.
+
+    sc config PhoneSvc start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Phone Service disabled.
+
+    sc config SharedAccess start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Internet Connection Sharing disabled.
 
     timeout /t 1 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
 
     echo.
-    echo   %red%[ %orange%•%purple% %red%]%white% Thermal Limit Unlocked %green%successfully%white%.
+    echo   %red%[ %orange%•%purple% %red%]%white% Unecessary Services disabled %green%successfully%white%.
     timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %red%[ %orange%•%purple% %red%]%white% Press Enter to continue...
     pause >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     title Ghost Optimizer
-    echo --- Thermal Limit unlocked --- >> Ghost_Log.txt
+    echo --- Unecessary Services disabled --- >> Ghost_Log.txt
     goto:menu
 
 
     :thermal3
     cls
     echo.
-    echo   %red%[ %orange%•%purple% %red%]%white% Locking %red%Thermal%reset% Limit... %red%(%orange%~2s%red%)%white%
+    echo   %red%[ %orange%•%purple% %red%]%white% Enabling %red%Unecessary Services%reset%... %red%(%orange%~2s%red%)%white%
     echo.
     timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo --- Unlocking Thermal Limit --- >> Ghost_Log.txt
+    echo --- enabling Unecessary Services --- >> Ghost_Log.txt
 
-    reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power" /v PowerThrottlingOff /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power" /v PowerThrottlingOff /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %red%[ %orange%•%purple% %red%]%white% Power Throttling enabled.
+    sc config WerSvc start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Error Reporting enabled.
 
-    timeout /t 1 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    sc config Spooler start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Print Spooler enabled.
 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\be337238-0d82-4146-a960-4f3749d470c7" /v Attributes /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\be337238-0d82-4146-a960-4f3749d470c7" /v Attributes /t REG_DWORD /d 0 /f >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %red%[ %orange%•%purple% %red%]%white% Thermal Throttling enabled.
+    sc config MapsBroker start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Maps Broker enabled.
+
+    sc config TabletInputService start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    sc config TouchKeyboardAndHandwritingPanelService start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Tablet Input enabled.
+
+    sc config WSearch start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Windows Search enabled.
+
+    sc config bits start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Background Intelligent Transfer enabled.
+
+    sc config CDPSvc start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Connected Devices Platform enabled.
+
+    sc config DiagTrack start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Connected User Experience enabled.
+
+    sc config RemoteRegistry start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Remote Registry enabled.
+
+    sc config WbioSrvc start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Windows Biometric enabled.
+
+    sc config wisvc start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Windows Insider enabled.
+
+    sc config WalletService start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Wallet enabled.
+
+    sc config FrameServer start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Frame Server enabled.
+
+    sc config SysMain start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% SysMain enabled.
+
+    sc config RetailDemo start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Retail Demo enabled.
+
+    sc config xbgm start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    sc config XblAuthManager start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    sc config XblGameSave start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    sc config XboxGipSvc start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    sc config XboxNetApiSvc start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Xbox Services enabled.
+
+    sc config dmwappushservice start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Device Management Wireless App Push enabled.
+
+    sc config Fax start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Fax service enabled.
+
+    sc config PhoneSvc start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Phone Service enabled.
+
+    sc config SharedAccess start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Internet Connection Sharing enabled.
 
     timeout /t 1 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
 
     echo.
-    echo   %red%[ %orange%•%purple% %red%]%white% Thermal Limit Locked %green%successfully%white%.
+    echo   %red%[ %orange%•%purple% %red%]%white% Unecessary Services enabled %green%successfully%white%.
     timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %red%[ %orange%•%purple% %red%]%white% Press Enter to continue...
     pause >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     title Ghost Optimizer
-    echo --- Thermal Limit unlocked --- >> Ghost_Log.txt
+    echo --- Unecessary Services enabled --- >> Ghost_Log.txt
     goto:menu
 
-:: NVIDIA Tweaks
+:: NVIDIA
         :nvidia
         cls
         echo.
@@ -2411,8 +2524,8 @@
     echo --- Profile Inspector Closed --- >> Ghost_Log.txt
     goto:nvidia
 
-:: Services/Bloatware
-    :services
+:: Bloatware
+    :debloat
     cls
     echo.
     echo.
@@ -2431,12 +2544,12 @@
     set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
     )
 
-    set "lines[0]=                                     ███████╗███████╗██████╗ ██╗   ██╗██╗ ██████╗███████╗███████╗ "
-    set "lines[1]=                                     ██╔════╝██╔════╝██╔══██╗██║   ██║██║██╔════╝██╔════╝██╔════╝"
-    set "lines[2]=                                     ███████╗█████╗  ██████╔╝██║   ██║██║██║     █████╗  ███████╗"
-    set "lines[3]=                                     ╚════██║██╔══╝  ██╔══██╗╚██╗ ██╔╝██║██║     ██╔══╝  ╚════██║"
-    set "lines[4]=                                     ███████║███████╗██║  ██║ ╚████╔╝ ██║╚██████╗███████╗███████║"
-    set "lines[5]=                                     ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝ ╚═════╝╚══════╝╚══════╝"
+    set "lines[0]=                                      ██████╗ ███████╗██████╗ ██╗      ██████╗  █████╗ ████████╗ "
+    set "lines[1]=                                      ██╔══██╗██╔════╝██╔══██╗██║     ██╔═══██╗██╔══██╗╚══██╔══╝"
+    set "lines[2]=                                      ██║  ██║█████╗  ██████╔╝██║     ██║   ██║███████║   ██║   "
+    set "lines[3]=                                      ██║  ██║██╔══╝  ██╔══██╗██║     ██║   ██║██╔══██║   ██║   "
+    set "lines[4]=                                      ██████╔╝███████╗██████╔╝███████╗╚██████╔╝██║  ██║   ██║   "
+    set "lines[5]=                                      ╚═════╝ ╚══════╝╚═════╝ ╚══════╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   "
 
     for /L %%i in (0,1,5) do (
     set "text=!lines[%%i]!"
@@ -2450,10 +2563,9 @@
     )
 
     echo.
-    set "lines[0]=                                             Turns off unnecessary services and bloatware."
-    set "lines[1]=                                   Reduces background resource usage without affecting core functions."
+    set "lines[0]=                                             Cleans pre-installed apps without affecting core functions."
 
-    for /L %%i in (0,1,1) do (
+    for /L %%i in (0,1) do (
     set "text=!lines[%%i]!"
     set "textGradient="
     for /L %%j in (0,1,129) do (
@@ -2480,9 +2592,9 @@
 
     echo.
     echo.
-    echo                                                       %purple%[ %roxo%%underline%1%reset% %purple%]%white% Start Services ^& Bloatware Removal
+    echo                                                       %purple%[ %roxo%%underline%1%reset% %purple%]%white% Remove Bloatware
     echo.
-    echo                                                       %purple%[ %roxo%%underline%2%reset% %purple%]%white% Revert Services ^& Bloatware Removal      
+    echo                                                       %purple%[ %roxo%%underline%2%reset% %purple%]%white% Revert Bloatware      
     echo.
     echo.
     echo                                                         %purple%[ %roxo%%underline%M%reset% %purple%]%white% Back to Menu
@@ -2490,86 +2602,21 @@
     set /p answer="%white% >:%roxo%"
 
     :: Option Keys
-    if %answer% equ 1 goto:services2
-    if %answer% equ 2 goto:services3
+    if %answer% equ 1 goto:bloatware2
+    if %answer% equ 2 goto:bloatware3
     if "%answer%"=="m" goto:menu
     if "%answer%"=="M" goto:menu
 
     :: Invalid Input
-    goto:services
+    goto:debloat
 
-    :services2
+    :bloatware2
     cls
     echo.
     echo   %purple%[ %roxo%%underline%•%reset% %purple%]%white% Starting %purple%Services ^& Bloatware%reset% Removal... %purple%(%roxo%~2s%purple%)%reset%
     echo.
     timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo --- Starting Services and Bloatware Removal --- >> Ghost_Log.txt
-
-    sc config WerSvc start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Error Reporting disabled.
-
-    sc config Spooler start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Print Spooler disabled.
-
-    sc config MapsBroker start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Maps Broker disabled.
-
-    sc config TabletInputService start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    sc config TouchKeyboardAndHandwritingPanelService start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Tablet Input disabled.
-
-    sc config WSearch start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Windows Search disabled.
-
-    sc config bits start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Background Intelligent Transfer disabled.
-
-    sc config CDPSvc start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Connected Devices Platform disabled.
-
-    sc config DiagTrack start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Connected User Experience disabled.
-
-    sc config RemoteRegistry start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Remote Registry disabled.
-
-    sc config WbioSrvc start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Windows Biometric disabled.
-
-    sc config wisvc start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Windows Insider disabled.
-
-    sc config WalletService start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Wallet disabled.
-
-    sc config FrameServer start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Frame Server disabled.
-
-    sc config SysMain start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% SysMain disabled.
-
-    sc config RetailDemo start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Retail Demo disabled.
-
-    sc config xbgm start= disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    sc config XblAuthManager start= disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    sc config XblGameSave start= disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    sc config XboxGipSvc start= disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    sc config XboxNetApiSvc start= disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Xbox Services disabled.
-
-    sc config dmwappushservice start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Device Management Wireless App Push disabled.
-
-    sc config Fax start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Fax service disabled.
-
-    sc config PhoneSvc start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Phone Service disabled.
-
-    sc config SharedAccess start=disabled >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Internet Connection Sharing disabled.
+    echo --- Removing bloatware --- >> Ghost_Log.txt
 
     PowerShell -Command "Get-AppxPackage -allusers *3DBuilder* | Remove-AppxPackage" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% 3DBuilder uninstalled.
@@ -2629,6 +2676,7 @@
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Alarms uninstalled.
 
     PowerShell -Command "Get-AppxPackage -allusers *WindowsPhone* | Remove-AppxPackage" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *YourPhone* | Remove-AppxPackage" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Windows Phone uninstalled.
 
     PowerShell -Command "Get-AppxPackage -allusers *WindowsMaps* | Remove-AppxPackage" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
@@ -2649,178 +2697,142 @@
     Powershell -Command "Get-appxpackage -allusers *Microsoft.549981C3F5F10* | Remove-AppxPackage" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Cortana uninstalled.
 
+    PowerShell -Command "Get-AppxPackage -allusers *Teams* | Remove-AppxPackage" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Microsoft Teams uninstalled.
+
+    PowerShell -Command "Get-AppxPackage -allusers *MicrosoftStickyNotes* | Remove-AppxPackage" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Sticky Notes uninstalled.
+
+    PowerShell -Command "Get-AppxPackage -allusers *MixedReality.Portal* | Remove-AppxPackage" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Mixed Reality Portal uninstalled.
+
+    PowerShell -Command "Get-AppxPackage -allusers *Xbox* | Remove-AppxPackage" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Xbox app uninstalled.
+
+    winget uninstall "Windows Web Experience Pack" --silent >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Windows Widgets uninstalled.
+
     echo.
     timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     title Ghost Optimizer (Reboot Required)
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Services ^& Bloatware removed %green%successfully%white%.
     timeout /t 1 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo --- Finished Services and Bloatware Removal --- >> Ghost_Log.txt
+    echo --- Bloatware removed --- >> Ghost_Log.txt
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Restarting %purple%%underline%Ghost Optimizer%white%... %nvidia%(%verde%~2s%nvidia%)%white%
     timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     start "" "%~f0"
     exit
 
-    :services3
+    :bloatware3
     cls
     echo.
-    echo   %purple%[ %roxo%%underline%•%reset% %purple%]%white% Reverting %purple%Services ^& Bloatware%reset% Removal... %purple%(%roxo%~2s%purple%)%reset%
+    echo   %purple%[ %roxo%%underline%•%reset% %purple%]%white% Reverting %purple%Bloatware%reset%... %purple%(%roxo%~2s%purple%)%reset%
     echo.
     timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo --- Reverting Services and Bloatware Removal --- >> Ghost_Log.txt
+    echo --- Reverting Bloatware --- >> Ghost_Log.txt
 
-    sc config WerSvc start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Error Reporting enabled.
-
-    sc config Spooler start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Print Spooler enabled.
-
-    sc config MapsBroker start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Maps Broker enabled.
-
-    sc config TabletInputService start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    sc config TouchKeyboardAndHandwritingPanelService start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Tablet Input enabled.
-
-    sc config WSearch start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Windows Search enabled.
-
-    sc config bits start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Background Intelligent Transfer enabled.
-
-    sc config CDPSvc start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Connected Devices Platform enabled.
-
-    sc config DiagTrack start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Connected User Experience enabled.
-
-    sc config RemoteRegistry start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Remote Registry enabled.
-
-    sc config WbioSrvc start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Windows Biometric enabled.
-
-    sc config wisvc start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Windows Insider enabled.
-
-    sc config WalletService start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Wallet enabled.
-
-    sc config FrameServer start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Frame Server enabled.
-
-    sc config SysMain start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% SysMain enabled.
-
-    sc config RetailDemo start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Retail Demo enabled.
-
-    sc config xbgm start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    sc config XblAuthManager start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    sc config XblGameSave start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    sc config XboxGipSvc start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    sc config XboxNetApiSvc start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Xbox Services enabled.
-
-    sc config dmwappushservice start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Device Management Wireless App Push enabled.
-
-    sc config Fax start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Fax service enabled.
-
-    sc config PhoneSvc start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Phone Service enabled.
-
-    sc config SharedAccess start=auto >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Internet Connection Sharing enabled.
-
-    PowerShell -Command "Get-AppxPackage -allusers *3DBuilder* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *3DBuilder* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% 3DBuilder reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *bing* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *bing* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Bing Apps reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *bingfinance* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *bingfinance* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Bing Finance reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *bingsports* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *bingsports* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Bing Sports reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *BingWeather* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *BingWeather* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Bing Weather reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *CommsPhone* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *CommsPhone* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Communications reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *Drawboard PDF* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *Drawboard PDF* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Drawboard PDF reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *Facebook* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *Facebook* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Facebook reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *Getstarted* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *Getstarted* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Get Started reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *Microsoft.Messaging* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *Microsoft.Messaging* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Messaging reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *MicrosoftOfficeHub* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *MicrosoftOfficeHub* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Office Hub reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *Office.OneNote* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *OneNote* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% OneNote reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *OneNote* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% OneNote reinstalled.
-
-    PowerShell -Command "Get-AppxPackage -allusers *people* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *people* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% People reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *SkypeApp* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *SkypeApp* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Skype reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *solit* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *solit* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Solitaire reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *Sway* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *Sway* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Sway reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *Twitter* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *Twitter* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Twitter reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *WindowsAlarms* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *WindowsAlarms* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Alarms reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *WindowsPhone* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *WindowsPhone* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Windows Phone reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *WindowsMaps* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *WindowsMaps* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Maps reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *WindowsFeedbackHub* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *WindowsFeedbackHub* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Feedback Hub reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *WindowsSoundRecorder* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *WindowsSoundRecorder* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Sound Recorder reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *windowscommunicationsapps* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *windowscommunicationsapps* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Communications reinstalled.
 
-    PowerShell -Command "Get-AppxPackage -allusers *zune* | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppXManifest.xml'}" >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
+    PowerShell -Command "Get-AppxPackage -allusers *zune* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Zune reinstalled.
+
+    PowerShell -Command "Get-AppxPackage -allusers *Microsoft.549981C3F5F10* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Cortana reinstalled.
+
+    PowerShell -Command "Get-AppxPackage -allusers *Teams* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Microsoft Teams reinstalled.
+
+    PowerShell -Command "Get-AppxPackage -allusers *MicrosoftStickyNotes* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Sticky Notes reinstalled.
+
+    PowerShell -Command "Get-AppxPackage -allusers *MixedReality.Portal* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Mixed Reality Portal reinstalled.
+
+    PowerShell -Command "Get-AppxPackage -allusers *Xbox* | ForEach-Object {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Xbox app reinstalled.
+
+    winget install "Windows Web Experience Pack" --silent >> "C:\Ghost Optimizer\Ghost_Log.txt" 2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Windows Widgets reinstalled.
 
     echo.
     timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     title Ghost Optimizer (Reboot Required)
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Services ^& Bloatware Removal reverted %green%successfully%white%.
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Bloatware reverted %green%successfully%white%.
     timeout /t 1 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo --- Reverted Services and Bloatware Removal --- >> Ghost_Log.txt
+    echo --- Bloatware reverted --- >> Ghost_Log.txt
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Restarting %purple%%underline%Ghost Optimizer%white%... %nvidia%(%verde%~2s%nvidia%)%white%
     timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
     start "" "%~f0"
     exit
 
-:: Restart Script
-
+:: Restart
     :restart
     cls
     echo.
@@ -2830,36 +2842,13 @@
     start "" "%~f0"
     exit
 
-:: System Tree
-
-
-    :tree
-    title There is literally no reason for me to add this.
-    cls
-    echo.
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Starting %purple%Tree%white%... %purple%(%roxo%~2s%purple%)%white%
-    echo.
-    timeout /t 2 /nobreak >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    echo --- Starting Tree --- >> Ghost_Log.txt
-
-    color 5
-    tree C:\ /f
-
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Press Enter to continue...
-    pause >> "C:\Ghost Optimizer\Ghost_Log.txt"  2>&1
-    title Ghost Optimizer
-    echo --- Finished Tree --- >> Ghost_Log.txt
-    start "" "%~f0"
-    exit
-
-:: Reboot System
+:: Reboot
     :reboot
     shutdown /r /t 10
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Your system will reboot in %purple%10%reset% seconds to apply optimizations...
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Your system will reboot in %purple%10s%reset% to apply optimizations...
     timeout /t 3 /nobreak >nul
     goto:menu
 
-:: Reboot Cancel
     :rebootcancel
     shutdown /a
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Scheduled reboot cancelled %green%successfully%white%..
