@@ -19,8 +19,8 @@ A special thanks to **Opendows** for listing this script and to **MysteryNich** 
 1. [Go to the releases](https://github.com/louzkk/Ghost-Optimizer/releases)  
 2. Download **Ghost Optimizer.bat**  
 3. Run **Ghost Optimizer.bat** as **Administrator**   
+(You may need to temporarily disable your antivirus)     
 4. Follow the interactive prompts to select optimizations  
-(You may need to temporarily disable your antivirus)
 
 # 💬 Bug or Suggestion
 Send me a message on [Discord](https://github.com/louzkk) or [Open an issue](https://github.com/louzkk/Ghost-Optimizer/issues).
