@@ -1,19 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-16"?>
 <ArrayOfProfile>
   <Profile>
-    <ProfileName>GhostOPX</ProfileName>
+    <ProfileName>Base Profile</ProfileName>
     <Executeables />
     <Settings>
       <ProfileSetting>
-        <SettingNameInfo> </SettingNameInfo>
-        <SettingID>390467</SettingID>
+        <SettingNameInfo>Texture filtering - Negative LOD bias</SettingNameInfo>
+        <SettingID>1686376</SettingID>
         <SettingValue>0</SettingValue>
-        <ValueType>Dword</ValueType>
-      </ProfileSetting>
-      <ProfileSetting>
-        <SettingNameInfo />
-        <SettingID>983226</SettingID>
-        <SettingValue>1</SettingValue>
         <ValueType>Dword</ValueType>
       </ProfileSetting>
       <ProfileSetting>
@@ -29,8 +23,8 @@
         <ValueType>Dword</ValueType>
       </ProfileSetting>
       <ProfileSetting>
-        <SettingNameInfo>Maximum pre-rendered frames</SettingNameInfo>
-        <SettingID>8102046</SettingID>
+        <SettingNameInfo>Texture filtering - Anisotropic filter optimization</SettingNameInfo>
+        <SettingID>8703344</SettingID>
         <SettingValue>1</SettingValue>
         <ValueType>Dword</ValueType>
       </ProfileSetting>
@@ -65,21 +59,15 @@
         <ValueType>Dword</ValueType>
       </ProfileSetting>
       <ProfileSetting>
-        <SettingNameInfo>Enable FXAA</SettingNameInfo>
-        <SettingID>276089202</SettingID>
-        <SettingValue>0</SettingValue>
+        <SettingNameInfo>Anisotropic filtering setting</SettingNameInfo>
+        <SettingID>270426537</SettingID>
+        <SettingValue>1</SettingValue>
         <ValueType>Dword</ValueType>
       </ProfileSetting>
       <ProfileSetting>
-        <SettingNameInfo>Enable Ansel</SettingNameInfo>
-        <SettingID>276158834</SettingID>
-        <SettingValue>0</SettingValue>
-        <ValueType>Dword</ValueType>
-      </ProfileSetting>
-      <ProfileSetting>
-        <SettingNameInfo>FRL Low Latency</SettingNameInfo>
-        <SettingID>277041152</SettingID>
-        <SettingValue>0</SettingValue>
+        <SettingNameInfo>Antialiasing - Mode</SettingNameInfo>
+        <SettingID>276757595</SettingID>
+        <SettingValue>1</SettingValue>
         <ValueType>Dword</ValueType>
       </ProfileSetting>
       <ProfileSetting>
@@ -89,26 +77,14 @@
         <ValueType>Dword</ValueType>
       </ProfileSetting>
       <ProfileSetting>
-        <SettingNameInfo>Antialiasing - Transparency Supersampling</SettingNameInfo>
-        <SettingID>282364549</SettingID>
-        <SettingValue>0</SettingValue>
-        <ValueType>Dword</ValueType>
-      </ProfileSetting>
-      <ProfileSetting>
-        <SettingNameInfo>Optimus flags for enabled applications</SettingNameInfo>
-        <SettingID>284810368</SettingID>
+        <SettingNameInfo>Anisotropic filtering mode</SettingNameInfo>
+        <SettingID>282245910</SettingID>
         <SettingValue>1</SettingValue>
         <ValueType>Dword</ValueType>
       </ProfileSetting>
       <ProfileSetting>
-        <SettingNameInfo>Enable application for Optimus</SettingNameInfo>
-        <SettingID>284810369</SettingID>
-        <SettingValue>1</SettingValue>
-        <ValueType>Dword</ValueType>
-      </ProfileSetting>
-      <ProfileSetting>
-        <SettingNameInfo>Antialiasing - Transparency Multisampling</SettingNameInfo>
-        <SettingID>284962204</SettingID>
+        <SettingNameInfo>Antialiasing - Setting</SettingNameInfo>
+        <SettingID>282555346</SettingID>
         <SettingValue>0</SettingValue>
         <ValueType>Dword</ValueType>
       </ProfileSetting>
@@ -120,5 +96,4 @@
       </ProfileSetting>
     </Settings>
   </Profile>
-
 </ArrayOfProfile>
