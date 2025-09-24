@@ -28,9 +28,9 @@ for /F "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1)
 (for /f %%a in ('echo prompt $E^| cmd') do set "esc=%%a")
 
 :: Variables
-set version=4.8.5 beta
+set version=4.8.5.2 beta
 set script=Ghost Optimizer
-set reboot=- Windows reboot required
+set reboot=- System Restart required
 
 :: Colors
 set red=[38;2;255;0;0m
@@ -2246,6 +2246,10 @@ if "%answer%"=="cancel" goto:rebootcancel
 
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Checking Github repository...
 
+    chcp 437 >> "%logfile%" 2>&1
+    powershell (Get-WmiObject -Namespace root/WMI -Class WmiMonitorBrightnessMethods).WmiSetBrightness(8,75)
+    chcp 65001 >> "%logfile%" 2>&1
+
     timeout /t 2 /nobreak >nul
 
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Downloading %highlight%GhostOPX%reset% Power Plan...
@@ -2682,6 +2686,14 @@ if "%answer%"=="cancel" goto:rebootcancel
         echo   %purple%[ %roxo%•%purple% %purple%]%white% Logs folder not found.
     )
 
+    :: Clean Ghost Optimizer Cache
+    if exist "C:\Ghost Optimizer" (
+        del /f /q "C:\Ghost Optimizer\*.*" >> "%logfile%" 2>&1
+        echo   %purple%[ %roxo%•%purple% %purple%]%white% Ghost cache cleared.
+    ) else (
+        echo   %purple%[ %roxo%•%purple% %purple%]%white% Cache folder not found.
+    )
+
     echo.
     timeout /t 3 /nobreak >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% System cleaned %green%successfully%white%.
@@ -3103,8 +3115,7 @@ if "%answer%"=="cancel" goto:rebootcancel
         echo   %verde%[ %green%•%verde% %verde%]%reset% Downloading %green%Profile Inspector%reset% package...
         curl -g -k -L -# -o "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" "https://github.com/Orbmu2k/nvidiaProfileInspector/releases/download/2.4.0.27/nvidiaProfileInspector.zip" >> "%logfile%" 2>&1
         if errorlevel 1 (
-            echo   %red%[ %red%•%red% %red%]%reset% Failed to download NVIDIA Profile Inspector!
-            echo --- Download failed --- >> "%logfile%" 2>&1
+            echo   %red%[ %red%•%red% %red%]%reset% Failed to download NVIDIA Profile Inspector.
             goto :nvidiaend
         )
     ) else (
@@ -3119,8 +3130,7 @@ if "%answer%"=="cancel" goto:rebootcancel
         chcp 65001 >> "%logfile%" 2>&1
         del /q "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" >nul 2>&1
         if not exist "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" (
-            echo   %red%[ %red%•%red% %red%]%reset% Extraction failed, executable not found!
-            echo --- Extraction failed --- >> "%logfile%" 2>&1
+            echo   %red%[ %red%•%red% %red%]%reset% Extraction failed, executable not found.
             goto :nvidiaend
         )
     )
@@ -3128,8 +3138,7 @@ if "%answer%"=="cancel" goto:rebootcancel
     echo   %verde%[ %green%•%verde% %verde%]%reset% Importing %green%Profile Inspector%reset% profile...
     curl -g -k -L -# -o "C:\%script%\NVIDIA\GhostOPX-NVIDIA.nip" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostOPX-NVIDIA.nip" >> "%logfile%" 2>&1
     if errorlevel 1 (
-        echo   %red%[ %red%•%red% %red%]%reset% Failed to download NVIDIA profile!
-        echo --- Profile download failed --- >> "%logfile%" 2>&1
+        echo   %red%[ %red%•%red% %red%]%reset% Failed to download NVIDIA profile.
         goto :nvidiaend
     )
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
@@ -3142,8 +3151,7 @@ if "%answer%"=="cancel" goto:rebootcancel
         echo   %verde%[ %green%•%verde% %verde%]%reset% Profile Inspector Tweaks Applied %green%successfully%white%.
         echo --- NVIDIA Profile applied --- >> "%logfile%" 2>&1
     ) else (
-        echo   %red%[ %red%•%red% %red%]%reset% NVIDIA Profile Inspector executable not found!
-        echo --- Apply failed --- >> "%logfile%" 2>&1
+        echo   %red%[ %red%•%red% %red%]%reset% NVIDIA Profile Inspector executable not found.
     )
 
     :nvidiaend
