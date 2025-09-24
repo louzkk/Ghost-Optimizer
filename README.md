@@ -3,12 +3,16 @@
    
 *Whether you're on a low-end laptop or a high-end PC, Ghost Optimizer helps you get the most out of your hardware with minimal resource usage.*     
 
+Still in development, no stable release.
+
 # 🚨 Disclaimer
 Use this script at your own risk. The author takes no responsibility for any damage or data loss.     
 Performance results may vary depending on your system configuration and usage.     
 
 # 🤝 Credits
 A special thanks to **Opendows** for listing this script and to **MysteryNich** for testing it before each release. Some parts of the code were adapted from other developers, and proper credit is included in the script comments.     
+
+> If you use, modify, or redistribute any part of this script, you must retain proper credits to the original authors.
 
 # 💻 Requirements
 - Windows **10**/**11** (64-bit)      

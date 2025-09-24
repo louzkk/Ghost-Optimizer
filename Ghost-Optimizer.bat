@@ -28,13 +28,12 @@ for /F "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1)
 (for /f %%a in ('echo prompt $E^| cmd') do set "esc=%%a")
 
 :: Variables
-set version=4.8
+set version=4.8.3 beta
 set script=Ghost Optimizer
 set reboot=- Windows reboot required
 
 :: Colors
 set red=[38;2;255;0;0m
-set blue=[94m
 set purple=[38;5;93m
 set yellow=[33m
 set orange=[38;5;202m
@@ -349,7 +348,7 @@ if "%answer%"=="rebootcancel" goto:rebootcancel
 if "%answer%"=="cancel" goto:rebootcancel
 
 :: Invalid Input
-goto:menu
+    goto:menu
 
 :: Apply General Tweaks
     :general
@@ -468,7 +467,7 @@ goto:menu
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Dsh" /v "AllowNewsAndInterests" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Taskbar Tweaks applied.
 
-    :: Blue
+    :: Blur Effect
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "EnableTransparency" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Transparency disabled.
 
@@ -1042,7 +1041,7 @@ goto:menu
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
     echo !lineGradient!!esc![0m     
     echo.
-    echo                                 %purple%[ %roxo%%underline%A%reset% %purple%]%white% Stop Telemetry ^& Logging                %purple%[ %roxo%%underline%R%reset% %purple%]%white% Revert Telemetry ^& Logging
+    echo                                 %purple%[ %roxo%%underline%S%reset% %purple%]%white% Stop Telemetry ^& Logging                %purple%[ %roxo%%underline%R%reset% %purple%]%white% Revert Telemetry ^& Logging
     echo.
     echo.
     echo                                                           %purple%[ %roxo%%underline%O%reset% %purple%]%white% Open OOSU10+   
@@ -1052,9 +1051,9 @@ goto:menu
     echo.
     set /p answer="%reset% >:%roxo%"
 
-    if "%answer%"=="a" goto:telemetryapply
+    if "%answer%"=="s" goto:telemetryapply
+    if "%answer%"=="S" goto:telemetryapply
     if "%answer%"=="r" goto:telemetryrevert
-    if "%answer%"=="A" goto:telemetryapply
     if "%answer%"=="R" goto:telemetryrevert
     if "%answer%"=="o" goto:oosu10
     if "%answer%"=="O" goto:oosu10
@@ -1555,16 +1554,16 @@ goto:menu
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
     echo !lineGradient!!esc![0m     
     echo.
-    echo                              %purple%[ %roxo%%underline%A%reset% %purple%]%white% Uninstall Bloatware Apps                %purple%[ %roxo%%underline%R%reset% %purple%]%white% Reinstall Bloatware Apps
+    echo                              %purple%[ %roxo%%underline%U%reset% %purple%]%white% Uninstall Bloatware Apps                %purple%[ %roxo%%underline%R%reset% %purple%]%white% Reinstall Bloatware Apps
     echo.                 
     echo.
     echo                                                         %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to Menu 
     echo.
     set /p answer="%reset% >:%roxo%"
 
-    if "%answer%"=="a" goto:debloatapply
+    if "%answer%"=="u" goto:debloatapply
+    if "%answer%"=="U" goto:debloatapply
     if "%answer%"=="r" goto:debloatrevert
-    if "%answer%"=="A" goto:debloatapply
     if "%answer%"=="R" goto:debloatrevert
     if "%answer%"=="b" goto:menu
     if "%answer%"=="B" goto:menu
@@ -1575,7 +1574,7 @@ goto:menu
     :debloatapply
     cls
     echo.
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Disabling %roxo%Bloatware%white% Apps... 
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Disabling %roxo%Bloatware%white% Features... 
     echo.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     echo --- Uninstalling Bloatware Apps --- >> "%logfile%" 2>&1
@@ -1962,7 +1961,7 @@ goto:menu
     :latencyapply
     cls
     echo.
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Applying %roxo%Latency ^& Input-Lag%white% Tweaks... 
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Applying %roxo%Latency %white%^& %roxo%Input-Lag%white% Tweaks... 
     echo.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     echo --- Applying Latency and Input-Lag Tweaks --- >> "%logfile%" 2>&1
@@ -2892,6 +2891,19 @@ goto:menu
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxNetApiSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Xbox services disabled.
 
+    :: Xbox Services
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\cplspcon" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\cphs" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\jhi_service" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\esifsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\igccservice" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\igfxCUIService2.0.0.0" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WMIRegistrationService" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\RstMwService" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Intel(R) TPM Provisioning Service" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\IntelAudioService" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Intel services disabled.
+
     echo.
     timeout /t 3 /nobreak >> "C:\%script%\Ghost_Log.txt" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Unnecessary Services disabled %green%successfully%white%.
@@ -3196,3 +3208,4 @@ goto:menu
     echo   %yellow%[ %yellow%•%yellow% %yellow%]%reset% Scheduled reboot cancelled %green%successfully%white%..
     timeout /t 3 /nobreak >nul
     goto:menu
+
