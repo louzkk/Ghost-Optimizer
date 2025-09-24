@@ -3,7 +3,7 @@
    
 *Whether you're on a low-end laptop or a high-end PC, Ghost Optimizer helps you get the most out of your hardware with minimal resource usage.*     
 
-Still in development, no stable release.
+> Still in development, no stable release.
 
 # 🚨 Disclaimer
 Use this script at your own risk. The author takes no responsibility for any damage or data loss.     
@@ -24,7 +24,6 @@ A special thanks to **Opendows** for listing this script and to **MysteryNich** 
 2. Download **Ghost Optimizer.bat**  
 3. Run **Ghost Optimizer.bat** as **Administrator**   
 (You may need to temporarily disable your antivirus)     
-4. Follow the interactive prompts to select optimizations  
 
 # 💬 Bug or Suggestion
 Send me a message on [Discord](https://github.com/louzkk) or [Open an issue](https://github.com/louzkk/Ghost-Optimizer/issues).

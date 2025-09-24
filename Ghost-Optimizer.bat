@@ -1,193 +1,195 @@
 @echo off
 
 :: Check for Admin Privileges
-net session >nul 2>&1
-if %errorlevel% NEQ 0 (
-    goto:UACPrompt
-) else (
-    goto:GotAdmin
-)
+    net session >nul 2>&1
+    if %errorlevel% NEQ 0 (
+        goto:UACPrompt
+    ) else (
+        goto:GotAdmin
+    )
 
-:UACPrompt
-    > "%temp%\getadmin.vbs" echo Set UAC = CreateObject^("Shell.Application"^)
-    >> "%temp%\getadmin.vbs" echo UAC.ShellExecute "cmd.exe", "/c ""%~s0"" %*", "", "runas", 1
-    cscript //nologo "%temp%\getadmin.vbs"
-    del "%temp%\getadmin.vbs"
-    exit /B
+    :UACPrompt
+        > "%temp%\getadmin.vbs" echo Set UAC = CreateObject^("Shell.Application"^)
+        >> "%temp%\getadmin.vbs" echo UAC.ShellExecute "cmd.exe", "/c ""%~s0"" %*", "", "runas", 1
+        cscript //nologo "%temp%\getadmin.vbs"
+        del "%temp%\getadmin.vbs"
+        exit /B
 
-:GotAdmin
-    pushd "%CD%"
-    CD /D "%~dp0"
+    :GotAdmin
+        pushd "%CD%"
+        CD /D "%~dp0"
 
 :: Properties
-mode 135,30
-setlocal enabledelayedexpansion
-powershell "Set-ExecutionPolicy Unrestricted" >nul 2>&1
-reg add "HKCU\CONSOLE" /v "VirtualTerminalLevel" /t REG_DWORD /d 1 /f >nul 2>&1
-for /F "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1) do rem"') do (set "DEL=%%a" & set "COL=%%b")
-(for /f %%a in ('echo prompt $E^| cmd') do set "esc=%%a")
+    mode 135,30
+    setlocal enabledelayedexpansion
+    powershell "Set-ExecutionPolicy Unrestricted" >nul 2>&1
+    reg add "HKCU\CONSOLE" /v "VirtualTerminalLevel" /t REG_DWORD /d 1 /f >nul 2>&1
+    for /F "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1) do rem"') do (set "DEL=%%a" & set "COL=%%b")
+    (for /f %%a in ('echo prompt $E^| cmd') do set "esc=%%a")
 
 :: Variables
-set version=4.8.5.2 beta
-set script=Ghost Optimizer
-set reboot=- System Restart required
+    set version=4.8.5.3 beta
+    set script=Ghost Optimizer
+    set reboot=- System Restart required
 
 :: Colors
-set red=[38;2;255;0;0m
-set purple=[38;5;93m
-set yellow=[33m
-set orange=[38;5;202m
-set green=[38;2;0;255;0m
-set verde=[38;5;42m
-set nvidia=[38;5;51m
-set blue=[97;44m
-set msi=[30;47m
-set reset=[0m
-set white=[0m
-set underline=[4m
-set roxo=[38;5;129m
-set cinza=[38;5;8m
-set highlight=[97;48;5;93m
+    set red=[38;2;255;0;0m
+    set purple=[38;5;93m
+    set yellow=[33m
+    set orange=[38;5;202m
+    set green=[38;2;0;255;0m
+    set verde=[38;5;42m
+    set nvidia=[38;5;51m
+    set blue=[97;44m
+    set msi=[30;47m
+    set reset=[0m
+    set white=[0m
+    set underline=[4m
+    set roxo=[38;5;129m
+    set cinza=[38;5;8m
+    set highlight=[97;48;5;93m
 
 :: Gradient
-set "colorBaseR=128"
-set "colorBaseG=0"
-set "colorBaseB=255"
-set "variationR=-96"
-set "variationG=0"
-set "variationB=0"
-for /L %%j in (0,1,129) do (
-    set /a "mid=80"
-    set /a "pos=%%j"
-    if %%j LEQ !mid! (
-        set /a "t=pos * 100 / mid"
-        set /a "colorR=40 + (88 * t / 100)"
-        set /a "colorG=0"
-        set /a "colorB=255"
-    ) else (
-        set /a "t=(pos - mid) * 100 / (82 - mid)"
-        set /a "colorR=128 - (128 * t / 100)"
-        set /a "colorG=0"
-        set /a "colorB=255"
+    set "colorBaseR=128"
+    set "colorBaseG=0"
+    set "colorBaseB=255"
+    set "variationR=-96"
+    set "variationG=0"
+    set "variationB=0"
+    for /L %%j in (0,1,129) do (
+        set /a "mid=80"
+        set /a "pos=%%j"
+        if %%j LEQ !mid! (
+            set /a "t=pos * 100 / mid"
+            set /a "colorR=40 + (88 * t / 100)"
+            set /a "colorG=0"
+            set /a "colorB=255"
+        ) else (
+            set /a "t=(pos - mid) * 100 / (82 - mid)"
+            set /a "colorR=128 - (128 * t / 100)"
+            set /a "colorG=0"
+            set /a "colorB=255"
+        )
+        if !colorR! LSS 0 set colorR=0
+        set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
     )
-    if !colorR! LSS 0 set colorR=0
-    set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
-)
 
 :: Welcome Page
-:disclaimer
-title %script% %version%
-chcp 65001 >nul 2>&1
-cls 
-echo.
-echo.
-set "W=130"
-set /a "LAST=W-2"
-set /a "MID=(W-2)/2"
+    :disclaimer
+    title %script% %version%
+    chcp 65001 >nul 2>&1
+    cls 
+    echo.
+    echo.
+    set "W=130"
+    set /a "LAST=W-2"
+    set /a "MID=(W-2)/2"
 
-for /L %%j in (0,1,!LAST!) do (
-    if %%j LEQ !MID! (
-        set /a "colorR=40 + (88 * %%j / !MID!)"
-    ) else (
-        set /a "colorR=128 - (128 * (%%j-!MID!) / (!LAST!-!MID!))"
-    )
-    set /a "colorG=0", "colorB=255"
-    set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
-)
-
-set "lines[0]=                                    ██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗  "
-set "lines[1]=                                    ██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝"
-set "lines[2]=                                    ██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗"
-set "lines[3]=                                    ██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝"
-set "lines[4]=                                    ╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗"
-set "lines[5]=                                     ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝"
-
-for /L %%i in (0,1,5) do (
-    set "text=!lines[%%i]!"
-    set "textGradient="
     for /L %%j in (0,1,!LAST!) do (
-        set "char=!text:~%%j,1!"
-        if "!char!"=="" set "char= "
-        set "textGradient=!textGradient!!esc[%%j]!!char!"
+        if %%j LEQ !MID! (
+            set /a "colorR=40 + (88 * %%j / !MID!)"
+        ) else (
+            set /a "colorR=128 - (128 * (%%j-!MID!) / (!LAST!-!MID!))"
+        )
+        set /a "colorG=0", "colorB=255"
+        set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
     )
-    echo !textGradient!!esc![0m
-)
 
-set "lineGradient="
-set /a "BeforeSpace=(135 - 109) / 2"
-for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-for /L %%j in (0,1,108) do (
-    set /a "colorR=colorBaseR + (variationR * %%j / 108)"
-    set /a "colorG=colorBaseG + (variationG * %%j / 108)"
-    set /a "colorB=colorBaseB + (variationB * %%j / 108)"
-    set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
-)
-for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-echo !lineGradient!!esc![0m
+    set "lines[0]=                                     ██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗  "
+    set "lines[1]=                                     ██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝"
+    set "lines[2]=                                     ██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗"
+    set "lines[3]=                                     ██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝"
+    set "lines[4]=                                     ╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗"
+    set "lines[5]=                                      ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝"
 
-echo.
-echo                                      %roxo%%underline%%script%%reset% is a lightweight open source tweaker/optimizer
-echo                               made to improve system performance, network, latency and fix system integrity.
-echo.
-echo                           The revert tweaks option may not work as expected; create a restore point for safety.
-echo                   Use this script at your own risk. The author takes no responsibility for any damage or data loss.
-echo                                        You can report issues or submit suggetions at Github.
-echo.
-echo.
-echo                                 %purple%[ %roxo%%underline%Y%reset% %purple%]%white% Create a restore point                %purple%[ %roxo%%underline%N%reset% %purple%]%white% Skip restore point
-echo.
-echo.
+    for /L %%i in (0,1,5) do (
+        set "text=!lines[%%i]!"
+        set "textGradient="
+        for /L %%j in (0,1,!LAST!) do (
+            set "char=!text:~%%j,1!"
+            if "!char!"=="" set "char= "
+            set "textGradient=!textGradient!!esc[%%j]!!char!"
+        )
+        echo !textGradient!!esc![0m
+    )
 
-set /p answer="%white% >:%roxo%"
+    set "lineGradient="
+    set /a "BeforeSpace=(135 - 109) / 2"
+    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
+    for /L %%j in (0,1,108) do (
+        set /a "colorR=colorBaseR + (variationR * %%j / 108)"
+        set /a "colorG=colorBaseG + (variationG * %%j / 108)"
+        set /a "colorB=colorBaseB + (variationB * %%j / 108)"
+        set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
+    )
+    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
+    echo !lineGradient!!esc![0m
+
+    echo.
+    echo                                      %roxo%%underline%%script%%reset% is a lightweight open source tweaker/optimizer
+    echo                               made to improve system performance, network, latency and fix system integrity.
+    echo.
+    echo                           The revert tweaks option may not work as expected; create a restore point for safety.
+    echo                     Use this script at your own risk. The author takes no responsibility for any damage or data loss.
+    echo                                          You can report issues or submit suggetions at Github.
+    echo.
+    echo                                                          Made by: %roxo%@louzkk%reset%
+    echo.
+    echo.
+    echo                                 %purple%[ %roxo%%underline%Y%reset% %purple%]%white% Create a restore point                %purple%[ %roxo%%underline%N%reset% %purple%]%white% Skip restore point
+    echo.
+    echo.
+
+    set /p answer="%white% >:%roxo%"
 
 :: Options
-if "%answer%"=="y" goto:restore
-if "%answer%"=="Y" goto:restore
-if "%answer%"=="n" goto:loading
-if "%answer%"=="N" goto:loading
+    if "%answer%"=="y" goto:restore
+    if "%answer%"=="Y" goto:restore
+    if "%answer%"=="n" goto:loading
+    if "%answer%"=="N" goto:loading
 
 :: Invalid Input
-goto:disclaimer
+    goto:disclaimer
 
 :: Restore Point
-:restore
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" /v "SystemRestorePointCreationFrequency" /t REG_DWORD /d 0 /f >nul 2>&1
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\SystemRestore" /v "DisableSR" /t REG_DWORD /d 0 /f >nul 2>&1
+    :restore
+    reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" /v "SystemRestorePointCreationFrequency" /t REG_DWORD /d 0 /f >nul 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\SystemRestore" /v "DisableSR" /t REG_DWORD /d 0 /f >nul 2>&1
 
-chcp 437 >nul 2>&1
-powershell -ExecutionPolicy Bypass -Command "Checkpoint-Computer -Description '%script% %version% | Restore Point' -RestorePointType 'MODIFY_SETTINGS'" >nul 2>&1
-chcp 65001 >nul 2>&1
+    chcp 437 >nul 2>&1
+    powershell -ExecutionPolicy Bypass -Command "Checkpoint-Computer -Description '%script% %version% | Restore Point' -RestorePointType 'MODIFY_SETTINGS'" >nul 2>&1
+    chcp 65001 >nul 2>&1
 
-cls
-echo.
-echo   %purple%[ %roxo%•%purple% %purple%]%white% Restore Point created %green%successfully%white%.
-timeout /t 2 /nobreak >> "%logfile%" 2>&1
-goto:loading
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Restore Point created %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    goto:loading
 
 :: Loading Page
-:loading
-cls
-echo !esc![?25l
-echo.
-echo.
-echo.
-echo.
-echo.
-echo.
-echo.
-set "lines[0]=                                                                 ██████          "
-set "lines[1]=                                                              ████████████       "
-set "lines[2]=                                                           ██████████████████    "
-set "lines[3]=                                                           █████   ██   █████    "
-set "lines[4]=                                                          ██████   ██   ██████    "
-set "lines[5]=                                                         ██████████████████████    "
-set "lines[6]=                                                        █████   ███  ███   █████     "
-set "lines[7]=                                                        ███  ███   ██   ███  ███     "
-set "lines[8]=                                                        ████████████████████████     "
-set "lines[9]=                                                        ████    ███  ███    ████     "
-set "lines[10]=                                                                                      "
-set "lines[11]=                                                                                       "
-set "lines[12]=                                                                Loading...             "
+    :loading
+    cls
+    echo !esc![?25l
+    echo.
+    echo.
+    echo.
+    echo.
+    echo.
+    echo.
+    echo.
+    set "lines[0]=                                                                 ██████          "
+    set "lines[1]=                                                              ████████████       "
+    set "lines[2]=                                                           ██████████████████    "
+    set "lines[3]=                                                           █████   ██   █████    "
+    set "lines[4]=                                                          ██████   ██   ██████    "
+    set "lines[5]=                                                         ██████████████████████    "
+    set "lines[6]=                                                        █████   ███  ███   █████     "
+    set "lines[7]=                                                        ███  ███   ██   ███  ███     "
+    set "lines[8]=                                                        ████████████████████████     "
+    set "lines[9]=                                                        ████    ███  ███    ████     "
+    set "lines[10]=                                                                                      "
+    set "lines[11]=                                                                                       "
+    set "lines[12]=                                                                Loading...             "
 
 for /L %%i in (0,1,12) do (
     set "text=!lines[%%i]!"
@@ -201,151 +203,152 @@ for /L %%i in (0,1,12) do (
 )
 
 :: Create Folders
-if not exist "C:\Ghost Optimizer" md "C:\Ghost Optimizer"
-if not exist "C:\Ghost Optimizer\Logs" md "C:\Ghost Optimizer\Logs"
-if not exist "C:\Ghost Optimizer\NVIDIA" md "C:\Ghost Optimizer\NVIDIA"
-if not exist "C:\Ghost Optimizer\OOSU10++" md "C:\Ghost Optimizer\OOSU10++"
-if not exist "C:\Ghost Optimizer\GhostOPX" md "C:\Ghost Optimizer\GhostOPX"
-if not exist "C:\Ghost Optimizer\GhostAHK" md "C:\Ghost Optimizer\GhostAHK"
+    if not exist "C:\Ghost Optimizer" md "C:\Ghost Optimizer"
+    if not exist "C:\Ghost Optimizer\Logs" md "C:\Ghost Optimizer\Logs"
+    if not exist "C:\Ghost Optimizer\NVIDIA" md "C:\Ghost Optimizer\NVIDIA"
+    if not exist "C:\Ghost Optimizer\OOSU10++" md "C:\Ghost Optimizer\OOSU10++"
+    if not exist "C:\Ghost Optimizer\GhostOPX" md "C:\Ghost Optimizer\GhostOPX"
+    if not exist "C:\Ghost Optimizer\GhostAHK" md "C:\Ghost Optimizer\GhostAHK"
 
 :: Setting Logs
-set "d=%date:/=-%"
-set "t=%time::=-%"
-set "t=%t:.=-%"
-set "t=%t: =0%"
+    set "d=%date:/=-%"
+    set "t=%time::=-%"
+    set "t=%t:.=-%"
+    set "t=%t: =0%"
 
-set "logfile=C:\Ghost Optimizer\Logs\%d%_%t%.log"
+    set "logfile=C:\Ghost Optimizer\Logs\%d%_%t%.log"
 
-echo Ghost Optimizer > "%logfile%"
-echo Created by: @louzkk >> "%logfile%" 2>&1
-echo. >> "%logfile%" 2>&1
+    echo Ghost Optimizer > "%logfile%"
+    echo Created by: @louzkk >> "%logfile%" 2>&1
+    echo. >> "%logfile%" 2>&1
 
 :: Setting Url
-set "LinkFile=C:\Ghost Optimizer\GitHub.url"
-(
-echo [InternetShortcut]
-echo URL=https://github.com/louzkk/Ghost-Optimizer
-) > "%LinkFile%"
+    set "LinkFile=C:\Ghost Optimizer\GitHub.url"
+    (
+    echo [InternetShortcut]
+    echo URL=https://github.com/louzkk/Ghost-Optimizer
+    ) > "%LinkFile%"
 
 :: Get GPU Info
-chcp 437 >> "%logfile%" 2>&1
-for /f "delims=" %%G in ('powershell -NoProfile -Command "Get-CimInstance Win32_VideoController | Select-Object -ExpandProperty Name"') do (
-    set "GPUName=%%G"
-    goto:gotGPU
-)
-:gotGPU
+    chcp 437 >> "%logfile%" 2>&1
+    for /f "delims=" %%G in ('powershell -NoProfile -Command "Get-CimInstance Win32_VideoController | Select-Object -ExpandProperty Name"') do (
+        set "GPUName=%%G"
+        goto:gotGPU
+    )
+    :gotGPU
 
 :: Get CPU Info
-for /f "delims=" %%A in ('powershell -NoProfile -Command "Get-CimInstance Win32_Processor | Select-Object -ExpandProperty Name"') do (
-    set "CPUName=%%A"
-    goto:gotCPU
-)
-:gotCPU
-chcp 65001 >> "%logfile%" 2>&1
+    for /f "delims=" %%A in ('powershell -NoProfile -Command "Get-CimInstance Win32_Processor | Select-Object -ExpandProperty Name"') do (
+        set "CPUName=%%A"
+        goto:gotCPU
+    )
+    :gotCPU
+    chcp 65001 >> "%logfile%" 2>&1
 
 :: Main Menu
-:menu
-cls
-echo.
-echo.
+    :menu
+    cls
+    echo.
+    echo.
 
-set "W=130"
-set /a "LAST=W-2"
-set /a "MID=(W-2)/2"
+    set "W=130"
+    set /a "LAST=W-2"
+    set /a "MID=(W-2)/2"
 
-for /L %%j in (0,1,!LAST!) do (
-    if %%j LEQ !MID! (
-        set /a "colorR=40 + (88 * %%j / !MID!)"
-    ) else (
-        set /a "colorR=128 - (128 * (%%j-!MID!) / (!LAST!-!MID!))"
-    )
-    set /a "colorG=0", "colorB=255"
-    set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
-)
-
-set "lines[0]=            ██████╗ ██╗  ██╗ ██████╗ ███████╗████████╗      ██████╗ ██████╗ ████████╗██╗███╗   ███╗██╗███████╗███████╗██████╗  "
-set "lines[1]=           ██╔════╝ ██║  ██║██╔═══██╗██╔════╝╚══██╔══╝     ██╔═══██╗██╔══██╗╚══██╔══╝██║████╗ ████║██║╚══███╔╝██╔════╝██╔══██╗"
-set "lines[2]=           ██║  ███╗███████║██║   ██║███████╗   ██║        ██║   ██║██████╔╝   ██║   ██║██╔████╔██║██║  ███╔╝ █████╗  ██████╔╝"
-set "lines[3]=           ██║   ██║██╔══██║██║   ██║╚════██║   ██║        ██║   ██║██╔═══╝    ██║   ██║██║╚██╔╝██║██║ ███╔╝  ██╔══╝  ██╔══██╗"
-set "lines[4]=           ╚██████╔╝██║  ██║╚██████╔╝███████║   ██║        ╚██████╔╝██║        ██║   ██║██║ ╚═╝ ██║██║███████╗███████╗██║  ██║"
-set "lines[5]=            ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝         ╚═════╝ ╚═╝        ╚═╝   ╚═╝╚═╝     ╚═╝╚═╝╚══════╝╚══════╝╚═╝  ╚═╝"
-
-for /L %%i in (0,1,5) do (
-    set "text=!lines[%%i]!"
-    set "textGradient="
     for /L %%j in (0,1,!LAST!) do (
-        set "char=!text:~%%j,1!"
-        if "!char!"=="" set "char= "
-        set "textGradient=!textGradient!!esc[%%j]!!char!"
+        if %%j LEQ !MID! (
+            set /a "colorR=40 + (88 * %%j / !MID!)"
+        ) else (
+            set /a "colorR=128 - (128 * (%%j-!MID!) / (!LAST!-!MID!))"
+        )
+        set /a "colorG=0", "colorB=255"
+        set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
     )
-    echo !textGradient!!esc![0m
-)
 
-echo.
-echo                             %purple%%underline%GPU%reset%%purple%:%reset% %GPUName%        %purple%%underline%CPU%reset%%purple%:%reset% %CPUName%
-echo.
+    set "lines[0]=            ██████╗ ██╗  ██╗ ██████╗ ███████╗████████╗      ██████╗ ██████╗ ████████╗██╗███╗   ███╗██╗███████╗███████╗██████╗  "
+    set "lines[1]=           ██╔════╝ ██║  ██║██╔═══██╗██╔════╝╚══██╔══╝     ██╔═══██╗██╔══██╗╚══██╔══╝██║████╗ ████║██║╚══███╔╝██╔════╝██╔══██╗"
+    set "lines[2]=           ██║  ███╗███████║██║   ██║███████╗   ██║        ██║   ██║██████╔╝   ██║   ██║██╔████╔██║██║  ███╔╝ █████╗  ██████╔╝"
+    set "lines[3]=           ██║   ██║██╔══██║██║   ██║╚════██║   ██║        ██║   ██║██╔═══╝    ██║   ██║██║╚██╔╝██║██║ ███╔╝  ██╔══╝  ██╔══██╗"
+    set "lines[4]=           ╚██████╔╝██║  ██║╚██████╔╝███████║   ██║        ╚██████╔╝██║        ██║   ██║██║ ╚═╝ ██║██║███████╗███████╗██║  ██║"
+    set "lines[5]=            ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝         ╚═════╝ ╚═╝        ╚═╝   ╚═╝╚═╝     ╚═╝╚═╝╚══════╝╚══════╝╚═╝  ╚═╝"
 
-set "lineGradient="
-set /a "BeforeSpace=(135 - 109) / 2"
-for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-for /L %%j in (0,1,108) do (
-    set /a "colorR=colorBaseR + (variationR * %%j / 108)"
-    set /a "colorG=colorBaseG + (variationG * %%j / 108)"
-    set /a "colorB=colorBaseB + (variationB * %%j / 108)"
-    set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
-)
-for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-echo !lineGradient!!esc![0m
+    for /L %%i in (0,1,5) do (
+        set "text=!lines[%%i]!"
+        set "textGradient="
+        for /L %%j in (0,1,!LAST!) do (
+            set "char=!text:~%%j,1!"
+            if "!char!"=="" set "char= "
+            set "textGradient=!textGradient!!esc[%%j]!!char!"
+        )
+        echo !textGradient!!esc![0m
+    )
 
-echo.
-echo                             %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply all Tweaks/Fixes                %purple%[ %roxo%%underline%R%reset% %purple%]%white% Revert all Tweaks/Fixes
-echo.
-echo.
-echo                   %purple%[ %roxo%%underline%1%reset% %purple%]%white% General Tweaks               %purple%[ %roxo%%underline%2%reset% %purple%]%white% Performance Tweaks             %purple%[ %roxo%%underline%3%reset% %purple%]%white% Network Tweaks 
-echo.
-echo                   %purple%[ %roxo%%underline%4%reset% %purple%]%white% NVIDIA Profile               %purple%[ %roxo%%underline%5%reset% %purple%]%white% Latency ^& Input-Lag            %purple%[ %roxo%%underline%6%reset% %purple%]%white% Mouse ^& Keyboard       
-echo.
-echo                   %purple%[ %roxo%%underline%7%reset% %purple%]%white% Windows Cleaner              %purple%[ %roxo%%underline%8%reset% %purple%]%white% Telemetry ^& Logging            %purple%[ %roxo%%underline%9%reset% %purple%]%white% Unnecessary Services
-echo.
-echo                   %purple%[ %roxo%%underline%10%reset% %purple%]%white% Ghost Powerplan             %purple%[ %roxo%%underline%11%reset% %purple%]%white% Integrity ^& Health            %purple%[ %roxo%%underline%12%reset% %purple%]%white% Remove Bloatware                        
-echo.
-set /p answer="%white% >:%roxo%"
+    echo.
+    echo                             %purple%%underline%GPU%reset%%purple%:%reset% %GPUName%        %purple%%underline%CPU%reset%%purple%:%reset% %CPUName%
+    echo.
+
+    set "lineGradient="
+    set /a "BeforeSpace=(135 - 109) / 2"
+    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
+    for /L %%j in (0,1,108) do (
+        set /a "colorR=colorBaseR + (variationR * %%j / 108)"
+        set /a "colorG=colorBaseG + (variationG * %%j / 108)"
+        set /a "colorB=colorBaseB + (variationB * %%j / 108)"
+        set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
+    )
+    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
+    echo !lineGradient!!esc![0m
+
+    echo.
+    echo                             %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply all Tweaks/Fixes                %purple%[ %roxo%%underline%R%reset% %purple%]%white% Revert all Tweaks/Fixes
+    echo.
+    echo.
+    echo                   %purple%[ %roxo%%underline%1%reset% %purple%]%white% General Tweaks               %purple%[ %roxo%%underline%2%reset% %purple%]%white% Performance Tweaks             %purple%[ %roxo%%underline%3%reset% %purple%]%white% Network Tweaks 
+    echo.
+    echo                   %purple%[ %roxo%%underline%4%reset% %purple%]%white% NVIDIA Profile               %purple%[ %roxo%%underline%5%reset% %purple%]%white% Latency ^& Input-Lag            %purple%[ %roxo%%underline%6%reset% %purple%]%white% Mouse ^& Keyboard       
+    echo.
+    echo                   %purple%[ %roxo%%underline%7%reset% %purple%]%white% Windows Cleaner              %purple%[ %roxo%%underline%8%reset% %purple%]%white% Telemetry ^& Logging            %purple%[ %roxo%%underline%9%reset% %purple%]%white% Unnecessary Services
+    echo.
+    echo                   %purple%[ %roxo%%underline%10%reset% %purple%]%white% Ghost Powerplan             %purple%[ %roxo%%underline%11%reset% %purple%]%white% Integrity ^& Health            %purple%[ %roxo%%underline%12%reset% %purple%]%white% Remove Bloatware                        
+    echo.
+    set /p answer="%white% >:%roxo%"
 
 :: Options
-if %answer% equ 1 call:general
-if %answer% equ 2 call:performance
-if %answer% equ 3 call:network
-if %answer% equ 4 call:nvidia
-if %answer% equ 5 call:latency
-if %answer% equ 6 call:kbm
-if %answer% equ 7 call:clean
-if %answer% equ 8 call:telemetry
-if %answer% equ 9 call:services
-if %answer% equ 10 call:powerplan
-if %answer% equ 11 call:health
-if %answer% equ 12 call:debloat
+    if %answer% equ 1 call:general
+    if %answer% equ 2 call:performance
+    if %answer% equ 3 call:network
+    if %answer% equ 4 call:nvidia
+    if %answer% equ 5 call:latency
+    if %answer% equ 6 call:kbm
+    if %answer% equ 7 call:clean
+    if %answer% equ 8 call:telemetry
+    if %answer% equ 9 call:services
+    if %answer% equ 10 call:powerplan
+    if %answer% equ 11 call:health
+    if %answer% equ 12 call:debloat
 
-if "%answer%"=="A" goto:applyall
-if "%answer%"=="a" goto:applyall
-if "%answer%"=="R" goto:revertall
-if "%answer%"=="r" goto:revertall
+    if "%answer%"=="A" goto:applyall
+    if "%answer%"=="a" goto:applyall
+    if "%answer%"=="R" goto:revertall
+    if "%answer%"=="r" goto:revertall
 
-if "%answer%"=="Louzkk" start https://github.com/louzkk
-if "%answer%"=="louzkk" start https://github.com/louzkk
-if "%answer%"=="@louzkk" start https://github.com/louzkk
-if "%answer%"=="@Louzkk" start https://github.com/louzkk
-if "%answer%"=="ghost" start https://github.com/louzkk/Ghost-Optimizer
-if "%answer%"=="Ghost" start https://github.com/louzkk/Ghost-Optimizer
-if "%answer%"=="GHOST" start https://github.com/louzkk/Ghost-Optimizer
-if "%answer%"=="github" start https://github.com/louzkk/Ghost-Optimizer
-if "%answer%"=="Github" start https://github.com/louzkk/Ghost-Optimizer
-if "%answer%"=="help" start https://github.com/louzkk/Ghost-Optimizer
-if "%answer%"=="restart" goto:restart
-if "%answer%"=="exit" exit /B
-if "%answer%"=="menu" goto:menu
-if "%answer%"=="reboot" goto:reboot
-if "%answer%"=="rebootcancel" goto:rebootcancel
-if "%answer%"=="cancel" goto:rebootcancel
+    if "%answer%"=="restart" goto:restart
+    if "%answer%"=="exit" exit /B
+    if "%answer%"=="menu" goto:menu
+    if "%answer%"=="reboot" goto:reboot
+    if "%answer%"=="rebootcancel" goto:rebootcancel
+    if "%answer%"=="cancel" goto:rebootcancel
+
+    if "%answer%"=="Louzkk" start https://github.com/louzkk
+    if "%answer%"=="louzkk" start https://github.com/louzkk
+    if "%answer%"=="@louzkk" start https://github.com/louzkk
+    if "%answer%"=="@Louzkk" start https://github.com/louzkk
+    if "%answer%"=="ghost" start https://github.com/louzkk/Ghost-Optimizer
+    if "%answer%"=="Ghost" start https://github.com/louzkk/Ghost-Optimizer
+    if "%answer%"=="GHOST" start https://github.com/louzkk/Ghost-Optimizer
+    if "%answer%"=="github" start https://github.com/louzkk/Ghost-Optimizer
+    if "%answer%"=="Github" start https://github.com/louzkk/Ghost-Optimizer
+    if "%answer%"=="help" start https://github.com/louzkk/Ghost-Optimizer
 
 :: Invalid Input
     goto:menu
@@ -670,7 +673,7 @@ if "%answer%"=="cancel" goto:rebootcancel
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Game Bar and DVR disabled.
 
     :: System Profile
-    reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "SystemResponsiveness" /t REG_DWORD /d "10" /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "SystemResponsiveness" /t REG_DWORD /d 10 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% System Responsiveness Optimized.
 
     :: Win32PrioritySeparation
@@ -1037,7 +1040,7 @@ if "%answer%"=="cancel" goto:rebootcancel
     reg add "%%n" /v "AutoPowerSaveModeEnabled" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
     reg add "%%n" /v "AutoDisableGigabit" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
     reg add "%%n" /v "AdvancedEEE" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "DisableDelayedPowerUp" /t REG_SZ /d "2" /f >> "%logfile%" 2>&1
+    reg add "%%n" /v "DisableDelayedPowerUp" /t REG_SZ /d 2 /f >> "%logfile%" 2>&1
     reg add "%%n" /v "*EEE" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
     reg add "%%n" /v "EEE" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
     reg add "%%n" /v "EnablePME" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
@@ -1049,7 +1052,7 @@ if "%answer%"=="cancel" goto:rebootcancel
     reg add "%%n" /v "EnableConnectedPowerGating" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
     reg add "%%n" /v "EnableWakeOnLan" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
     reg add "%%n" /v "GigaLite" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "NicAutoPowerSaver" /t REG_SZ /d "2" /f >> "%logfile%" 2>&1
+    reg add "%%n" /v "NicAutoPowerSaver" /t REG_SZ /d 2 /f >> "%logfile%" 2>&1
     reg add "%%n" /v "PowerDownPll" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
     reg add "%%n" /v "PowerSavingMode" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
     reg add "%%n" /v "ReduceSpeedOnPowerDown" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
@@ -1061,7 +1064,7 @@ if "%answer%"=="cancel" goto:rebootcancel
     reg add "%%n" /v "*WakeOnMagicPacket" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
     reg add "%%n" /v "*WakeOnPattern" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
     reg add "%%n" /v "WakeOnLink" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "WolShutdownLinkSpeed" /t REG_SZ /d "2" /f >> "%logfile%" 2>&1
+    reg add "%%n" /v "WolShutdownLinkSpeed" /t REG_SZ /d 2 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% NIC Power Saving disabled.
 
     echo.
@@ -1074,7 +1077,7 @@ if "%answer%"=="cancel" goto:rebootcancel
     echo --- Finished Network Tweaks --- >> "%logfile%" 2>&1
     goto:network
 
-:: Apply Telemetry & Logging Removal
+:: Disable Telemetry & Logging
     :telemetry
     cls
     echo.
@@ -1177,8 +1180,7 @@ if "%answer%"=="cancel" goto:rebootcancel
         powershell -Command "Invoke-WebRequest 'https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe' -OutFile 'C:\%script%\OOSU10++\OOSU10.exe'" >> "%logfile%" 2>&1
         chcp 65001 >> "%logfile%" 2>&1
         if not exist "C:\%script%\OOSU10++\OOSU10.exe" (
-            echo   %red%[ %red%•%red% %red%]%reset% Failed to download OOSU10+ executable!
-            echo --- Download failed --- >> "%logfile%" 2>&1
+            echo   %red%[ %red%•%red% %red%]%reset% Failed to download OOSU10+ executable.
             goto:telemetryend
         )
     ) else (
@@ -1189,8 +1191,7 @@ if "%answer%"=="cancel" goto:rebootcancel
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Importing %highlight%OOSU10+%reset% Profile...
     curl -g -k -L -# -o "C:\%script%\OOSU10++\GhostOPX-OOSU.cfg" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostOPX-OOSU.cfg" >> "%logfile%" 2>&1
     if errorlevel 1 (
-        echo   %red%[ %red%•%red% %red%]%reset% Failed to download OOSU10+ profile!
-        echo --- Profile download failed --- >> "%logfile%" 2>&1
+        echo   %red%[ %red%•%red% %red%]%reset% Failed to download OOSU10+ profile.
         goto:telemetryend
     )
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
@@ -1204,7 +1205,6 @@ if "%answer%"=="cancel" goto:rebootcancel
         echo --- OOSU Tweaks applied --- >> "%logfile%" 2>&1
     ) else (
         echo   %red%[ %red%•%red% %red%]%reset% OOSU10+ executable not found!
-        echo --- Apply failed --- >> "%logfile%" 2>&1
     )
 
     :telemetryend
@@ -2065,7 +2065,7 @@ if "%answer%"=="cancel" goto:rebootcancel
     echo --- Applying Latency and Input-Lag Tweaks --- >> "%logfile%" 2>&1
 
     :: System Responsivness
-    reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "SystemResponsiveness" /t REG_DWORD /d "10" /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "SystemResponsiveness" /t REG_DWORD /d 10 /f >> "%logfile%" 2>&1
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "AlwaysOn" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "NoLazyMode" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% System Responsivness Optimized.
@@ -2849,7 +2849,7 @@ if "%answer%"=="cancel" goto:rebootcancel
     echo   %purple%[ %roxo%•%purple% %purple%]%white% File Sharing disabled.
 
     :: Windows Update
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\wuauserv" /v "Start" /t REG_DWORD /d "3" /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\wuauserv" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Wecsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\InstallService" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\sedsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
@@ -3168,7 +3168,7 @@ if "%answer%"=="cancel" goto:rebootcancel
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "F1TransitionLatency" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "LOWLATENCY" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "Node3DLowLatency" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "PciLatencyTimerControl" /t REG_DWORD /d "20" /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "PciLatencyTimerControl" /t REG_DWORD /d 20 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RMDeepL1EntryLatencyUsec" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RmGspcMaxFtuS" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RmGspcMinFtuS" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
