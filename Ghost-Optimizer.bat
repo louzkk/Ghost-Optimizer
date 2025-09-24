@@ -884,13 +884,16 @@ for /L %%i in (0,1,12) do (
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     echo --- Applying Network Tweaks --- >> "%logfile%" 2>&1
 
-    :: Network Interface Detection
-    for /f "tokens=3 delims={}" %%A in ('reg query "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces" ^| find "{" 2>&1 >> "%logfile%"') do (
+    :: Network Adapter Detection
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Searching Network Interface...
+    for /f "tokens=3 delims={}" %%A in ('reg query "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces" ^| find "{"') do (
         set "InterfaceID=%%A"
     )
-    for /f %%n in ('Reg query "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4D36E972-E325-11CE-BFC1-08002bE10318}" /v "*SpeedDuplex" /s ^| findstr  "HKEY" 2>&1 >> "%logfile%"') do (
-        echo %%n >> "%logfile%" 2>&1
-    )
+
+    for /f %%n in ('Reg query "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4D36E972-E325-11CE-BFC1-08002bE10318}" /v "*SpeedDuplex" /s 2^>nul ^| findstr "HKEY"') do (
+        set "SpeedDuplexValue=%%n"
+    ) >nul 2>&1
+
     chcp 437 >> "%logfile%" 2>&1
     for /f "delims=" %%A in ('powershell -Command "(Get-NetAdapter | Where-Object {$_.Status -eq 'Up'}).Name"') do (
         set "netinterface=%%A"
@@ -900,12 +903,38 @@ for /L %%i in (0,1,12) do (
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Network Interface detected.
     timeout /t 1 >> "%logfile%" 2>&1
 
+    :: Network Throttling
+    reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "NetworkThrottlingIndex" /t REG_DWORD /d 4294967295 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters" /v "DisableBandwidthThrottling" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters" /v "MaxCmds" /t REG_DWORD /d 2048 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Network Throttling disabled.
+
+    :: TCP/IP Interface
+    reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v "TCPNoDelay" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{%InterfaceID%}" /v "TcpAckFrequency" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{%InterfaceID%}" /v "TCPNoDelay" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces" /v "TcpDelAckTicks" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Nagle's Algorithm tweaked.
+
+    :: TCP/IP Advanced / Offloads
+    netsh int tcp set global timestamps=disabled >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "DisableTaskOffload" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableTCPChimney" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableRSS" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableTCPA" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpMaxHalfOpen" /t REG_DWORD /d 100 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpMaxHalfOpenRetried" /t REG_DWORD /d 80 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpMaxPortsExhausted" /t REG_DWORD /d 5 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpNumConnections" /t REG_DWORD /d 500 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableECN" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% TCP/IP ^& Offloads tweaked.
+
     :: MSI
     for /f %%l in ('wmic path win32_NetworkAdapter get PNPDeviceID ^| find "PCI\VEN_"') do (
     reg add "HKEY_LOCAL_MACHINE\SYSTEM\SYSTEM\CurrentControlSet\Enum\%%l\Device Parameters\Interrupt Management\MessageSignaledInterruptProperties" /v "MSISupported" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKEY_LOCAL_MACHINE\SYSTEM\SYSTEM\CurrentControlSet\Enum\%%l\Device Parameters\Interrupt Management\Affinity Policy" /v "DevicePriority" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     )
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Network Adaper MSI enabled.
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Network MSI mode enabled.
     timeout /t 1 >> "%logfile%" 2>&1
 
     :: Priority
@@ -913,61 +942,29 @@ for /L %%i in (0,1,12) do (
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "HostsPriority" /t REG_DWORD /d 5 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "DnsPriority" /t REG_DWORD /d 6 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" /v "NetbtPriority" /t REG_DWORD /d 7 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% General Network Tweaks applied.
-
-    :: Sock Adress
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Winsock" /v "MinSockAddrLength" /t REG_DWORD /d 16 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Winsock" /v "MaxSockAddrLength" /t REG_DWORD /d 16 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Increased Sock Adress size.
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Priority Tweaks applied.
 
     :: Autotuning
     netsh int tcp set global autotuninglevel=disabled >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Autotuning Level disabled.
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Autotuninglevel disabled.
 
     :: Explicit Congestion
     netsh int tcp set global ecncapability=disabled >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Explicit Congestion disabled.
 
-    :: NETDMA
+    :: NETDMA/DCA
     netsh int tcp set global netdma=enabled >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Direct Memory Access enabled.
-
-    :: DCA
     netsh int tcp set global dca=enabled >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Direct Cache Access enabled.
-
-    :: RSC
-    netsh int tcp set global rsc=disabled >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Recieve Side Coalescing disabled.
-
-    :: RSS
-    netsh int tcp set global rss=enabled >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Ndis\Parameters" /v "RssBaseCpu" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Recieve Side Scaling disabled.
+    netsh int tcp set security mpp=disabled >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Direct Memory Access tweaked.
 
     :: Chimney
-    netsh int tcp set global chimney=enabled >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Chimney enabled.
-
-    :: Timestamps
-    netsh int tcp set global timestamps=disabled >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% TCP Timestamps disabled.
-
-    :: Memory Pressure
-    netsh int tcp set security mpp=disabled >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Memory Pressure Protection disabled.
-
-    :: Security Profiles
-    netsh int tcp set security profiles=disabled >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Security Profiles disabled.
+    netsh int tcp set global chimney=disabled >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Chimney disabled.
 
     :: Heuristics
     netsh int tcp set heuristics disabled >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Scaling Heuristics disabled.
-
-    :: CTCP
-    netsh int tcp set supplemental Internet congestionprovider=ctcp >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% CTCP disabled.
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Heuristics disabled.
 
     :: Task Offload
     netsh int ip set global taskoffload=disabled >> "%logfile%" 2>&1
@@ -983,45 +980,13 @@ for /L %%i in (0,1,12) do (
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "CacheHashTableSize" /t REG_DWORD /d 384 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "MaxCacheEntryTtlLimit" /t REG_DWORD /d 64000 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "MaxCacheTtl" /t REG_DWORD /d 64000 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% DNS Cache Optimized.
-
-    :: DNS Cache Clean
     ipconfig /flushdns >> "%logfile%" 2>&1
-    timeout /t 2 /nobreak >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% DNS Cache cleared.
+    timeout /t 1 /nobreak >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% DNS Cache Optimized/Cleared.
 
-    :: Network Throttling
-    reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "NetworkThrottlingIndex" /t REG_DWORD /d 4294967295 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters" /v "DisableBandwidthThrottling" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters" /v "MaxCmds" /t REG_DWORD /d 2048 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Network Throttling disabled.
-
-    :: TCP/IP Interface
-    reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v "TCPNoDelay" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{%InterfaceID%}" /v "TcpAckFrequency" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{%InterfaceID%}" /v "TCPNoDelay" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces" /v "TcpDelAckTicks" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Nagle's Algorithm Tweaks applied.
-
-    :: TCP/IP Advanced / Offloads
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "DisableTaskOffload" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableTCPChimney" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableRSS" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableTCPA" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpMaxHalfOpen" /t REG_DWORD /d 100 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpMaxHalfOpenRetried" /t REG_DWORD /d 80 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpMaxPortsExhausted" /t REG_DWORD /d 5 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpNumConnections" /t REG_DWORD /d 500 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "EnableECN" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% TCP/IP ^& Offloads Tweaks applied.
-
-    :: Delivery Optimization
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DODownloadMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DownloadMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings" /v "DownloadMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Delivery Optimization disabled.
-
-    :: AFD / Socket Tweaks
+    :: AFD/Socket Tweaks
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Winsock" /v "MinSockAddrLength" /t REG_DWORD /d 16 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Winsock" /v "MaxSockAddrLength" /t REG_DWORD /d 16 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "BufferAlignment" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "DefaultReceiveWindow" /t REG_DWORD /d 262144 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "DefaultSendWindow" /t REG_DWORD /d 262144 /f >> "%logfile%" 2>&1
@@ -1037,35 +1002,44 @@ for /L %%i in (0,1,12) do (
     echo   %purple%[ %roxo%•%purple% %purple%]%white% AFD/Socket Tweaks applied.
 
     :: NIC Power Saving (from Ancel's Performance Batch)
-    reg add "%%n" /v "AutoPowerSaveModeEnabled" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "AutoDisableGigabit" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "AdvancedEEE" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "DisableDelayedPowerUp" /t REG_SZ /d 2 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "*EEE" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "EEE" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "EnablePME" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "EEELinkAdvertisement" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "EnableGreenEthernet" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "EnableSavePowerNow" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "EnablePowerManagement" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "EnableDynamicPowerGating" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "EnableConnectedPowerGating" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "EnableWakeOnLan" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "GigaLite" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "NicAutoPowerSaver" /t REG_SZ /d 2 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "PowerDownPll" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "PowerSavingMode" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "ReduceSpeedOnPowerDown" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "SmartPowerDownEnable" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "S5NicKeepOverrideMacAddrV2" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "S5WakeOnLan" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "ULPMode" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "WakeOnDisconnect" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "*WakeOnMagicPacket" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "*WakeOnPattern" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "WakeOnLink" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
-    reg add "%%n" /v "WolShutdownLinkSpeed" /t REG_SZ /d 2 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "AutoPowerSaveModeEnabled" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "AutoDisableGigabit" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "AdvancedEEE" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "DisableDelayedPowerUp" /t REG_SZ /d 2 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "*EEE" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "EEE" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "EnablePME" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "EEELinkAdvertisement" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "EnableGreenEthernet" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "EnableSavePowerNow" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "EnablePowerManagement" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "EnableDynamicPowerGating" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "EnableConnectedPowerGating" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "EnableWakeOnLan" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "GigaLite" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "NicAutoPowerSaver" /t REG_SZ /d 2 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "PowerDownPll" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "PowerSavingMode" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "ReduceSpeedOnPowerDown" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "SmartPowerDownEnable" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "S5NicKeepOverrideMacAddrV2" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "S5WakeOnLan" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "ULPMode" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "WakeOnDisconnect" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "*WakeOnMagicPacket" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "*WakeOnPattern" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "WakeOnLink" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "%SpeedDuplexValue%" /v "WolShutdownLinkSpeed" /t REG_SZ /d 2 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% NIC Power Saving disabled.
+
+    :: RSC/RSS
+    netsh int tcp set global rsc=disabled >> "%logfile%" 2>&1
+    netsh int tcp set global rss=enabled >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% RSC/RSS tweaked.
+
+    :: CTCP
+    netsh int tcp set supplemental Internet congestionprovider=ctcp >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% CTCP disabled.
 
     echo.
     timeout /t 3 /nobreak >> "%logfile%" 2>&1
@@ -1768,6 +1742,12 @@ for /L %%i in (0,1,12) do (
     reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableThirdPartySuggestions" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Lockscreen Spotlight disabled.
 
+    :: Delivery Optimization
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DODownloadMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DownloadMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings" /v "DownloadMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Delivery Optimization disabled.
+
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
 
     cls
@@ -2294,6 +2274,10 @@ for /L %%i in (0,1,12) do (
         goto:powerplan
     )
 
+    chcp 437 >> "%logfile%" 2>&1
+    powershell (Get-WmiObject -Namespace root/WMI -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1,100)
+    chcp 65001 >> "%logfile%" 2>&1
+
     echo.
     timeout /t 3 /nobreak >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% GhostOPX power plan applied %green%successfully%white%.
@@ -2814,7 +2798,7 @@ for /L %%i in (0,1,12) do (
     echo.
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Disabling %roxo%Unnecessary Services%white%...
     echo.
-    timeout /t 2 /nobreak >> "C:\%script%\Ghost_Log.txt" 2>&1
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
     echo --- Disabling Unnecessary Services --- >> "%logfile%" 2>&1
 
     :: Telephony API
@@ -3007,9 +2991,9 @@ for /L %%i in (0,1,12) do (
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Intel services disabled.
 
     echo.
-    timeout /t 3 /nobreak >> "C:\%script%\Ghost_Log.txt" 2>&1
+    timeout /t 3 /nobreak >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Unnecessary Services disabled %green%successfully%white%.
-    timeout /t 2 /nobreak >> "C:\%script%\Ghost_Log.txt" 2>&1
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %reboot%
     echo --- Unnecessary Services Disabled --- >> "%logfile%" 2>&1
     goto:services
