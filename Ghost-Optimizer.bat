@@ -28,7 +28,7 @@ for /F "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1)
 (for /f %%a in ('echo prompt $E^| cmd') do set "esc=%%a")
 
 :: Variables
-set version=4.8.3 beta
+set version=4.8.4 beta
 set script=Ghost Optimizer
 set reboot=- Windows reboot required
 
@@ -1089,7 +1089,7 @@ if "%answer%"=="cancel" goto:rebootcancel
     )
 
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Importing %highlight%OOSU10+%reset% Profile...
-    curl -g -k -L -# -o "C:\%script%\OOSU10++\Ghost-OOSU10.cfg" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/Ghost-OOSU10.cfg" >> "%logfile%" 2>&1
+    curl -g -k -L -# -o "C:\%script%\OOSU10++\GhostOPX-OOSU.cfg" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostOPX-OOSU.cfg" >> "%logfile%" 2>&1
     if errorlevel 1 (
         echo   %red%[ %red%•%red% %red%]%reset% Failed to download OOSU10+ profile!
         echo --- Profile download failed --- >> "%logfile%" 2>&1
@@ -1100,7 +1100,7 @@ if "%answer%"=="cancel" goto:rebootcancel
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Applying %highlight%OOSU10+%reset% Profile...
     timeout /t 3 /nobreak >> "%logfile%" 2>&1
     if exist "C:\%script%\OOSU10++\OOSU10.exe" (
-        start "" /wait "C:\%script%\OOSU10++\OOSU10.exe" "C:\%script%\OOSU10++\Ghost-OOSU10.cfg" >> "%logfile%" 2>&1
+        start "" /wait "C:\%script%\OOSU10++\OOSU10.exe" "C:\%script%\OOSU10++\GhostOPX-OOSU.cfg" >> "%logfile%" 2>&1
         echo.
         echo   %purple%[ %roxo%•%purple% %purple%]%white% OOSU10++ Tweaks Applied %green%successfully%white%.
         echo --- OOSU Tweaks applied --- >> "%logfile%" 2>&1
@@ -3036,7 +3036,7 @@ if "%answer%"=="cancel" goto:rebootcancel
     )
 
     echo   %verde%[ %green%•%verde% %verde%]%reset% Importing %green%Profile Inspector%reset% profile...
-    curl -g -k -L -# -o "C:\%script%\NVIDIA\Ghost-NVIDIA.nip" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/Ghost-NVIDIA.nip" >> "%logfile%" 2>&1
+    curl -g -k -L -# -o "C:\%script%\NVIDIA\GhostOPX-NIP.nip" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostOPX-NIP.nip" >> "%logfile%" 2>&1
     if errorlevel 1 (
         echo   %red%[ %red%•%red% %red%]%reset% Failed to download NVIDIA profile!
         echo --- Profile download failed --- >> "%logfile%" 2>&1
@@ -3047,7 +3047,7 @@ if "%answer%"=="cancel" goto:rebootcancel
     echo   %verde%[ %green%•%verde% %verde%]%reset% Applying %green%Profile Inspector%reset% profile...
     timeout /t 3 /nobreak >> "%logfile%" 2>&1
     if exist "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" (
-        start "" /wait "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" "C:\%script%\NVIDIA\Ghost-NVIDIA.nip" >> "%logfile%" 2>&1
+        start "" /wait "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" "C:\%script%\NVIDIA\GhostOPX-NIP.nip" >> "%logfile%" 2>&1
         echo.
         echo   %verde%[ %green%•%verde% %verde%]%reset% Profile Inspector Tweaks Applied %green%successfully%white%.
         echo --- NVIDIA Profile applied --- >> "%logfile%" 2>&1
@@ -3058,17 +3058,11 @@ if "%answer%"=="cancel" goto:rebootcancel
 
     :nvidiaend
 
-    echo.
-    timeout /t 3 /nobreak >> "%logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% %verde%]%reset% Profile Inspector Tweaks applied %green%successfully%white%.
-    timeout /t 2 /nobreak >> "%logfile%" 2>&1
-    echo --- Profile Inspector tweaks applied --- >> "%logfile%" 2>&1
-
     cls
     echo.
     echo   %verde%[ %green%•%verde% %verde%]%reset% Applying %green%NVIDIA%reset% Tweaks... 
     echo.
-    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    timeout /t 3 /nobreak >> "%logfile%" 2>&1
     echo --- Applying NVIDIA Tweaks --- >> "%logfile%" 2>&1
 
     :: Latency Tolerance (from Ancel's Performance Batch)
@@ -3154,39 +3148,47 @@ if "%answer%"=="cancel" goto:rebootcancel
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "TdrTestMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     echo   %verde%[ %green%•%verde% %verde%]%reset% Driver TDR disabled.
 
+    echo.
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% %verde%]%reset% NVIDIA Tweaks applied %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    title %script% %version% %reboot%
+    taskkill /f /im explorer.exe >> "%logfile%" 2>&1
+    start explorer.exe >> "%logfile%" 2>&1
+    echo --- NVIDIA Tweaks applied --- >> "%logfile%" 2>&1
+    goto:nvidia
 
    :inspector
     cls
     echo.
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Opening %green%NVIDIA Profile Inspector%reset% Software...
+    echo   %verde%[ %green%•%verde% %verde%]%reset% Opening %green%NVIDIA Profile Inspector%reset% Software...
     echo.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     echo --- Opening Profile Inspector --- >> "%logfile%" 2>&1
 
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Checking %green%Profile Inspector%reset% executable...
+    echo   %verde%[ %green%•%verde% %verde%]%reset% Checking %green%Profile Inspector%reset% executable...
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     if not exist "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" (
-        echo   %purple%[ %roxo%•%purple% %purple%]%white% Downloading %green%Profile Inspector%reset% executable...
+        echo   %verde%[ %green%•%verde% %verde%]%reset% Downloading %green%Profile Inspector%reset% executable...
         curl -g -k -L -# -o "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" "https://github.com/Orbmu2k/nvidiaProfileInspector/releases/download/2.4.0.27/nvidiaProfileInspector.zip" >> "%logfile%" 2>&1
     ) else (
-        echo   %purple%[ %roxo%•%purple% %purple%]%white% %green%Profile Inspector%reset% already downloaded.
+        echo   %verde%[ %green%•%verde% %verde%]%reset% %green%Profile Inspector%reset% already downloaded.
         timeout /t 2 /nobreak >> "%logfile%" 2>&1
     )
 
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Opening %green%Profile Inspector%reset% software...
+    echo   %verde%[ %green%•%verde% %verde%]%reset% Opening %green%Profile Inspector%reset% software...
     timeout /t 1 /nobreak >> "%logfile%" 2>&1
     start /wait "" "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" >> "%logfile%" 2>&1
 
     echo.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% %green%Profile Inspector%reset% Software closed.
+    echo   %verde%[ %green%•%verde% %verde%]%reset% %green%Profile Inspector%reset% Software closed.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %reboot%
     taskkill /f /im explorer.exe >> "%logfile%" 2>&1
     start explorer.exe >> "%logfile%" 2>&1
     echo --- Closing Profile Inspector --- >> "%logfile%" 2>&1
     goto:nvidia
-
 
 :: Restarting & Rebooting
     :restart
