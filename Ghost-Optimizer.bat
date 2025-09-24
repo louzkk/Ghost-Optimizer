@@ -2192,8 +2192,8 @@ if "%answer%"=="cancel" goto:rebootcancel
     )
 
     echo.
-    set "lines[0]=                             Applies a custom Power Plan focused on highest performance and lowest latency."
-    set "lines[1]=                                Check full documentation at: https://github.com/louzkk/Ghost-Optimizer"
+    set "lines[0]=                            Applies a custom Power Plan focused on highest performance and lowest latency."
+    set "lines[1]=                               Check full documentation at: https://github.com/louzkk/Ghost-Optimizer"
 
     for /L %%i in (0,1,1) do (
         set "text=!lines[%%i]!"
@@ -2239,43 +2239,37 @@ if "%answer%"=="cancel" goto:rebootcancel
     :powerplanapply
     cls
     echo.
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Applying %roxo%GhostOPX%white% Power Plan... 
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Applying %highlight%GhostOPX%reset% Power Plan... 
     echo.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     echo --- Applying Power Plan --- >> "%logfile%" 2>&1
 
     echo   %purple%[ %roxo%•%purple% %purple%]%white% Checking Github repository...
 
-    if not exist "C:\%script%\" mkdir "C:\%script%\" >> "%logfile%" 2>&1
-    if not exist "C:\%script%\Power Plan" mkdir "C:\%script%\Power Plan" >> "%logfile%" 2>&1
-
     timeout /t 2 /nobreak >nul
 
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Downloading Power Plan...
-
-    curl -g -k -L -# -o "C:\%script%\Power Plan\GhostOPX-POWER.pow" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostOPX-POWER.pow" >> "%logfile%" 2>&1
-    if not exist "C:\%script%\GhostOPX-POWER.pow" (
-        echo   %red%[ %orange%• %red%]%white% Failed to download GhostOPX power plan. >> "%logfile%" 2>&1
-        echo   %red%[ %orange%• %red%]%white% Power plan file not found. Aborting...
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Downloading %highlight%GhostOPX%reset% Power Plan...
+    curl -g -k -L -# -o "C:\%script%\GhostOPX\GhostOPX-POWER.pow" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostOPX-POWER.pow" >> "%logfile%" 2>&1
+    if not exist "C:\%script%\GhostOPX\GhostOPX-POWER.pow" (
+        echo   %red%[ %orange%• %red%]%white% Failed to download GhostOPX power plan.
         timeout /t 2 >nul
         goto:powerplan
     )
 
     timeout /t 2 /nobreak >nul
 
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Importing Power Plan...
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Importing %highlight%GhostOPX%reset% Power Plan...
 
-    powercfg /import "C:\%script%\Power Plan\GhostOPX-POWER.pow" >> "%logfile%" 2>&1
+    powercfg /import "C:\%script%\GhostOPX\GhostOPX-POWER.pow" >> "%logfile%" 2>&1
     if errorlevel 1 (
-        echo   %red%[ %orange%• %red%]%white% Failed to import GhostOPX power plan. >> "%logfile%" 2>&1
-        echo   %red%[ %orange%• %red%]%white% Failed to import power plan.
+        echo   %red%[ %orange%• %red%]%white% Failed to import %highlight%GhostOPX%reset% power plan.
         timeout /t 3 >nul
         goto:powerplan
     )
 
     timeout /t 2 /nobreak >nul
 
-    echo   %purple%[ %roxo%•%purple% %purple%]%white% Applying Power Plan...
+    echo   %purple%[ %roxo%•%purple% %purple%]%white% Applying %highlight%GhostOPX%reset% Power Plan...
 
     set "GUID="
     for /f "tokens=2 delims=:()" %%i in ('powercfg /list ^| findstr /i "GhostOPX"') do (
@@ -2284,16 +2278,14 @@ if "%answer%"=="cancel" goto:rebootcancel
     )
 
     if not defined GUID (
-        echo   %red%[ %orange%• %red%]%white% Could not find GhostOPX power plan GUID. >> "%logfile%" 2>&1
-        echo   %red%[ %orange%• %red%]%white% Failed to locate imported power plan.
+        echo   %red%[ %orange%• %red%]%white% Could not find %highlight%GhostOPX%reset% power plan GUID.
         timeout /t 3 >nul
         goto:powerplan
     )
 
     powercfg /setactive !GUID! >> "%logfile%" 2>&1
     if errorlevel 1 (
-        echo   %red%[ %orange%• %red%]%white% Failed to set GhostOPX power plan active. >> "%logfile%" 2>&1
-        echo   %red%[ %orange%• %red%]%white% Failed to apply GhostOPX power plan.
+        echo   %red%[ %orange%• %red%]%white% Failed to set %highlight%GhostOPX%reset% power plan active.
         timeout /t 3 >nul
         goto:powerplan
     )
