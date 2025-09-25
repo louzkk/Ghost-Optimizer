@@ -1,5 +1,5 @@
 # 💜 About
-**Ghost Optimizer** is a lightweight open-source tweaker/optimizer that **improves** system **performance**, **network** stability, and reduces **latency**. It also makes Windows feel faster and more minimal by freeing up system resources. The script is text-based but interactive, letting users choose which optimizations to apply or skip.         
+**Ghost Optimizer** is a lightweight open-source tweaker/optimizer that **improves** system **performance**, **network**, and **latency**. It also makes Windows feel faster and more minimal by freeing up system resources. The script is text-based but interactive, letting users choose which optimizations to apply or skip.         
 
 > Recommended for low-end, mid-range, or high-end PCs and laptops.    
 
