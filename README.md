@@ -20,7 +20,7 @@ Some software and parts of the code were adapted from other developers, with pro
 If you create derivative work or redistribute this project, please maintain proper credit to the original authors.   
 
 # ❓ How to Use
-1. Go to [Releases] page   (https://github.com/louzkk/Ghost-Optimizer/releases)  
+1. Go to [Releases](https://github.com/louzkk/Ghost-Optimizer/releases)  page    
 2. Download **Ghost Optimizer.bat**  
 3. Run **Ghost Optimizer.bat** as **Administrator**  
 *(You may need to temporarily disable your antivirus)*
