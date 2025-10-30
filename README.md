@@ -1,6 +1,6 @@
 # 💜 About
-**Ghost Optimizer** is a lightweight, open-source tweaker/optimizer that **improves performance** (FPS), **network speed** (ping), **reduces latency** (input lag), and **disables telemetry**, **data collection**, and **tracking** to **protect your privacy** and **fixes system integrity**.  
-It also makes Windows feel faster by freeing up unnecessary system resources. The script is text-based but interactive, so you can choose exactly which optimizations to apply or skip.
+**Ghost Optimizer** is a lightweight, open-source tweaker/optimizer that **improves performance** (FPS), **network speed** (ping), **reduces latency** (input lag), and **disables telemetry** and **data collection** to **protect your privacy** and **fixes system integrity**.  
+The script is text-based but interactive, so you can choose exactly which optimizations to apply or skip.
 
 # 🚨 Disclaimer
 Use this script at your own risk. I take no responsibility for any damage or data loss.
