@@ -1,6 +1,9 @@
 # Guide
 This guide provides detailed information about Ghost Optimizer, explaining what it does, how to use it safely, and how each tweak affects your system.
 
+> [!WARNING]  
+> GUIDE.md not finished yet.
+
 # Why optimize Windows?
 Windows is made to work on any kind of hardware and for any kind of user. This means that it puts usability and stability first, but it also has a lot of extra features, ads, services, and compatibility layers that not every user needs. Even though Windows is well optimized, it gets heavier with each update, and mid- to low-end PCs start to feel the effects. Ghost Optimizer doesn't try to "fix" Windows. Instead, it optimizes it by turning off features and services that aren't being used, blocking most telemetry, and changing system values to prioritize performance, and privacy. The result is a system that is cleaner and more responsive. It won't work magically, but it does help lower background resource usage and make everything run better.
 

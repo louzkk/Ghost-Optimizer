@@ -14,7 +14,7 @@ Special thanks to **Opendows** for listing this project and to **MysteryNich** f
 Some software and parts of the code were adapted from other developers, with proper credits included in the script comments.
 
 # 📜 License
-**Ghost Optimizer** is released under the [MIT License](https://github.com/louzkk/Ghost-Optimizer?tab=MIT-1-ov-file)., allowing open use, modification, and distribution with attribution.  
+**Ghost Optimizer** is released under the [MIT License](LICENSE)., allowing open use, modification, and distribution with attribution.  
 If you create derivative work or redistribute this project, please maintain proper credit to the original authors.   
 
 # ❓ How to Use
@@ -26,6 +26,8 @@ If you create derivative work or redistribute this project, please maintain prop
 # 🚨 Disclaimer
 Use this script at your own risk. I take no responsibility for any damage or data loss.
 Performance improvements may vary depending on your hardware and usage.
+
+Use this script at your own risk — I take no responsibility for any damage or data loss. Performance improvements may vary depending on your hardware and usage; check the [Guide](GUIDE.md) for more information.
 
 # 💬 Bug or Suggestion
 Send me a message on [Discord](https://github.com/louzkk) or [Ppen an Issue](https://github.com/louzkk/Ghost-Optimizer/issues).

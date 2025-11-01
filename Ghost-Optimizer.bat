@@ -159,11 +159,9 @@
     :restore
     reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" /v "SystemRestorePointCreationFrequency" /t REG_DWORD /d 0 /f >nul 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\SystemRestore" /v "DisableSR" /t REG_DWORD /d 0 /f >nul 2>&1
-
     chcp 437 >nul 2>&1
     powershell -ExecutionPolicy Bypass -Command "Checkpoint-Computer -Description '%script% %version% | Restore Point' -RestorePointType 'MODIFY_SETTINGS'" >nul 2>&1
     chcp 65001 >nul 2>&1
-
     cls
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Restore Point created %green%successfully%white%.
@@ -220,7 +218,7 @@
     set "t=%t:.=-%"
     set "t=%t: =0%"
 
-    set "logfile=C:\Ghost Optimizer\Logs\%d%_%t%.log"
+    set "logfile=C:\Ghost Optimizer %version%\Logs\%d%_%t%.log"
 
     echo Ghost Optimizer > "%logfile%"
     echo Created by: @louzkk >> "%logfile%" 2>&1
