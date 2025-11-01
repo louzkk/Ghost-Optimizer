@@ -2,7 +2,7 @@
 **Ghost Optimizer** is a lightweight, open-source tweaker/optimizer that **improves performance** (FPS), **network speed** (ping), **reduces latency** (input lag), **disables telemetry** and **data collection** to **protect your privacy** and **fixes system integrity**.  
 The script is text-based but interactive, so you can choose which optimizations to apply or skip.
 
-![Banner](GhostOPX-BANNER-denoised-4x.png)
+![Banner](images/GhostOPX-BANNER-denoised-4x.png)
 
 # 💻 Requirements
 - Windows **10** / **11**  
