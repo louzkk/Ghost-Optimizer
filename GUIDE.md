@@ -7,9 +7,6 @@ This guide provides detailed information about Ghost Optimizer, explaining what 
 # Why optimize Windows?
 Windows is made to work on any kind of hardware and for any kind of user. This means that it puts usability and stability first, but it also has a lot of extra features, ads, services, and compatibility layers that not every user needs. Even though Windows is well optimized, it gets heavier with each update, and mid to low end PCs start to feel the effects. Ghost Optimizer doesn't try to "fix" Windows. Instead, it optimizes it by turning off features and services that aren't being used, blocking most telemetry, and changing system values to prioritize performance, and privacy.
 
-# About the Project
-I have a low-end laptop and wanted an easy way to automate the basic Windows tweaks i’d been doing manually. Over time, I kept improving the script, and soon my friends were asking me for it. That’s how i created Ghost Optimizer, not only automating basic optimizations with simple outputs, but also letting me explore more advanced Windows tweaks. Shoutout to Hellzerg's Optimizer and Ancel's Tweaker for the inspiration, and to MysteryNich for testing the script before each release.
-
 # Troubleshooting & Notes
 Do not minimize or move the cmd window while Ghost Optimizer is open, as this will cause the script to stop working for some reason.
 Do not close the cmd window while creating a restore point.
