@@ -146,13 +146,13 @@
 
     set /p answer="%white% >:%roxo%"
 
-:: Options
+:: Key Options #1
     if "%answer%"=="y" goto restore
     if "%answer%"=="Y" goto restore
     if "%answer%"=="n" goto loading
     if "%answer%"=="N" goto loading
 
-:: Invalid Input
+    :: Invalid Input
     goto welcome
 
 :: Restore Point
@@ -162,7 +162,6 @@
     chcp 437 >nul 2>&1
     powershell -ExecutionPolicy Bypass -Command "Checkpoint-Computer -Description '%script% %version% | Restore Point' -RestorePointType 'MODIFY_SETTINGS'" >nul 2>&1
     chcp 65001 >nul 2>&1
-    cls
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Restore Point created %green%successfully%white%.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
@@ -217,9 +216,7 @@
     set "t=%time::=-%"
     set "t=%t:.=-%"
     set "t=%t: =0%"
-
-    set "logfile=C:\Ghost Optimizer %version%\Logs\%d%_%t%.log"
-
+    set "logfile=C:\Ghost Optimizer\Logs\%d%_%t%.log"
     echo Ghost Optimizer > "%logfile%"
     echo Created by: @louzkk >> "%logfile%" 2>&1
     echo. >> "%logfile%" 2>&1
@@ -333,7 +330,7 @@
     echo.
     set /p answer="%white% >:%roxo%"
 
-:: Key Options
+:: Key Options #2
     if %answer% equ 1 call :general
     if %answer% equ 2 call :performance
     if %answer% equ 3 call :network

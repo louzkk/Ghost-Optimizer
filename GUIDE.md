@@ -10,6 +10,9 @@ Windows is made to work on any kind of hardware and for any kind of user. This m
 # How Registry Tweaks Work
 The Windows Registry (Regedit.exe) is a central database where Windows stores settings for the system, installed programs, and hardware. It controls how Windows behaves, remembers user preferences, and manages hidden features. Accessing the Registry lets you make deeper, more advanced changes to the system’s behavior you can’t do through settings app.
 
+# Project Credits
+
+
 # How Terminal/CMD Work?
 
 
