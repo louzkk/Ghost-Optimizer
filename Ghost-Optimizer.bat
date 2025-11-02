@@ -19,6 +19,17 @@
         pushd "%CD%"
         CD /D "%~dp0"
 
+:: Variables
+    set version=4.9
+    set space= / 
+    set script=Ghost Optimizer
+    set reboot=Reboot required
+    set rebooing=Rebooting...
+    set shuttingdown=Shutting Down...
+    set downloading=Downloading...
+    set louzkk=@louzkk
+    title %script% %version%
+
 :: Properties
     mode 135,30
     setlocal enabledelayedexpansion
@@ -26,15 +37,6 @@
     reg add "HKCU\CONSOLE" /v "VirtualTerminalLevel" /t REG_DWORD /d 1 /f >nul 2>&1
     for /F "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1) do rem"') do (set "DEL=%%a" & set "COL=%%b")
     (for /f %%a in ('echo prompt $E^| cmd') do set "esc=%%a")
-
-:: Variables
-    set version=4.8.8
-    set space= / 
-    set script=Ghost Optimizer
-    set reboot=System Reboot required
-    set rebooing=Rebooting...
-    set shuttingdown=Shutting Down...
-    set downloading=Downloading... (this may take a while)
 
 :: Colors
     set red=[38;2;255;0;0m
@@ -80,7 +82,6 @@
 
 :: Welcome
     :welcome
-    title %script% %version%
     chcp 65001 >nul 2>&1
     cls 
     echo.
@@ -130,7 +131,7 @@
     echo !lineGradient!!esc![0m
 
     echo.
-    echo                                      %roxo%%underline%%script%%reset% is a lightweight open source tweaker/optimizer
+    echo                                      %roxo%%script%%reset% is a lightweight open source tweaker/optimizer
     echo                               made to improve system performance, network, latency and fix system integrity.
     echo.
     echo                           The revert tweaks option may not work as expected; create a restore point for safety.
@@ -178,19 +179,19 @@
     echo.
     echo.
     echo.
-    set "lines[0]=                                                                 ██████              "
-    set "lines[1]=                                                              ████████████           "
-    set "lines[2]=                                                           ██████████████████        "
-    set "lines[3]=                                                           █████   ██   █████        "
-    set "lines[4]=                                                          ██████   ██   ██████       "
-    set "lines[5]=                                                         ██████████████████████      "
-    set "lines[6]=                                                        █████   ███  ███   █████     "
-    set "lines[7]=                                                        ███  ███   ██   ███  ███     "
-    set "lines[8]=                                                        ████████████████████████     "
-    set "lines[9]=                                                        ████    ███  ███    ████     "
-    set "lines[10]=                                                                                    "
-    set "lines[11]=                                                                                    "
-    set "lines[12]=                                                                Loading...          "
+    set "lines[0]=                                                                ██████              "
+    set "lines[1]=                                                             ████████████           "
+    set "lines[2]=                                                          ██████████████████        "
+    set "lines[3]=                                                          █████   ██   █████        "
+    set "lines[4]=                                                         ██████   ██   ██████       "
+    set "lines[5]=                                                        ██████████████████████      "
+    set "lines[6]=                                                       █████   ███  ███   █████     "
+    set "lines[7]=                                                       ███  ███   ██   ███  ███     "
+    set "lines[8]=                                                       ████████████████████████     "
+    set "lines[9]=                                                       ████    ███  ███    ████     "
+    set "lines[10]=                                                                                   "
+    set "lines[11]=                                                                                   "
+    set "lines[12]=                                                               Loading...          "
 
     for /L %%i in (0,1,12) do (
         set "text=!lines[%%i]!"
@@ -262,11 +263,10 @@
 
 :: Main Menu
     :menu
+    title %script% %version% %space% %winver%
     cls
     echo.
     echo.
-
-    title %script% %version% %space% %winver%
 
     set "W=130"
     set /a "LAST=W-2"
@@ -366,7 +366,7 @@
     if "%answer%"=="Github" start https://github.com/louzkk/Ghost-Optimizer
     if "%answer%"=="help" start https://github.com/louzkk/Ghost-Optimizer
 
-:: Invalid Input
+    :: Invalid Input
     goto menu
 
 :: All Tweaks/Fixes
@@ -407,7 +407,7 @@
     )
 
     echo.
-    set "lines[0]=                           Applies all tweaks/fixes, except Windows Clean, Integrity Fix, and NVIDIA profile."
+    set "lines[0]=                           Applies all Tweaks/Fixes, except Windows Clean, Integrity Fix, and NVIDIA Profile."
     set "lines[1]=                                Check full documentation at: https://github.com/louzkk/Ghost-Optimizer"
 
     for /L %%i in (0,1,1) do (
@@ -434,7 +434,7 @@
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
     echo !lineGradient!!esc![0m     
     echo.
-    echo                                %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply All Tweaks/Fixes                %purple%[ %roxo%%underline%C%reset% %purple%]%white% Check Documentation
+    echo                                %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply all Tweaks/Fixes                %purple%[ %roxo%%underline%C%reset% %purple%]%white% Check Documentation
     echo.                 
     echo.
     echo                                                         %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to Menu 
@@ -457,7 +457,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Applying %roxo%All%white% Tweaks/Fixes... 
     echo.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
-    echo --- Applying All Tweaks/Fixes --- >> "%logfile%" 2>&1
+    echo --- Applying all Tweaks/Fixes --- >> "%logfile%" 2>&1
 
     title %script% %version% %space% Applying All...  [1/10]
     call :generalapply
@@ -479,15 +479,24 @@
     call :bloatwareapply
 
     title %script% %version% %space% Applying All...  [10/10]
+    taskkill /f /im explorer.exe >> "%logfile%" 2>&1
+    start explorer.exe >> "%logfile%" 2>&1
 
     echo.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% All Tweaks/FIxes applied %green%successfully%white%.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
-    taskkill /f /im explorer.exe >> "%logfile%" 2>&1
-    start explorer.exe >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
-    echo --- Finished All Tweaks/Fixes --- >> "%logfile%" 2>&1
+    echo --- Finished all Tweaks/Fixes --- >> "%logfile%" 2>&1
+    goto eof
+
+    :documentation
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Opening %roxo%Documentation%white% page...
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    start https://github.com/louzkk/Ghost-Optimizer
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
     goto eof
 
 :: General
@@ -580,9 +589,13 @@
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     echo --- Applying General Tweaks --- >> "%logfile%" 2>&1
 
-    :: Defrag
+    :: Disk Defrag
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\defragsvc" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Disk Defrag enabled.
+
+    :: Disk Optimization
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Optimize" /v "ScheduledDefrag" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Disk Optimization enabled.
 
     :: SysMain
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\SysMain" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
@@ -2510,8 +2523,10 @@
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
     echo !lineGradient!!esc![0m     
     echo.
-    echo                                         %purple%[ %roxo%%underline%S%reset% %purple%] %white%Fast Health Fix           %purple%[ %roxo%%underline%F%reset% %purple%] %white%Full Health Fix
+    echo                                         %purple%[ %roxo%%underline%S%reset% %purple%] %white%Fast Integrity Fix        %purple%[ %roxo%%underline%F%reset% %purple%] %white%Full Integrity Fix
     echo.                 
+    echo                                         %purple%[ %roxo%%underline%BT%reset% %purple%] %white%Bluetooth Fix            %purple%[ %roxo%%underline%XB%reset% %purple%] %white%Xbox App/Bar Fix
+    echo.
     echo.
     echo                                                         %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to Menu 
     echo.
@@ -2521,6 +2536,14 @@
     if "%answer%"=="S" goto healthapply1
     if "%answer%"=="f" goto healthapply2
     if "%answer%"=="F" goto healthapply2
+    if "%answer%"=="bt" goto bluetoothfix
+    if "%answer%"=="BT" goto bluetoothfix
+    if "%answer%"=="Bt" goto bluetoothfix
+    if "%answer%"=="bT" goto bluetoothfix
+    if "%answer%"=="XB" goto xboxfix
+    if "%answer%"=="Xb" goto xboxfix
+    if "%answer%"=="xB" goto xboxfix
+    if "%answer%"=="xb" goto xboxfix
     if "%answer%"=="b" goto menu
     if "%answer%"=="B" goto menu
 
@@ -2593,7 +2616,7 @@
     ::taskkill /f /im explorer.exe >> "%logfile%" 2>&1
     ::start explorer.exe >> "%logfile%" 2>&1
     echo --- Finished Fast Health Fix --- >> "%logfile%" 2>&1
-    goto health
+    goto eof
 
     :healthapply2
     cls
@@ -2702,6 +2725,150 @@
     ::taskkill /f /im explorer.exe >> "%logfile%" 2>&1
     ::start explorer.exe >> "%logfile%" 2>&1
     echo --- Finished Full Health Fix --- >> "%logfile%" 2>&1
+    goto eof
+
+    :bluetoothfix
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Bluetooth%white% Fix... 
+    echo.
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    echo --- Starting Bluetooth Fix --- >> "%logfile%" 2>&1
+
+    :: Restart BT Drivers
+    chcp 437 >> "%logfile%" 2>&1
+    powershell -command "Get-Service *bth* | Restart-Service -Force -ErrorAction SilentlyContinue" >> "%logfile%" 2>&1
+    powershell -command "Get-PnpDevice -Class Bluetooth | Disable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue" >> "%logfile%" 2>&1
+    powershell -command "Start-Sleep -Seconds 1" >> "%logfile%" 2>&1
+    powershell -command "Get-PnpDevice -Class Bluetooth | Enable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue" >> "%logfile%" 2>&1
+    powershell -command "pnputil /scan-devices" >> "%logfile%" 2>&1
+    chcp 65001 >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Bluetooth Drivers restored.
+
+    :: BT Registry
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters" /v "EnableOffload" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters" /v "EnableLEEncryption" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters" /v "EnableRadioOffload" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BTHUSB" /v "EnableSelectiveSuspend" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\bthserv" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BthHFSrv" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BthAvctpSvc" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Bluetooth features restored.
+
+    :: Radio Services
+    chcp 437 >> "%logfile%" 2>&1
+    powershell -command "(Get-Service bthserv).StartType='Automatic'" >> "%logfile%" 2>&1
+    powershell -command "Start-Service bthserv -ErrorAction SilentlyContinue" >> "%logfile%" 2>&1
+    powershell -command "Start-Service DeviceAssociationService -ErrorAction SilentlyContinue" >> "%logfile%" 2>&1
+    powershell -command "Start-Service DeviceAssociationBrokerSvc -ErrorAction SilentlyContinue" >> "%logfile%" 2>&1
+    chcp 65001 >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Radio Services restored.
+
+    :: BT Services
+    sc config bthserv start= auto >> "%logfile%" 2>&1
+    sc config BthHFSrv start= demand >> "%logfile%" 2>&1
+    sc config BthAvctpSvc start= demand >> "%logfile%" 2>&1
+    sc config bthmodem start= demand >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Bluetooth Services restored.
+
+    :: Broker Service
+    net stop DeviceAssociationService /y >> "%logfile%" 2>&1
+    net start DeviceAssociationService >> "%logfile%" 2>&1
+    net stop DeviceAssociationBrokerSvc /y >> "%logfile%" 2>&1
+    net start DeviceAssociationBrokerSvc >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Broker Service restored.
+
+    :: Enable BT
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BTHPORT" /v "Start" /t REG_DWORD /d 2 /f
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BTHUSB" /v "Start" /t REG_DWORD /d 3 /f
+    echo   %purple%[ %roxo%•%purple% ]%white% Bluetooth enabled.
+
+    echo.
+    echo   %yellow%[ %yellow%•%yellow% %yellow%]%reset% If that doesn't solve your problem, try running Full Integrity Fix.
+
+    echo.
+    timeout /t 4 /nobreak >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Bluetooth fixed %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    title %script% %version% %space% %reboot%
+    ::taskkill /f /im explorer.exe >> "%logfile%" 2>&1
+    ::start explorer.exe >> "%logfile%" 2>&1
+    echo --- Finished Bluetooth Fix --- >> "%logfile%" 2>&1
+    goto eof
+
+    :xboxfix
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Xbox App/Bar%white% Fix... 
+    echo.
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    echo --- Starting Xbox Fix --- >> "%logfile%" 2>&1
+
+    :: Restart Xbox Services
+    chcp 437 >> "%logfile%" 2>&1
+    powershell -Command "Set-Service -Name XblAuthManager -StartupType Manual" >> "%logfile%" 2>&1
+    powershell -Command "Set-Service -Name XblGameSave -StartupType Manual" >> "%logfile%" 2>&1
+    powershell -Command "Set-Service -Name XboxNetApiSvc -StartupType Automatic" >> "%logfile%" 2>&1
+    powershell -Command "Set-Service -Name XboxGipSvc -StartupType Manual" >> "%logfile%" 2>&1
+    chcp 65001 >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Xbox Core restored.
+
+    :: Xbox Services
+    sc config XblAuthManager start= demand >> "%logfile%" 2>&1
+    sc config XblGameSave start= demand >> "%logfile%" 2>&1
+    sc config XboxGipSvc start= demand >> "%logfile%" 2>&1
+    sc config XboxNetApiSvc start= auto >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Xbox Services restored.
+
+    :: Reinstall Xbox App & Identity Provider
+    chcp 437 >> "%logfile%" 2>&1
+    powershell -Command "Get-AppxPackage Microsoft.XboxApp -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "%logfile%" 2>&1
+    powershell -Command "Get-AppxPackage Microsoft.Xbox.TCUI -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "%logfile%" 2>&1
+    powershell -Command "Get-AppxPackage Microsoft.XboxIdentityProvider -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "%logfile%" 2>&1
+    chcp 65001 >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Xbox App reinstalled.
+
+    :: Reinstall Xbox Game Bar
+    chcp 437 >> "%logfile%" 2>&1
+    powershell -Command "Get-AppxPackage Microsoft.XboxGamingOverlay -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "%logfile%" 2>&1
+    chcp 65001 >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Game Bar reinstalled.
+
+    :: Game Bar Registry
+    reg add "HKCU\Software\Microsoft\GameBar" /v "AllowAutoGameMode" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\GameBar" /v "ShowStartupPanel" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\GameBar" /v "GamePanelStartupTipIndex" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\GameBar" /v "UseNexusForGameBarEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\GameBar" /v "AllowBroadcasting" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR" /v "value" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\System\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\System\GameConfigStore" /v "GameDVR_FSEBehaviorMode" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
+    reg add "HKCU\System\GameConfigStore" /v "GameDVR_DXGIHonorFSEWindowsCompatible" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Game Bar Support restored.
+
+    :: App Capture
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "AudioCaptureEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% App Capture restored.
+
+    :: Restart Xbox Overlay
+    chcp 437 >> "%logfile%" 2>&1
+    powershell -Command "Get-AppxPackage Microsoft.XboxGamingOverlay | Foreach {Start-Process 'shell:appsfolder\' + $_.PackageFamilyName + '!App'}" >> "%logfile%" 2>&1
+    chcp 65001 >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Xbox Overlay restored.
+
+    echo.
+    echo   %yellow%[ %yellow%•%yellow% %yellow%]%reset% If that doesn't solve your problem, try running Full Integrity Fix.
+
+    echo.
+    timeout /t 4 /nobreak >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Xbox fixed %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    title %script% %version% %space% %reboot%
+    ::taskkill /f /im explorer.exe >> "%logfile%" 2>&1
+    ::start explorer.exe >> "%logfile%" 2>&1
+    echo --- Finished Xbox Fix --- >> "%logfile%" 2>&1
     goto eof
 
 :: Temporary Files Cleanup
@@ -3504,7 +3671,7 @@
     :restart
     cls
     echo.
-    echo   %purple%[ %roxo%•%purple% ]%white% Restarting %purple%%underline%%script%%white%... 
+    echo   %purple%[ %roxo%•%purple% ]%white% Restarting %purple%%script%%white%... 
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     start "" "%~f0"
     exit
