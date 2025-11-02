@@ -1,7 +1,7 @@
 # 💜 About
 **Ghost Optimizer** is a lightweight, open-source tweaker/optimizer that **improves performance** (FPS), **network speed** (ping), **reduces latency** (input lag), **disables telemetry** and **data collection** to **protect your privacy** and **fixes system integrity**.  
 
-![Version](https://img.shields.io/badge/Version-5.0-indigo)
+[![Version](https://img.shields.io/badge/Version-5.0-indigo)](https://github.com/louzkk/Ghost-Optimizer/releases)
 [![Download](https://img.shields.io/badge/Download-indigo)](https://github.com/louzkk/Ghost-Optimizer/releases)
 
 ![Banner](images/GhostOPX-BANNER-denoised-4x.png)
