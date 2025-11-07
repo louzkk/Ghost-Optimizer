@@ -138,7 +138,7 @@
     echo                     Use this script at your own risk. The author takes no responsibility for any damage or data loss.
     echo                                          You can report issues or submit suggetions at Github.
     echo.
-    echo                                                          Made by: %roxo%@louzkk%reset%
+    echo                                                          Made by: %roxo%%louzkk%%reset%
     echo.
     echo.
     echo                                 %purple%[ %roxo%%underline%Y%reset% %purple%]%white% Create a restore point                %purple%[ %roxo%%underline%N%reset% %purple%]%white% Skip restore point
@@ -369,7 +369,7 @@
     :: Invalid Input
     goto menu
 
-:: All Tweaks/Fixes
+:: Apply Tweaks
     :applyall
     cls
     echo.
@@ -454,7 +454,7 @@
     :applyallapply
     cls
     echo.
-    echo   %purple%[ %roxo%•%purple% ]%white% Applying %roxo%All%white% Tweaks/Fixes... 
+    echo   %purple%[ %roxo%•%purple% ]%white% %roxo%Applying %white% all Tweaks/Fixes... 
     echo.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     echo --- Applying all Tweaks/Fixes --- >> "%logfile%" 2>&1
@@ -488,6 +488,121 @@
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
     echo --- Finished all Tweaks/Fixes --- >> "%logfile%" 2>&1
+    goto eof
+
+    :documentation
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Opening %roxo%Documentation%white% page...
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    start https://github.com/louzkk/Ghost-Optimizer
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    goto eof
+
+:: Revert Tweaks
+    :revertall
+    cls
+    echo.
+    echo.
+    set "W=130"
+    set /a "LAST=W-2"
+    set /a "MID=(W-2)/2"
+
+    for /L %%j in (0,1,!LAST!) do (
+        if %%j LEQ !MID! (
+            set /a "colorR=40 + (88 * %%j / !MID!)"
+        ) else (
+            set /a "colorR=128 - (128 * (%%j-!MID!) / (!LAST!-!MID!))"
+        )
+        set /a "colorG=0", "colorB=255"
+        set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
+    )
+
+    set "lines[0]=                             ██████╗ ███████╗██╗   ██╗███████╗██████╗ ████████╗     █████╗ ██╗     ██╗               "
+    set "lines[1]=                             ██╔══██╗██╔════╝██║   ██║██╔════╝██╔══██╗╚══██╔══╝    ██╔══██╗██║     ██║               "
+    set "lines[2]=                             ██████╔╝█████╗  ██║   ██║█████╗  ██████╔╝   ██║       ███████║██║     ██║               "
+    set "lines[3]=                             ██╔══██╗██╔══╝  ╚██╗ ██╔╝██╔══╝  ██╔══██╗   ██║       ██╔══██║██║     ██║               "
+    set "lines[4]=                             ██║  ██║███████╗ ╚████╔╝ ███████╗██║  ██║   ██║       ██║  ██║███████╗███████╗          "
+    set "lines[5]=                             ╚═╝  ╚═╝╚══════╝  ╚═══╝  ╚══════╝╚═╝  ╚═╝   ╚═╝       ╚═╝  ╚═╝╚══════╝╚══════╝          "
+
+    for /L %%i in (0,1,5) do (
+        set "text=!lines[%%i]!"
+        set "textGradient="
+        for /L %%j in (0,1,!LAST!) do (
+            set "char=!text:~%%j,1!"
+            if "!char!"=="" set "char= "
+            set "textGradient=!textGradient!!esc[%%j]!!char!"
+        )
+        echo !textGradient!!esc![0m
+    )
+
+    echo.
+    set "lines[0]=                            Revert all Tweaks/Fixes using the restore point that you created (or should have)."
+    set "lines[1]=                                Check full documentation at: https://github.com/louzkk/Ghost-Optimizer"
+
+    for /L %%i in (0,1,1) do (
+        set "text=!lines[%%i]!"
+        set "textGradient="
+        for /L %%j in (0,1,129) do (
+            set "char=!text:~%%j,1!"
+            if "!char!"=="" set "char= "
+            set "textGradient=!textGradient!!esc[%%j]!!char!"
+        )
+        echo !textGradient!!esc![0m
+    )
+
+    echo.
+    set "lineGradient="
+    set /a "BeforeSpace=(134 - 108) / 2"
+    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
+    for /L %%j in (0,1,108) do (
+        set /a "colorR=colorBaseR + (variationR * %%j / 108)"
+        set /a "colorG=colorBaseG + (variationG * %%j / 108)"
+        set /a "colorB=colorBaseB + (variationB * %%j / 108)"
+        set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
+    )
+    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
+    echo !lineGradient!!esc![0m     
+    echo.
+    echo                                 %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply Restore Point                %purple%[ %roxo%%underline%C%reset% %purple%]%white% Check Documentation
+    echo.                 
+    echo.
+    echo                                                         %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to Menu 
+    echo.
+    set /p answer="%reset% >:%roxo%"
+
+    if "%answer%"=="a" goto revertallapply
+    if "%answer%"=="c" goto documentation
+    if "%answer%"=="A" goto revertallapply
+    if "%answer%"=="C" goto documentation
+    if "%answer%"=="b" goto menu
+    if "%answer%"=="B" goto menu
+
+    :: Invalid Input
+    goto revertall
+
+    :revertallapply
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Reverting %roxo%All%white% Tweaks/Fixes... 
+    echo.
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    echo --- Applying Restore Point --- >> "%logfile%" 2>&1
+
+    :: Start System Restore
+    echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%System Restore%white%...
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    start /wait "" rstrui.exe >> "%logfile%" 2>&1
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% System Restore closed.
+    echo.
+
+    echo.
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% All Tweaks/FIxes reverted %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    title %script% %version% %space% %reboot%
+    echo --- Restore Point reverted --- >> "%logfile%" 2>&1
     goto eof
 
     :documentation
@@ -564,10 +679,10 @@
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
     echo !lineGradient!!esc![0m     
     echo.
-    echo                                %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply General Tweaks                %purple%[ %roxo%%underline%R%reset% %purple%]%white% Revert General Tweaks
+    echo                                                    %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply General Tweaks
     echo.                 
     echo.
-    echo                                                         %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to Menu 
+    echo                                                        %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to Menu 
     echo.
     set /p answer="%reset% >:%roxo%"
 
@@ -589,15 +704,12 @@
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     echo --- Applying General Tweaks --- >> "%logfile%" 2>&1
 
-    :: Disk Defrag
+    :: HDD/SSD /Optimization
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\defragsvc" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Optimize" /v "ScheduledDefrag" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Disk Defrag enabled.
 
-    :: Disk Optimization
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Optimize" /v "ScheduledDefrag" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Disk Optimization enabled.
-
-    :: SysMain
+    :: SysMain (Prefetcher)
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\SysMain" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Prefetcher disabled.
 
@@ -653,15 +765,16 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Search Tweaks applied.
 
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    goto pf2
 
     :: Blur Effect
     :pf2
     cls
     echo.
-    echo   %purple%[ %roxo%•%purple% ]%white% Do you want to diasble UI %roxo%Transparency%reset%?
+    echo   %purple%[ %roxo%•%purple% ]%white% Do you want to enable %roxo%Transparency%reset%?
     echo.
-    echo   %purple%About:%reset% Disabling Transparency can improve performance on low-end systems by reducing resource usage.
-    echo   The Transparency (Blur Effect) slightly increase GPU and memory usage.
+    echo   %purple%About:%reset% Enabling Transparency adds blur and acrylic effects to the Windows.
+    echo   Rendering Blur Effects slightly increase GPU and Memory usage.
     echo.
     echo   Type %roxo%Y%reset% for Yes or %roxo%N%reset% for No.
     echo.
@@ -669,11 +782,17 @@
     set /p answer="%reset% >:%roxo%"
 
     if /i "%answer%"=="Y" (
-        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "EnableTransparency" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-        echo   %purple%[ %roxo%•%purple% ]%white% Transparency disabled.
-    ) else if /i "%answer%"=="N" (
+        echo.
         reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "EnableTransparency" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
         echo   %purple%[ %roxo%•%purple% ]%white% Transparency enabled.
+        timeout /t 1 /nobreak >> "%logfile%" 2>&1
+        goto pf3
+    ) else if /i "%answer%"=="N" (
+        echo.
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "EnableTransparency" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+        echo   %purple%[ %roxo%•%purple% ]%white% Transparency disabled.
+        timeout /t 1 /nobreak >> "%logfile%" 2>&1
+        goto pf3
     ) else (
         echo.
         echo   %red%[ %red%•%red% ]%white% Invalid option.
@@ -681,7 +800,50 @@
         goto pf2
     )
 
+    :: Spatial Sound
     :pf3
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Do you want to enable %roxo%Spatial Sound%reset%?
+    echo.
+    echo   %purple%About:%reset% Spatial Sound processing for headphones, creating a 3D audio environment.
+    echo   Windows Sonic HRTF slightly increase CPU and Memory usage.
+    echo.
+    echo   Type %roxo%Y%reset% for Yes or %roxo%N%reset% for No.
+    echo.
+
+    set /p answer="%reset% >:%roxo%"
+
+    if /i "%answer%"=="Y" (
+        echo.
+        reg add "HKCU\Software\Microsoft\Multimedia\Audio" /v "AllowExclusive" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+        reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio\Spatial" /v "EnableSpatialSound" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+        reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio\Spatial" /v "SpatialFormat" /t REG_SZ /d "WindowsSonicHeadphones" /f >> "%logfile%" 2>&1
+        echo   %purple%[ %roxo%•%purple% ]%white% Spatial Sound enabled.
+        timeout /t 1 /nobreak >> "%logfile%" 2>&1
+        reg add "HKCU\Software\Microsoft\Multimedia\Audio" /v "PreferredFormat" /t REG_SZ /d "24,48000" /f >> "%logfile%" 2>&1
+        echo   %purple%[ %roxo%•%purple% ]%white% Audio Quality set to 24-bit 48kHz.
+        timeout /t 2 /nobreak >> "%logfile%" 2>&1
+        goto pf4
+    ) else if /i "%answer%"=="N" (
+        echo.
+        reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio\Spatial" /v "EnableSpatialSound" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+        reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio\Spatial" /v "SpatialFormat" /t REG_SZ /d "WindowsSonicHeadphones" /f >> "%logfile%" 2>&1
+        reg delete "HKCU\Software\Microsoft\Multimedia\Audio" /v "AllowExclusive" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+        timeout /t 1 /nobreak >> "%logfile%" 2>&1
+        echo   %purple%[ %roxo%•%purple% ]%white% Spatial Sound disabled.
+        reg delete "HKCU\Software\Microsoft\Multimedia\Audio" /v "PreferredFormat" /t REG_SZ /d "24,48000" /f >> "%logfile%" 2>&1
+        echo   %purple%[ %roxo%•%purple% ]%white% Audio Quality set to Default.
+        timeout /t 2 /nobreak >> "%logfile%" 2>&1
+        goto pf4
+    ) else (
+        echo.
+        echo   %red%[ %red%•%red% ]%white% Invalid option.
+        timeout /t 2 /nobreak >nul
+        goto pf3
+    )
+
+    :pf4
     cls
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Applying %roxo%General%white% Tweaks... 
@@ -696,7 +858,7 @@
 
     :: Dynamic Light
     reg add "HKCU\Software\Microsoft\Lighting" /v "AmbientLightingEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Dynamic Lighting disabled.
+    echo   %purple%[ %roxo%•%purple% ]%white% Dynamic Light disabled.
 
     :: Stickers
     reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\current\device\Stickers" /v "EnableStickers" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -735,14 +897,14 @@
 
     :: USB Selective Suspend
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\USB" /v "DisableSelectiveSuspend" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% USB Selective Suspend disabled.
+    echo   %purple%[ %roxo%•%purple% ]%white% USB Idle disabled.
 
     :: Send to My Phone (Context Menu W11)
     reg add "HKEY_CLASSES_ROOT\*\shell\Windows.SendToPhone" /v "Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKEY_CLASSES_ROOT\Directory\shell\Windows.SendToPhone" /v "Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" /v "{2F788D0F-1317-441B-86D2-4725301BD49D}" /t REG_SZ /d "" /f >> "%logfile%" 2>&1
     reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" /v "{2F788D0F-1317-441B-86D2-4725301BD49D}" /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Send to My Phone disabled.
+    echo   %purple%[ %roxo%•%purple% ]%white% My Phone disabled.
 
     :: Hibernation
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "HiberBootEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -851,10 +1013,10 @@
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
     echo !lineGradient!!esc![0m     
     echo.
-    echo                              %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply Performance Tweaks                %purple%[ %roxo%%underline%R%reset% %purple%]%white% Revert Performance Tweaks
+    echo                                                  %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply Performance Tweaks
     echo.                 
     echo.
-    echo                                                         %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to Menu 
+    echo                                                        %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to Menu 
     echo.
     set /p answer="%reset% >:%roxo%"
 
@@ -917,10 +1079,11 @@
 
     :: Memory Management
     chcp 437 >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control" /v "SvcHostSplitThresholdInKB" /t REG_DWORD /d 33554432 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "AutomaticManagedPagefile" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     powershell -Command "Get-ComputerInfo" >> "%logfile%" 2>&1
     powershell -Command "Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management' -Name 'PagingFiles' -Value 'C:\pagefile.sys 0 0'" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1    
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control" /v "SvcHostSplitThresholdInKB" /t REG_DWORD /d 33554432 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Memory Management Optimized.
 
     :: Fullscreen Optimization
@@ -1016,7 +1179,7 @@
     echo --- Performance Tweaks Applied --- >> "%logfile%" 2>&1
     goto eof
 
-:: Network Tweaks
+:: Network
     :network
     cls
     echo.
@@ -1081,10 +1244,10 @@
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
     echo !lineGradient!!esc![0m     
     echo.
-    echo                                  %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply Network Tweaks                %purple%[ %roxo%%underline%R%reset% %purple%]%white% Revert Network Tweaks
+    echo                                                     %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply Network Tweaks
     echo.                 
     echo.
-    echo                                                          %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to Menu 
+    echo                                                        %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to Menu 
     echo.
     set /p answer="%reset% >:%roxo%"
 
@@ -1340,13 +1503,10 @@
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
     echo !lineGradient!!esc![0m     
     echo.
-    echo                             %purple%[ %roxo%%underline%S%reset% %purple%]%white% Stop Telemetry ^& Logging                %purple%[ %roxo%%underline%R%reset% %purple%]%white% Revert Telemetry ^& Logging
+    echo                               %purple%[ %roxo%%underline%S%reset% %purple%]%white% Stop Telemetry ^& Logging                %purple%[ %roxo%%underline%O%reset% %purple%]%white% Open OOSU10+ Software
     echo.
     echo.
-    echo                                                         %purple%[ %roxo%%underline%O%reset% %purple%]%white% Open OOSU10   
-    echo.
-    echo.
-    echo                                                         %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to Menu 
+    echo                                                          %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to Menu 
     echo.
     set /p answer="%reset% >:%roxo%"
 
@@ -1389,12 +1549,14 @@
     )
 
     echo   %purple%[ %roxo%•%purple% ]%white% Importing %highlight%OOSU10%reset% Profile...
+    title %script% %version% %space% %downloading%
     curl -g -k -L -# -o "C:\%script%\OOSU10\GhostOPX-OOSU.cfg" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostOPX-OOSU.cfg" >> "%logfile%" 2>&1
     if errorlevel 1 (
         echo   %red%[ %red%•%red% %red%]%reset% Failed to download OOSU10 profile.
         goto telemetryend
     )
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    title %script% %version% %space% %winver%
 
     echo   %purple%[ %roxo%•%purple% ]%white% Applying %highlight%OOSU10%reset% Profile...
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
@@ -1607,6 +1769,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Checking %highlight%OOSU10%reset% executable...
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     if not exist "C:\%script%\OOSU10\OOSU10.exe" (
+        title %script% %version% %space% %downloading%
         echo   %purple%[ %roxo%•%purple% ]%white% Downloading %highlight%OOSU10%reset% executable...
         chcp 437 >> "%logfile%" 2>&1
         powershell -Command "Invoke-WebRequest 'https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe' -OutFile 'C:\%script%\OOSU10\OOSU10.exe'" >> "%logfile%" 2>&1
@@ -1616,6 +1779,7 @@
         timeout /t 2 /nobreak >> "%logfile%" 2>&1
     )
 
+    title %script% %version% %space% %winver%
     echo   %purple%[ %roxo%•%purple% ]%white% Opening %highlight%OOSU10%reset% software...
     timeout /t 1 /nobreak >> "%logfile%" 2>&1
     start /wait "" "C:\%script%\OOSU10\OOSU10.exe" >> "%logfile%" 2>&1
@@ -1693,10 +1857,10 @@
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
     echo !lineGradient!!esc![0m     
     echo.
-    echo                         %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply Mouse ^& Keyboard Tweaks                %purple%[ %roxo%%underline%R%reset% %purple%]%white% Revert Mouse ^& Keyboard Tweaks
+    echo                                                %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply Mouse ^& Keyboard Tweaks
     echo.                 
     echo.
-    echo                                                         %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to Menu 
+    echo                                                        %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to Menu 
     echo.
     set /p answer="%reset% >:%roxo%"
 
@@ -1758,7 +1922,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Toggle Keys disabled.
 
     echo.
-    echo   %yellow%[ %yellow%•%yellow% %yellow%]%reset% Set the highest polling rate value avaliable for your mouse/keyboard.
+    echo   %yellow%[ • ]%reset% Set the highest polling rate value avaliable for your mouse/keyboard.
 
     echo.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
@@ -2129,6 +2293,143 @@
     echo --- Finished Debloat --- >> "%logfile%" 2>&1
     goto eof
 
+    :debloatrevert
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Reverting %roxo%Bloatware%white% Features... 
+    echo.
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    echo --- Reverting Bloatware Apps --- >> "%logfile%" 2>&1
+
+    :: Advertising
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SoftLandingEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Explorer" /v "HideRecommendedSection" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\current\device\Start" /v "HideRecommendedSection" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\current\device\Education" /v "IsEducationEnvironment" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Start_Layout" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Enabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Advertising enabled.
+
+    :: OneDrive
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowSyncProviderNotifications" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% OneDrive Push enabled.
+
+    :: News and Widgets
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Dsh" /v "AllowNewsAndInterests" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds" /v "EnableFeeds" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Widgets ^& News enabled.
+
+    :: Copilot AI
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowCopilotButton" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Policies\Microsoft\Windows\WindowsCopilot" /v "TurnOffWindowsCopilot" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot" /v "TurnOffWindowsCopilot" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Copilot AI enabled.
+
+    :: Edge Policies
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "CopilotCDPPageContext" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "CopilotPageContext" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "HubsSidebarEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "EdgeEntraCopilotPageContext" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "EdgeHistoryAISearchEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "ComposeInlineEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "GenAILocalFoundationalModelSettings" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "NewTabPageBingChatEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Browser AI enabled.
+
+    :: Notepad Policies
+    reg add "HKLM\SOFTWARE\Policies\WindowsNotepad" /v "DisableAIFeatures" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Notepad AI enabled.
+
+    :: Paint Policies
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Paint" /v "DisableCocreator" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Paint" /v "DisableGenerativeFill" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Paint" /v "DisableImageCreator" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Paint" /v "DisableGenerativeErase" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Paint" /v "DisableRemoveBackground" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Paint AI enabled.
+
+    :: App preinstall
+    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "RemediationRequired" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "PreInstalledAppsEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SilentInstalledAppsEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "OemPreInstalledAppsEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "ContentDeliveryAllowed" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContentEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableConsumerFeatures" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableConsumerFeatures" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Apps Reinstalation enabled.
+
+    :: App Suggestions
+    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SystemPaneSuggestionsEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338388Enabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-314559Enabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-280815Enabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-314563Enabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338393Enabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-353694Enabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-353696Enabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-310093Enabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-202914Enabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338387Enabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338389Enabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-353698Enabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Suggestions enabled.
+
+    :: Lockscreen Tooltips
+    reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338387Enabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "RotatingLockScreenEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "RotatingLockScreenOverlayEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Tooltips enabled.
+
+    :: Lockscreen Spotlight
+    reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableSpotlightCollectionOnDesktop" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsSpotlightFeatures" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableThirdPartySuggestions" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Spotlight enabled.
+
+    :: Delivery Optimization
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DODownloadMode" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DownloadMode" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings" /v "DownloadMode" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Delivery Optimization enabled.
+
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Installing %roxo%Bloatware%white% Apps... 
+    echo.
+
+    :: Reinstall Bloatware Apps
+    chcp 437 >> "%logfile%" 2>&1
+    powershell Get-AppxPackage -AllUsers | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"} >> "%logfile%" 2>&1
+    chcp 65001 >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Bloatware apps reinstalled.
+
+    :: Reinstall Provisioned Packages
+    chcp 437 >> "%logfile%" 2>&1
+    powershell Get-AppxProvisionedPackage -Online | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"} >> "%logfile%" 2>&1
+    chcp 65001 >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Provisioned packages reinstalled.
+
+    :: Windows Web Experience Pack
+    chcp 437 >> "%logfile%" 2>&1
+    winget install "Windows Web Experience Pack" --silent >> "%logfile%" 2>&1
+    chcp 65001 >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Widgets installed.
+
+    echo.
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Bloatware apps reverted %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    title %script% %version% %space% %reboot%
+    ::taskkill /f /im explorer.exe >> "%logfile%" 2>&1
+    ::start explorer.exe >> "%logfile%" 2>&1
+    echo --- Reverted Debloat --- >> "%logfile%" 2>&1
+    goto eof
+
 :: Latency & Input-Lag
     :latency
     cls
@@ -2194,10 +2495,10 @@
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
     echo !lineGradient!!esc![0m     
     echo.
-    echo                      %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply Latency ^& Input-Lag Tweaks                %purple%[ %roxo%%underline%R%reset% %purple%]%white% Revert Latency ^& Input-LagTweaks
+    echo                                                %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply Latency ^& Input-Lag Tweaks
     echo.                 
     echo.
-    echo                                                          %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to Menu 
+    echo                                                         %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to Menu 
     echo.
     set /p answer="%reset% >:%roxo%"
 
@@ -2525,7 +2826,7 @@
     echo.
     echo                                         %purple%[ %roxo%%underline%S%reset% %purple%] %white%Fast Integrity Fix        %purple%[ %roxo%%underline%F%reset% %purple%] %white%Full Integrity Fix
     echo.                 
-    echo                                         %purple%[ %roxo%%underline%BT%reset% %purple%] %white%Bluetooth Fix            %purple%[ %roxo%%underline%XB%reset% %purple%] %white%Xbox App/Bar Fix
+    echo                                         %purple%[ %roxo%%underline%BT%reset% %purple%] %white%Bluetooth Fix            %purple%[ %roxo%%underline%XB%reset% %purple%] %white%Xbox Services Fix
     echo.
     echo.
     echo                                                         %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to Menu 
@@ -2574,25 +2875,16 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Restoring Windows Image Health...
     DISM /Online /Cleanup-Image /RestoreHealth >> "%logfile%" 2>&1
 
-    echo   %purple%[ %roxo%•%purple% ]%white% Windows Image Health restored %green%successfully%white%.
-    echo.
-
-    timeout /t 1 /nobreak >> "%logfile%" 2>&1
-
-    :: Components Reset
-    echo   %purple%[ %roxo%•%purple% ]%white% Reseting Windows Components base...
-    DISM /Online /Cleanup-Image /StartComponentCleanup /ResetBase >> "%logfile%" 2>&1
-
-    echo   %purple%[ %roxo%•%purple% ]%white% Windows Components repaired %green%successfully%white%.
+    echo   %purple%[ %roxo%•%purple% ]%white% Windows Image Health restored.
     echo.
 
     timeout /t 1 /nobreak >> "%logfile%" 2>&1
 
     :: SFC SCANNOW
-    echo   %purple%[ %roxo%•%purple% ]%white% Repairing System Integrity... (This may take a while)
+    echo   %purple%[ %roxo%•%purple% ]%white% Repairing System Integrity...
     sfc /scannow >> "%logfile%" 2>&1
 
-    echo   %purple%[ %roxo%•%purple% ]%white% System Integrity repaired %green%successfully%white%.
+    echo   %purple%[ %roxo%•%purple% ]%white% System Integrity repaired.
     echo.
 
     timeout /t 1 /nobreak >> "%logfile%" 2>&1
@@ -2601,7 +2893,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Repairing Microsoft Store...
     wsreset.exe >> "%logfile%" 2>&1
 
-    echo   %purple%[ %roxo%•%purple% ]%white% Microsoft Store repaired %green%successfully%white%.
+    echo   %purple%[ %roxo%•%purple% ]%white% Microsoft Store repaired.
     echo.
 
     :: Saving Registry Integrity into Log
@@ -2630,67 +2922,41 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Checking Windows Image Health...
     DISM /Online /Cleanup-Image /CheckHealth >> "%logfile%" 2>&1
 
-    timeout /t 1 /nobreak >> "%logfile%" 2>&1
-
     :: Scanning Image
     echo   %purple%[ %roxo%•%purple% ]%white% Scanning Windows Image Health...
     DISM /Online /Cleanup-Image /ScanHealth >> "%logfile%" 2>&1
-
-    timeout /t 1 /nobreak >> "%logfile%" 2>&1
 
     :: Restoring Image
     echo   %purple%[ %roxo%•%purple% ]%white% Restoring Windows Image Health...
     DISM /Online /Cleanup-Image /RestoreHealth >> "%logfile%" 2>&1
 
-    echo   %purple%[ %roxo%•%purple% ]%white% Windows Image Health restored %green%successfully%white%.
+    echo   %purple%[ %roxo%•%purple% ]%white% Windows Image Health restored.
     echo.
 
-    timeout /t 1 /nobreak >> "%logfile%" 2>&1
+    :: Restoring Components
+    echo   %purple%[ %roxo%•%purple% ]%white% Analyzing Drivers Base...
+    DISM /Online /Cleanup-Image /AnalyzeComponentStore >> "%logfile%" 2>&1
 
     :: Checking Components
-    echo   %purple%[ %roxo%•%purple% ]%white% Checking Windows Drivers Health...
-    DISM /Online /Cleanup-Image /StartComponentCleanup >> "%logfile%" 2>&1
-
-    :: Scanning Components
-    echo   %purple%[ %roxo%•%purple% ]%white% Repairing Windows Drivers Health...
-    DISM /Online /Cleanup-Image /StartComponentCleanup >> "%logfile%" 2>&1
-
-    timeout /t 1 /nobreak >> "%logfile%" 2>&1
-
-    :: Restoring Components
-    echo   %purple%[ %roxo%•%purple% ]%white% Reseting Drivers Base Health...
-    DISM /Online /Cleanup-Image /AnalyzeComponentStore >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Repairing Windows Drivers...
     DISM /Online /Cleanup-Image /StartComponentCleanup /ResetBase >> "%logfile%" 2>&1
 
-    echo   %purple%[ %roxo%•%purple% ]%white% Windows Drivers restored %green%successfully%white%.
+    echo   %purple%[ %roxo%•%purple% ]%white% Windows Drivers restored.
     echo.
 
     :: SFC SCANNOW
     echo   %purple%[ %roxo%•%purple% ]%white% Repairing System Integrity...
     sfc /scannow >> "%logfile%" 2>&1
 
-    echo   %purple%[ %roxo%•%purple% ]%white% System Integrity repaired %green%successfully%white%.
+    echo   %purple%[ %roxo%•%purple% ]%white% System Integrity repaired.
     echo.
-
-    timeout /t 1 /nobreak >> "%logfile%" 2>&1
 
     :: Reapring Microsoft Store Cache
     echo   %purple%[ %roxo%•%purple% ]%white% Repairing Microsoft Store...
     wsreset.exe >> "%logfile%" 2>&1
 
-    echo   %purple%[ %roxo%•%purple% ]%white% Microsoft Store repaired %green%successfully%white%.
+    echo   %purple%[ %roxo%•%purple% ]%white% Microsoft Store repaired.
     echo.
-
-    timeout /t 1 /nobreak >> "%logfile%" 2>&1
-
-    :: Files System Boot Check
-    echo   %purple%[ %roxo%•%purple% ]%white% Repairing Files System...
-    echo Y|chkdsk C: /f /r >> "%logfile%" 2>&1
-
-    echo   %purple%[ %roxo%•%purple% ]%white% %yellow%Files will be repaired in the next boot%reset%.
-    echo.
-
-    timeout /t 1 /nobreak >> "%logfile%" 2>&1
 
     :: Stopping Windows Update
     echo   %purple%[ %roxo%•%purple% ]%white% Stopping Windows Update services...
@@ -2698,6 +2964,7 @@
     net stop cryptSvc >> "%logfile%" 2>&1
     net stop bits >> "%logfile%" 2>&1
     net stop msiserver >> "%logfile%" 2>&1
+    net stop appidsvc
 
     :: Repairing Windows Update
     echo   %purple%[ %roxo%•%purple% ]%white% Repairing Windows Update...
@@ -2705,13 +2972,24 @@
     ren C:\Windows\System32\catroot2 catroot2.old >> "%logfile%" 2>&1
     del /q /f /s %windir%\SoftwareDistribution\Download\* >> "%logfile%" 2>&1
 
-    :: Starting Windows Update
-    echo   %purple%[ %roxo%•%purple% ]%white% Restarting Windows Update services...
-    net start wuauserv >> "%logfile%" 2>&1
-    net start cryptSvc >> "%logfile%" 2>&1
-    net start bits >> "%logfile%" 2>&1
-    net start msiserver >> "%logfile%" 2>&1
+    :: Cleaning CBS Logs Cache
+    echo   %purple%[ %roxo%•%purple% ]%white% Cleaning CBS ^& DISM cache...
+    del /f /q %windir%\Logs\CBS\CBS.log >> "%logfile%" 2>&1
+    del /f /q %windir%\Logs\DISM\dism.log >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% CBS ^& DISM cache cleaned.
+
+    :: Reverting Pending Actions
+    echo   %purple%[ %roxo%•%purple% ]%white% Reverting Pending Actions...
+    dism /online /cleanup-image /revertpendingactions >> "%logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Pending Actions reverted.
+
+    :: Files System Boot Check
+    echo   %purple%[ %roxo%•%purple% ]%white% Scheduling system file repair...
+    echo Y|chkdsk C: /f /r >> "%logfile%" 2>&1
+
     echo.
+    echo   %yellow%[ • ]%reset% Files will be repaired in the next boot.
 
     :: Saving Registry Integrity into Log
     reg query HKLM\SOFTWARE >> "%logfile%" 2>&1
@@ -2784,7 +3062,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Bluetooth enabled.
 
     echo.
-    echo   %yellow%[ %yellow%•%yellow% %yellow%]%reset% If that doesn't solve your problem, try running Full Integrity Fix.
+    echo   %yellow%[ • ]%reset% If that doesn't solve your problem, try running Full Integrity Fix.
 
     echo.
     timeout /t 4 /nobreak >> "%logfile%" 2>&1
@@ -2859,7 +3137,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Xbox Overlay restored.
 
     echo.
-    echo   %yellow%[ %yellow%•%yellow% %yellow%]%reset% If that doesn't solve your problem, try running Full Integrity Fix.
+    echo   %yellow%[ • ]%reset% If that doesn't solve your problem, try running Full Integrity Fix.
 
     echo.
     timeout /t 4 /nobreak >> "%logfile%" 2>&1
@@ -3275,6 +3553,163 @@
     echo --- Unnecessary Services Disabled --- >> "%logfile%" 2>&1
     goto eof
 
+    :servicesrevert
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Reverting %roxo%Unnecessary Services%white%...
+    echo.
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    echo --- Disabling Unnecessary Services --- >> "%logfile%" 2>&1
+
+    :: Telephony API
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TapiSrv" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\PhoneSvc" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Phone Services enabled.
+
+    :: Parental Control
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WpcMonSvc" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SEMgrSvc" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SharedRealitySvc" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Parental Control enabled.
+
+    :: P2P
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\PNRPsvc" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\p2psvc" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\p2pimsvc" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Peer-to-Peer enabled.
+
+    :: Sharing
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Netlogon" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\CscService" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\svsvc" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TrkWks" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\CDPSvc" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% File Sharing enabled.
+
+    :: Sensor / Location
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SensorDataService" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SensrSvc" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SensorService" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\shpamsvc" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\lfsvc" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\lfsvc\Service\Configuration" /v "Status" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Sensor services enabled.
+
+    :: Mixed Reality Portal
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\perceptionsimulation" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\FrameServer" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Mixed Reality enabled.
+
+    :: OneSync
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\OneSyncSvc" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Microsoft OneSync enabled.
+
+    :: DVRU
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WMPNetworkSvc" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BcastDVRUserService" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Broadcast enabled.
+
+    :: Edge
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\edgeupdatem" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\edgeupdate" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\MicrosoftEdgeElevationService" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Edge Update enabled.
+
+    :: Cross Device
+    reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\default\Connectivity\DisableCrossDeviceResume" /v "value" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\CrossDeviceResume\Configuration" /v "IsResumeAllowed" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Cross Device Resume enabled.
+
+    :: Tablet
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TabletInputService" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TouchKeyboardAndHandwritingPanelService" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Tablet Input enabled.
+
+    :: Themes
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Themes" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Themes enabled.
+
+    :: Readiness
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AppReadiness" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\OSRSS" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Readiness enabled.
+
+    :: Messages
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\MessagingService" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Messages enabled.
+
+    :: Cortana
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowCortana" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowCloudSearch" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowCortanaAboveLock" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowSearchToUseLocation" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchUseWeb" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchUseWebOverMeteredConnections" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "DisableWebSearch" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Cortana enabled.
+
+    :: Print Spooler / Fax
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Spooler" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Fax" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Spooler/Fax services enabled.
+
+    :: Maps Broker
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\MapsBroker" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Maps Broker enabled.
+
+    :: Search Index
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WSearch" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Search Index enabled.
+
+    :: Remote Registry
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\RemoteRegistry" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Remote Registry enabled.
+
+    :: Biometrics
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WbioSrvc" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Biometric enabled.
+
+    :: Insider
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\wisvc" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Windows Insider enabled.
+
+    :: Wallet
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WalletService" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Wallet enabled.
+
+    :: Xbox Services
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\xbgm" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblAuthManager" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblGameSave" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxGipSvc" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxNetApiSvc" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Xbox services enabled.
+
+    :: Intel Software
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\cplspcon" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\cphs" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\jhi_service" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\esifsvc" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\igccservice" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\igfxCUIService2.0.0.0" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WMIRegistrationService" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\RstMwService" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Intel(R) TPM Provisioning Service" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\IntelAudioService" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Intel services enabled.
+
+    :: AMD Software (Soon...)
+    echo   %purple%[ %roxo%•%purple% ]%white% AMD services enabled.
+
+    echo.
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Services restored %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    title %script% %version% %space% %reboot%
+    echo --- Services Re-enabled --- >> "%logfile%" 2>&1
+    goto eof
+
 :: NVIDIA Tweaks/Profile
     :nvidia
     cls
@@ -3339,13 +3774,10 @@
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
     echo !lineGradient!!esc![0m     
     echo.
-    echo                                 %nvidia%[ %verde%%underline%A%reset% %nvidia%]%white% Apply NVIDIA Tweaks                %nvidia%[ %verde%%underline%R%reset% %nvidia%]%white% Revert NVIDIA Tweaks
+    echo                                %nvidia%[ %verde%%underline%A%reset% %nvidia%]%white% Apply NVIDIA Tweaks                %nvidia%[ %verde%%underline%O%reset% %nvidia%]%white% Open Profile Inspector
     echo.
     echo.
-    echo                                                    %nvidia%[ %verde%%underline%O%reset% %nvidia%]%white% Open Profile Inspector   
-    echo.
-    echo.
-    echo                                                           %nvidia%[ %verde%%underline%B%reset% %nvidia%]%white% Back to Menu 
+    echo                                                         %nvidia%[ %verde%%underline%B%reset% %nvidia%]%white% Back to Menu 
     echo.
     set /p answer="%reset% >:%roxo%"
 
@@ -3535,12 +3967,24 @@
         timeout /t 2 /nobreak >> "%logfile%" 2>&1
     )
 
+    if not exist "C:\%script%\NVIDIA\NvidiaProfileInspector" (
+        echo   %verde%[ %green%•%verde% ]%reset% Extracting %green%Profile Inspector%reset% package...
+        chcp 437 >> "%logfile%" 2>&1
+        powershell -NoProfile Expand-Archive 'C:\%script%\NVIDIA\nvidiaProfileInspector.zip' -DestinationPath 'C:\%script%\NVIDIA\' >> "%logfile%" 2>&1
+        chcp 65001 >> "%logfile%" 2>&1
+        del /q "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" >nul 2>&1
+        if not exist "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" (
+            echo   %red%[ %red%•%red% %red%]%reset% Extraction failed, executable not found.
+            goto :nvidiaend
+        )
+    )
+
     echo   %verde%[ %green%•%verde% ]%reset% Opening %green%Profile Inspector%reset% software...
     timeout /t 1 /nobreak >> "%logfile%" 2>&1
     start /wait "" "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" >> "%logfile%" 2>&1
 
     echo.
-    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%logfile%" 2>&1
     echo   %verde%[ %green%•%verde% ]%reset% %green%Profile Inspector%reset% Software closed.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%

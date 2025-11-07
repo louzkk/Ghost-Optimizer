@@ -7,7 +7,7 @@
 ![Banner](images/GhostOPX-BANNER-denoised-4x.png)
 
 # 💻 Requirements
-- Windows **10 22H2** / **11 25H2**  
+- Windows **10** / **11** 
 - Administrator privileges  
 - Internet connection  
 
