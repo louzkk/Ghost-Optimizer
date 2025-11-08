@@ -65,18 +65,6 @@
         <ValueType>Dword</ValueType>
       </ProfileSetting>
       <ProfileSetting>
-        <SettingNameInfo>Enable FXAA</SettingNameInfo>
-        <SettingID>276089202</SettingID>
-        <SettingValue>1</SettingValue>
-        <ValueType>Dword</ValueType>
-      </ProfileSetting>
-      <ProfileSetting>
-        <SettingNameInfo>Antialiasing - Mode</SettingNameInfo>
-        <SettingID>276757595</SettingID>
-        <SettingValue>1</SettingValue>
-        <ValueType>Dword</ValueType>
-      </ProfileSetting>
-      <ProfileSetting>
         <SettingNameInfo>Frame Rate Limiter</SettingNameInfo>
         <SettingID>277041154</SettingID>
         <SettingValue>0</SettingValue>
