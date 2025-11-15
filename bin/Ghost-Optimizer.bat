@@ -1,33 +1,23 @@
-@echo off
-
-:: Check for Privileges
+:: Elevation
+    @echo off
     net session >nul 2>&1
-    if %errorlevel% NEQ 0 (
-        goto UACPrompt
-    ) else (
-        goto GotAdmin
+    if %errorlevel% neq 0 (
+        if not defined ELEVATED (
+            set "ELEVATED=1"
+            powershell -nop -c "Start-Process conhost.exe -ArgumentList '%~f0 %*' -Verb RunAs"
+            exit /b
+        )
     )
 
-    :UACPrompt
-        > "%temp%\getadmin.vbs" echo Set UAC = CreateObject^("Shell.Application"^)
-        >> "%temp%\getadmin.vbs" echo UAC.ShellExecute "cmd.exe", "/c ""%~s0"" %*", "", "runas", 1
-        cscript //nologo "%temp%\getadmin.vbs"
-        del "%temp%\getadmin.vbs"
-        exit /B
-
-    :GotAdmin
-        pushd "%CD%"
-        CD /D "%~dp0"
-
 :: Variables
-    set version=4.9
-    set space= / 
-    set script=Ghost Optimizer
-    set reboot=Reboot required
-    set rebooing=Rebooting...
-    set shuttingdown=Shutting Down...
-    set downloading=Downloading...
-    set louzkk=@louzkk
+    set "version=4.9.4"
+    set "space= / "
+    set "script=Ghost Optimizer"
+    set "reboot=Reboot required"
+    set "rebooing=Rebooting"
+    set "shuttingdown=Shutting Down"
+    set "downloading=Downloading"
+    set "louzkk=@louzkk"
     title %script% %version%
 
 :: Properties
@@ -147,14 +137,14 @@
 
     set /p answer="%white% >:%roxo%"
 
-:: Key Options #1
+:: Options #1
     if "%answer%"=="y" goto restore
     if "%answer%"=="Y" goto restore
     if "%answer%"=="n" goto loading
     if "%answer%"=="N" goto loading
 
     :: Invalid Input
-    goto welcome
+    goto eof
 
 :: Restore Point
     :restore
@@ -219,7 +209,7 @@
     set "t=%t: =0%"
     set "logfile=C:\Ghost Optimizer\Logs\%d%_%t%.log"
     echo Ghost Optimizer > "%logfile%"
-    echo Created by: @louzkk >> "%logfile%" 2>&1
+    echo Created by louzkk >> "%logfile%" 2>&1
     echo. >> "%logfile%" 2>&1
 
 :: Setting Url
@@ -330,7 +320,7 @@
     echo.
     set /p answer="%white% >:%roxo%"
 
-:: Key Options #2
+:: Options #2
     if %answer% equ 1 call :general
     if %answer% equ 2 call :performance
     if %answer% equ 3 call :network
@@ -354,6 +344,7 @@
     if "%answer%"=="reboot" call :reboot
     if "%answer%"=="rebootcancel" call :rebootcancel
     if "%answer%"=="cancel" call :rebootcancel
+    if "%answer%"=="reload" goto init
 
     if "%answer%"=="Louzkk" start https://github.com/louzkk
     if "%answer%"=="louzkk" start https://github.com/louzkk
@@ -369,7 +360,7 @@
     :: Invalid Input
     goto menu
 
-:: Apply Tweaks
+:: Apply All
     :applyall
     cls
     echo.
@@ -388,12 +379,12 @@
         set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
     )
 
-    set "lines[0]=                                       █████╗ ██████╗ ██████╗ ██╗  ██╗   ██╗     █████╗ ██╗     ██╗          "
-    set "lines[1]=                                      ██╔══██╗██╔══██╗██╔══██╗██║  ╚██╗ ██╔╝    ██╔══██╗██║     ██║          "
-    set "lines[2]=                                      ███████║██████╔╝██████╔╝██║   ╚████╔╝     ███████║██║     ██║          "
-    set "lines[3]=                                      ██╔══██║██╔═══╝ ██╔═══╝ ██║    ╚██╔╝      ██╔══██║██║     ██║          "
-    set "lines[4]=                                      ██║  ██║██║     ██║     ███████╗██║       ██║  ██║███████╗███████╗     "
-    set "lines[5]=                                      ╚═╝  ╚═╝╚═╝     ╚═╝     ╚══════╝╚═╝       ╚═╝  ╚═╝╚══════╝╚══════╝     "
+    set "lines[0]=                                    █████╗ ██████╗ ██████╗ ██╗  ██╗   ██╗     █████╗ ██╗     ██╗          "
+    set "lines[1]=                                   ██╔══██╗██╔══██╗██╔══██╗██║  ╚██╗ ██╔╝    ██╔══██╗██║     ██║          "
+    set "lines[2]=                                   ███████║██████╔╝██████╔╝██║   ╚████╔╝     ███████║██║     ██║          "
+    set "lines[3]=                                   ██╔══██║██╔═══╝ ██╔═══╝ ██║    ╚██╔╝      ██╔══██║██║     ██║          "
+    set "lines[4]=                                   ██║  ██║██║     ██║     ███████╗██║       ██║  ██║███████╗███████╗     "
+    set "lines[5]=                                   ╚═╝  ╚═╝╚═╝     ╚═╝     ╚══════╝╚═╝       ╚═╝  ╚═╝╚══════╝╚══════╝     "
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -434,7 +425,7 @@
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
     echo !lineGradient!!esc![0m     
     echo.
-    echo                                %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply all Tweaks/Fixes                %purple%[ %roxo%%underline%C%reset% %purple%]%white% Check Documentation
+    echo                                %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply all Tweaks                      %purple%[ %roxo%%underline%C%reset% %purple%]%white% Check Documentation
     echo.                 
     echo.
     echo                                                         %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to Menu 
@@ -454,52 +445,43 @@
     :applyallapply
     cls
     echo.
-    echo   %purple%[ %roxo%•%purple% ]%white% %roxo%Applying %white% all Tweaks/Fixes... 
+    echo   %purple%[ %roxo%•%purple% ]%white% Applying %roxo%All%white% Tweaks/Fixes... 
     echo.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     echo --- Applying all Tweaks/Fixes --- >> "%logfile%" 2>&1
 
-    title %script% %version% %space% Applying All...  [1/10]
     call :generalapply
-    title %script% %version% %space% Applying All...  [2/10]
     call :performanceapply
-    title %script% %version% %space% Applying All...  [3/10]
     call :networkapply
-    title %script% %version% %space% Applying All...  [4/10]
     call :latencyapply
-    title %script% %version% %space% Applying All...  [5/10]
     call :kbmapply
-    title %script% %version% %space% Applying All...  [6/10]
     call :telemetryapply
-    title %script% %version% %space% Applying All...  [7/10]
     call :servicesapply
-    title %script% %version% %space% Applying All...  [8/10]
     call :powerplanapply
-    title %script% %version% %space% Applying All...  [9/10]
-    call :bloatwareapply
+    call :debloatapply
+    goto applyallend
 
-    title %script% %version% %space% Applying All...  [10/10]
+    :applyallend
+    echo.
+    timeout /t 3 /nobreak >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% All Tweaks/Fixes applied %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
     taskkill /f /im explorer.exe >> "%logfile%" 2>&1
     start explorer.exe >> "%logfile%" 2>&1
-
-    echo.
-    timeout /t 2 /nobreak >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% All Tweaks/FIxes applied %green%successfully%white%.
-    timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
     echo --- Finished all Tweaks/Fixes --- >> "%logfile%" 2>&1
-    goto eof
+    goto menu
 
     :documentation
     cls
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Opening %roxo%Documentation%white% page...
-    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%logfile%" 2>&1
     start https://github.com/louzkk/Ghost-Optimizer
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     goto eof
 
-:: Revert Tweaks
+:: Revert All
     :revertall
     cls
     echo.
@@ -590,26 +572,30 @@
     echo --- Applying Restore Point --- >> "%logfile%" 2>&1
 
     :: Start System Restore
-    echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%System Restore%white%...
-    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% System Restore open.
     start /wait "" rstrui.exe >> "%logfile%" 2>&1
-    echo.
+    timeout /t 1 /nobreak >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% System Restore closed.
+    timeout /t 1 /nobreak >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Thank you for using Ghost Optimizer :]
     echo.
+    timeout /t 1 /nobreak >> "%logfile%" 2>&1
+    echo   %yellow%[ • ]%reset% The next system reboot/restart may take some time.
 
     echo.
-    timeout /t 2 /nobreak >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% All Tweaks/FIxes reverted %green%successfully%white%.
+    timeout /t 3 /nobreak >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% All Tweaks/Fixes reverted %green%successfully%white%.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
     echo --- Restore Point reverted --- >> "%logfile%" 2>&1
-    goto eof
+    goto menu
 
     :documentation
     cls
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Opening %roxo%Documentation%white% page...
-    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%logfile%" 2>&1
     start https://github.com/louzkk/Ghost-Optimizer
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     goto eof
@@ -888,12 +874,24 @@
 
     :: Remote Assist
     reg add "HKLM\System\CurrentControlSet\Control\Remote Assistance" /v "fAllowToGetHelp" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Remote Assistance" /v "fAllowFullControl" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" /v "fAllowUnsolicited" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" /v "fAllowToGetHelp" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Remote Assist disabled.
 
     :: Driver Search
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /v "ExcludeWUDriversInQualityUpdate" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\DriverSearching" /v "SearchOrderConfig" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Driver Search disabled.
+
+    :: SMB Protocols
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer" /v "Start" /t REG_DWORD /d 4 /f  >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\mrxsmb" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\mrxsmb20" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SMB1" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SMB2" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% SMB Protocols disabled.
 
     :: USB Selective Suspend
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\USB" /v "DisableSelectiveSuspend" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
@@ -943,8 +941,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% General Tweaks applied %green%successfully%white%.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
-    ::taskkill /f /im explorer.exe >> "%logfile%" 2>&1
-    ::start explorer.exe >> "%logfile%" 2>&1
+
     echo --- Finished General Tweaks --- >> "%logfile%" 2>&1
     goto eof
 
@@ -1088,7 +1085,7 @@
 
     :: Fullscreen Optimization
     reg add "HKCU\SYSTEM\GameConfigStore" /v "GameDVR_DSEBehavior" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SYSTEM\GameConfigStore" /v "GameDVR_FSEBehaviorMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SYSTEM\GameConfigStore" /v "GameDVR_FSEBehaviorMode" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
     reg add "HKCU\SYSTEM\GameConfigStore" /v "GameDVR_EFSEFeatureFlags" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\SYSTEM\GameConfigStore" /v "GameDVR_DXGIHonorFSEWindowsCompatible" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\SYSTEM\GameConfigStore" /v "GameDVR_HonorUserFSEBehaviorMode" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
@@ -1174,8 +1171,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Performance Tweaks applied %green%successfully%white%.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
-    ::taskkill /f /im explorer.exe >> "%logfile%" 2>&1
-    ::start explorer.exe >> "%logfile%" 2>&1
+
     echo --- Performance Tweaks Applied --- >> "%logfile%" 2>&1
     goto eof
 
@@ -1433,12 +1429,11 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Network Tweaks applied %green%successfully%white%.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
-    ::taskkill /f /im explorer.exe >> "%logfile%" 2>&1
-    ::start explorer.exe >> "%logfile%" 2>&1
+
     echo --- Finished Network Tweaks --- >> "%logfile%" 2>&1
     goto eof
 
-:: Telemetry & Logging
+:: Telemetry
     :telemetry
     cls
     echo.
@@ -1534,11 +1529,12 @@
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     if not exist "C:\%script%\OOSU10\OOSU10.exe" (
         echo   %purple%[ %roxo%•%purple% ]%white% Downloading %highlight%OOSU10%reset% executable...
-        title %script% %version% %space% %downloading%
+    title %script% %version% %space% %winver%
+
         chcp 437 >> "%logfile%" 2>&1
         powershell -Command "Invoke-WebRequest 'https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe' -OutFile 'C:\%script%\OOSU10\OOSU10.exe'" >> "%logfile%" 2>&1
         chcp 65001 >> "%logfile%" 2>&1
-        title %script% %version% %space% %winver%
+    title %script% %version% %space% %winver%
         if not exist "C:\%script%\OOSU10\OOSU10.exe" (
             echo   %red%[ %red%•%red% %red%]%reset% Failed to download OOSU10 executable.
             goto telemetryend
@@ -1549,7 +1545,7 @@
     )
 
     echo   %purple%[ %roxo%•%purple% ]%white% Importing %highlight%OOSU10%reset% Profile...
-    title %script% %version% %space% %downloading%
+    title %script% %version% %space% %winver%
     curl -g -k -L -# -o "C:\%script%\OOSU10\GhostOPX-OOSU.cfg" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostOPX-OOSU.cfg" >> "%logfile%" 2>&1
     if errorlevel 1 (
         echo   %red%[ %red%•%red% %red%]%reset% Failed to download OOSU10 profile.
@@ -1628,11 +1624,14 @@
 
     :: Error reporting
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\WerSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Wercplsupport" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WerSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" /v "Disabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" /v "DoReport" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" /v "LoggingDisabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting" /v "DoReport" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v "Disabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v "ForceQueue" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Error Reporting disabled.
 
     :: Experience Feedback
@@ -1661,18 +1660,18 @@
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableSoftLanding" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Advertising ID disabled.
+    echo   %purple%[ %roxo%•%purple% ]%white% Advertising disabled.
 
     :: Biometrics
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Biometrics" /v "Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Biometrics (Fingerprint) disabled.
+    echo   %purple%[ %roxo%•%purple% ]%white% Biometrics disabled.
 
     :: Location Sensor
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableLocation" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableLocationScripting" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableSensors" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableWindowsLocationProvider" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Geolocation (Location) disabled.
+    echo   %purple%[ %roxo%•%purple% ]%white% Geolocation disabled.
 
     :: Autologgers (from Ancel's Performance Batch)
     reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WUDF" /v "LogEnable" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -1769,7 +1768,8 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Checking %highlight%OOSU10%reset% executable...
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     if not exist "C:\%script%\OOSU10\OOSU10.exe" (
-        title %script% %version% %space% %downloading%
+    title %script% %version% %space% %winver%
+
         echo   %purple%[ %roxo%•%purple% ]%white% Downloading %highlight%OOSU10%reset% executable...
         chcp 437 >> "%logfile%" 2>&1
         powershell -Command "Invoke-WebRequest 'https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe' -OutFile 'C:\%script%\OOSU10\OOSU10.exe'" >> "%logfile%" 2>&1
@@ -1780,6 +1780,7 @@
     )
 
     title %script% %version% %space% %winver%
+ %space% %winver%
     echo   %purple%[ %roxo%•%purple% ]%white% Opening %highlight%OOSU10%reset% software...
     timeout /t 1 /nobreak >> "%logfile%" 2>&1
     start /wait "" "C:\%script%\OOSU10\OOSU10.exe" >> "%logfile%" 2>&1
@@ -1792,7 +1793,7 @@
     echo --- Closing OOSU10 --- >> "%logfile%" 2>&1
     goto eof
 
-:: Mouse & Keyboard
+:: KBM
     :kbm
     cls
     echo.
@@ -1929,12 +1930,11 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Mouse ^& Keyboard Tweaks applied %green%successfully%white%.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
-    ::taskkill /f /im explorer.exe >> "%logfile%" 2>&1
-    ::start explorer.exe >> "%logfile%" 2>&1
+
     echo --- KBM Tweaks Applied --- >> "%logfile%" 2>&1
     goto eof
 
-:: Bloatware Removal
+:: Bloatware
     :debloat
     cls
     echo.
@@ -2277,6 +2277,12 @@
     chcp 65001 >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% To Do uninstalled.
 
+    :: Cross Device
+    chcp 437 >> "%logfile%" 2>&1
+    powershell -Command "Get-AppxPackage *crossdevice* | Remove-AppxPackage" >> "%logfile%" 2>&1
+    chcp 65001 >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Cross Device uninstalled.
+
     :: Windows Web Experience Pack
     chcp 437 >> "%logfile%" 2>&1
     winget uninstall "Windows Web Experience Pack" --silent >> "%logfile%" 2>&1
@@ -2288,8 +2294,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Bloatware apps uninstalled %green%successfully%white%.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
-    ::taskkill /f /im explorer.exe >> "%logfile%" 2>&1
-    ::start explorer.exe >> "%logfile%" 2>&1
+
     echo --- Finished Debloat --- >> "%logfile%" 2>&1
     goto eof
 
@@ -2404,13 +2409,13 @@
 
     :: Reinstall Bloatware Apps
     chcp 437 >> "%logfile%" 2>&1
-    powershell Get-AppxPackage -AllUsers | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"} >> "%logfile%" 2>&1
+    powershell -Command "Get-AppxPackage -AllUsers | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"}" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Bloatware apps reinstalled.
 
     :: Reinstall Provisioned Packages
     chcp 437 >> "%logfile%" 2>&1
-    powershell Get-AppxProvisionedPackage -Online | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"} >> "%logfile%" 2>&1
+    powershell -Command "Get-AppxProvisionedPackage -Online | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"}" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Provisioned packages reinstalled.
 
@@ -2425,12 +2430,11 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Bloatware apps reverted %green%successfully%white%.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
-    ::taskkill /f /im explorer.exe >> "%logfile%" 2>&1
-    ::start explorer.exe >> "%logfile%" 2>&1
+
     echo --- Reverted Debloat --- >> "%logfile%" 2>&1
     goto eof
 
-:: Latency & Input-Lag
+:: Latency
     :latency
     cls
     echo.
@@ -2606,12 +2610,11 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Latency ^& Input-Lag Tweaks applied %green%successfully%white%.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
-    ::taskkill /f /im explorer.exe >> "%logfile%" 2>&1
-    ::start explorer.exe >> "%logfile%" 2>&1
+
     echo --- Latency and Input-Lag Tweaks Applied --- >> "%logfile%" 2>&1
     goto eof
 
-:: GhostOPX Power Plan
+:: Power Plan
     :powerplan
     cls
     echo.
@@ -2759,7 +2762,7 @@
     echo --- Power Plan applied --- >> "%logfile%" 2>&1
     goto eof
 
-:: Integrity & Health Fixes
+:: Integrity
     :health
     cls
     echo.
@@ -2905,8 +2908,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Integrity ^& Health fixes applied %green%successfully%white%.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
-    ::taskkill /f /im explorer.exe >> "%logfile%" 2>&1
-    ::start explorer.exe >> "%logfile%" 2>&1
+
     echo --- Finished Fast Health Fix --- >> "%logfile%" 2>&1
     goto eof
 
@@ -3000,8 +3002,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Integrity ^& Health fixes applied %green%successfully%white%.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
-    ::taskkill /f /im explorer.exe >> "%logfile%" 2>&1
-    ::start explorer.exe >> "%logfile%" 2>&1
+
     echo --- Finished Full Health Fix --- >> "%logfile%" 2>&1
     goto eof
 
@@ -3015,11 +3016,11 @@
 
     :: Restart BT Drivers
     chcp 437 >> "%logfile%" 2>&1
-    powershell -command "Get-Service *bth* | Restart-Service -Force -ErrorAction SilentlyContinue" >> "%logfile%" 2>&1
-    powershell -command "Get-PnpDevice -Class Bluetooth | Disable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue" >> "%logfile%" 2>&1
-    powershell -command "Start-Sleep -Seconds 1" >> "%logfile%" 2>&1
-    powershell -command "Get-PnpDevice -Class Bluetooth | Enable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue" >> "%logfile%" 2>&1
-    powershell -command "pnputil /scan-devices" >> "%logfile%" 2>&1
+    powershell -Command "Get-Service *bth* | Restart-Service -Force -ErrorAction SilentlyContinue" >> "%logfile%" 2>&1
+    powershell -Command "Get-PnpDevice -Class Bluetooth | Disable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue" >> "%logfile%" 2>&1
+    powershell -Command "Start-Sleep -Seconds 1" >> "%logfile%" 2>&1
+    powershell -Command "Get-PnpDevice -Class Bluetooth | Enable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue" >> "%logfile%" 2>&1
+    powershell -Command "pnputil /scan-devices" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Bluetooth Drivers restored.
 
@@ -3035,10 +3036,10 @@
 
     :: Radio Services
     chcp 437 >> "%logfile%" 2>&1
-    powershell -command "(Get-Service bthserv).StartType='Automatic'" >> "%logfile%" 2>&1
-    powershell -command "Start-Service bthserv -ErrorAction SilentlyContinue" >> "%logfile%" 2>&1
-    powershell -command "Start-Service DeviceAssociationService -ErrorAction SilentlyContinue" >> "%logfile%" 2>&1
-    powershell -command "Start-Service DeviceAssociationBrokerSvc -ErrorAction SilentlyContinue" >> "%logfile%" 2>&1
+    powershell -Command "(Get-Service bthserv).StartType='Automatic'" >> "%logfile%" 2>&1
+    powershell -Command "Start-Service bthserv -ErrorAction SilentlyContinue" >> "%logfile%" 2>&1
+    powershell -Command "Start-Service DeviceAssociationService -ErrorAction SilentlyContinue" >> "%logfile%" 2>&1
+    powershell -Command "Start-Service DeviceAssociationBrokerSvc -ErrorAction SilentlyContinue" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Radio Services restored.
 
@@ -3069,8 +3070,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Bluetooth fixed %green%successfully%white%.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
-    ::taskkill /f /im explorer.exe >> "%logfile%" 2>&1
-    ::start explorer.exe >> "%logfile%" 2>&1
+
     echo --- Finished Bluetooth Fix --- >> "%logfile%" 2>&1
     goto eof
 
@@ -3144,12 +3144,11 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Xbox fixed %green%successfully%white%.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
-    ::taskkill /f /im explorer.exe >> "%logfile%" 2>&1
-    ::start explorer.exe >> "%logfile%" 2>&1
+
     echo --- Finished Xbox Fix --- >> "%logfile%" 2>&1
     goto eof
 
-:: Temporary Files Cleanup
+:: Temporary Files
     :clean
     cls
     echo.
@@ -3286,8 +3285,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% System cleaned %green%successfully%white%.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
-    ::taskkill /f /im explorer.exe >> "%logfile%" 2>&1
-    ::start explorer.exe >> "%logfile%" 2>&1
+
     echo --- Finished Ghost Optimizer Clean --- >> "%logfile%" 2>&1
     goto clean
 
@@ -3308,8 +3306,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% System cleaned %green%successfully%white%.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
-    ::taskkill /f /im explorer.exe >> "%logfile%" 2>&1
-    ::start explorer.exe >> "%logfile%" 2>&1
+
     echo --- Finished Windows Clean --- >> "%logfile%" 2>&1
     goto eof
 
@@ -3710,7 +3707,7 @@
     echo --- Services Re-enabled --- >> "%logfile%" 2>&1
     goto eof
 
-:: NVIDIA Tweaks/Profile
+:: NVIDIA Profile
     :nvidia
     cls
     echo.
@@ -3944,8 +3941,7 @@
     echo   %verde%[ %green%•%verde% ]%reset% NVIDIA Tweaks applied %green%successfully%white%.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
-    ::taskkill /f /im explorer.exe >> "%logfile%" 2>&1
-    ::start explorer.exe >> "%logfile%" 2>&1
+
     echo --- NVIDIA Tweaks applied --- >> "%logfile%" 2>&1
     goto eof
 
@@ -3988,8 +3984,7 @@
     echo   %verde%[ %green%•%verde% ]%reset% %green%Profile Inspector%reset% Software closed.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
-    ::taskkill /f /im explorer.exe >> "%logfile%" 2>&1
-    ::start explorer.exe >> "%logfile%" 2>&1
+
     echo --- Closing Profile Inspector --- >> "%logfile%" 2>&1
     goto eof
 
@@ -4083,7 +4078,8 @@
     cls
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% %roxo%Rebooting%white% your system in %roxo%10%white% seconds... 
-    title %script% %version% %space% %rebooting%
+    title %script% %version% %space% %winver%
+ %space% %rebooting%
     echo.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     shutdown /r /t 10 >> "%logfile%" 2>&1
@@ -4094,7 +4090,8 @@
     cls
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% %roxo%Turning Off%white% your system in %roxo%10%white% seconds... 
-    title %script% %version% %space% %shuttingdown%
+    title %script% %version% %space% %winver%
+ %space% %shuttingdown%
     echo.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     shutdown /s /t 10 >> "%logfile%" 2>&1
@@ -4111,7 +4108,7 @@
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     goto eof
 
-:: Restart Script
+:: Restart
     :restart
     cls
     echo.
