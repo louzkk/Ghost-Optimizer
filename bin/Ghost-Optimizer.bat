@@ -600,7 +600,7 @@
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     goto eof
 
-:: General
+:: General Tweaks
     :general
     cls
     echo.
@@ -945,7 +945,7 @@
     echo --- Finished General Tweaks --- >> "%logfile%" 2>&1
     goto eof
 
-:: Performance
+:: Performance Tweaks
     :performance
     cls
     echo.
@@ -1175,7 +1175,7 @@
     echo --- Performance Tweaks Applied --- >> "%logfile%" 2>&1
     goto eof
 
-:: Network
+:: Network Tweaks
     :network
     cls
     echo.
@@ -1433,7 +1433,7 @@
     echo --- Finished Network Tweaks --- >> "%logfile%" 2>&1
     goto eof
 
-:: Telemetry
+:: Telemetry & OOSU10
     :telemetry
     cls
     echo.
@@ -1793,7 +1793,7 @@
     echo --- Closing OOSU10 --- >> "%logfile%" 2>&1
     goto eof
 
-:: KBM
+:: Mouse & Keyboard
     :kbm
     cls
     echo.
@@ -1934,7 +1934,7 @@
     echo --- KBM Tweaks Applied --- >> "%logfile%" 2>&1
     goto eof
 
-:: Bloatware
+:: Bloatware Apps
     :debloat
     cls
     echo.
@@ -2434,7 +2434,7 @@
     echo --- Reverted Debloat --- >> "%logfile%" 2>&1
     goto eof
 
-:: Latency
+:: Latency Tweaks
     :latency
     cls
     echo.
@@ -2762,7 +2762,7 @@
     echo --- Power Plan applied --- >> "%logfile%" 2>&1
     goto eof
 
-:: Integrity
+:: Integrity Fix
     :health
     cls
     echo.
@@ -4108,7 +4108,7 @@
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     goto eof
 
-:: Restart
+:: Restart Script
     :restart
     cls
     echo.
