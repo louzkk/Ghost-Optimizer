@@ -33,7 +33,7 @@ Do not close the cmd window while creating a restore point.
 
 ## Unecessary Services
 
-## GhostOPX Power Plan
+## GhostX Power Plan
 
 ## Integrity & Health
 

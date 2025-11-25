@@ -4,7 +4,7 @@
 [![Version](https://img.shields.io/badge/Version-5.0-indigo)](https://github.com/louzkk/Ghost-Optimizer)
 [![Download](https://img.shields.io/badge/Download-indigo)](https://github.com/louzkk/Ghost-Optimizer/releases)
 
-![Banner](images/GhostOPX-BANNER-denoised-4x.png)
+![Banner](images/GhostX-BANNER-denoised-4x.png)
 
 # 💻 Requirements
 - Windows **10** / **11** 
