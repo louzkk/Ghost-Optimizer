@@ -1,7 +1,7 @@
 # 💜 About
-**Ghost Optimizer** is a lightweight, open-source optimization tool designed to **boost performance** (FPS), **enhance network speed** (reduce ping), **minimize latency** (input lag), **disable telemetry** and **data collection** (OOSU10+), and **protect your privacy**, while also **ensuring system integrity**.
+**Ghost Optimizer** is a lightweight, open-source optimization tool made to **boost performance** (FPS), **enhance network speed** (reduce ping), **minimize latency** (input lag), **disable telemetry** and **data collection** (OOSU10+), and **protect your privacy**, while also **ensuring system integrity**.
 
-[![Version](https://img.shields.io/badge/Version-4.9-indigo)](https://github.com/louzkk/Ghost-Optimizer)
+[![Version](https://img.shields.io/badge/Version-4.9.6-indigo)](https://github.com/louzkk/Ghost-Optimizer)
 [![Download](https://img.shields.io/badge/Download-indigo)](https://github.com/louzkk/Ghost-Optimizer/releases)
 
 ![Banner](images/GhostX-BANNER-denoised-4x.png)
@@ -27,7 +27,7 @@ If you create derivative work or redistribute this project, please maintain prop
 
 # 🚨 Disclaimer
 Use this script at your own risk — I take no responsibility for any damage or data loss. Performance improvements may vary depending on your hardware and usage; check the [Guide](GUIDE.md)
-for more information. If you are unable to run the script or apply the optimizations, please visit the [Help](https://github.com/louzkk/Ghost-Optimizer/blob/main/GUIDEmd#troubleshooting--notes) page.
+for more information. If you are unable to run the script or apply the optimizations, please visit the [Help](https://github.com/louzkk/Ghost-Optimizer/blob/main/GUIDE.md#troubleshooting--notes) page.
 
 # 💬 Bug or Suggestion
-Send me a message on [Discord](https://github.com/louzkk) or [Open an Issue](https://github.com/louzkk/Ghost-Optimizer/issues).
+Send me a message on Discord (@louzkk) or [Open an Issue](https://github.com/louzkk/Ghost-Optimizer/issues).
