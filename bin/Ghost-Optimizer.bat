@@ -15,7 +15,6 @@
     )
 
     :UACPrompt
-    :: Script may run in Conhost (Legacy) or Windows Terminal (New)
     echo Set UAC = CreateObject("Shell.Application") > "%temp%\getadmin.vbs"
     set params=%*
     echo UAC.ShellExecute "cmd.exe", "/c ""%~s0"" %params%", "", "runas", 1 >> "%temp%\getadmin.vbs"
@@ -70,6 +69,7 @@
     set "variationR=-96"
     set "variationG=0"
     set "variationB=0"
+
     for /L %%j in (0,1,129) do (
         set /a "mid=80"
         set /a "pos=%%j"
@@ -173,6 +173,11 @@
     :restore
     cls
     echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Creating a %roxo%Restore Point%white%... 
+    echo.
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    echo --- Creating a Restore Point --- >> "%logfile%" 2>&1
+
     echo   %purple%[ %roxo%•%purple% ]%white% Starting System Restore services...
     sc config srservice start= auto >nul 2>&1
     sc start srservice >nul 2>&1
@@ -181,11 +186,12 @@
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\SystemRestore" /v "DisableSR" /t REG_DWORD /d 0 /f >nul 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Creating a Restore Point...
     chcp 437 >nul 2>&1
-    powershell -ExecutionPolicy Bypass -Command "Checkpoint-Computer -Description '%script% %version% | Restore Point' -RestorePointType 'MODIFY_SETTINGS'" >nul 2>&1
+    powershell -ExecutionPolicy Bypass -Command "Checkpoint-Computer -Description '%script% %version% - Restore Point' -RestorePointType 'MODIFY_SETTINGS'" >nul 2>&1
     chcp 65001 >nul 2>&1
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Restore Point created %green%successfully%white%.
-    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    echo --- Restore Point created --- >> "%logfile%" 2>&1
+    timeout /t 3 /nobreak >> "%logfile%" 2>&1
     goto loading
 
 :: Loading Page
@@ -745,14 +751,14 @@
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     echo --- Applying General Tweaks --- >> "%logfile%" 2>&1
 
-    :: HDD/SSD Optimization
+    :: Disk Optimization
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\defragsvc" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Optimize" /v "ScheduledDefrag" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Defrag enabled.
 
     :: SysMain (Prefetcher)
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\SysMain" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Prefetch disabled.
+    echo   %purple%[ %roxo%•%purple% ]%white% SysMain disabled.
 
     :: Bing Search
     reg add "HKCU\Software\Policies\Microsoft\Windows\Explorer" /v "DisableSearchBoxSuggestions" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
@@ -847,7 +853,7 @@
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" /v "fAllowToGetHelp" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Remote Assist disabled.
 
-    :: Send to My Phone (Context menu W11)
+    :: Send to My Phone
     reg add "HKEY_CLASSES_ROOT\*\shell\Windows.SendToPhone" /v "Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKEY_CLASSES_ROOT\Directory\shell\Windows.SendToPhone" /v "Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" /v "{2F788D0F-1317-441B-86D2-4725301BD49D}" /t REG_SZ /d "" /f >> "%logfile%" 2>&1
@@ -857,8 +863,6 @@
     :: Spatial Sound
     reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio\Spatial" /v "EnableSpatialSound" /f >> "%logfile%" 2>&1
     reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio\Spatial" /v "SpatialFormat" /f >> "%logfile%" 2>&1
-    reg delete "HKCU\Software\Microsoft\Multimedia\Audio" /v "AllowExclusive" /f >> "%logfile%" 2>&1
-    reg delete "HKCU\Software\Microsoft\Multimedia\Audio" /v "PreferredFormat" /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Windows Sonic disabled.
 
     :: Dynamic Light
@@ -878,15 +882,6 @@
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\DriverSearching" /v "SearchOrderConfig" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Driver Search disabled.
 
-    :: SMB Protocols
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer" /v "Start" /t REG_DWORD /d 4 /f  >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\mrxsmb" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\mrxsmb20" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SMB1" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SMB2" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% SMB1 Protocols disabled.
-
     :: Hibernation
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "HiberBootEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "HibernateEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -896,14 +891,23 @@
 
     :: Focus Assist
     reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings" /v "FocusAssist" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings" /v "NOC_GLOBAL_SETTING_AUTOMATIC_RULES_ENABLED" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings" /v "NOC_GLOBAL_SETTING_TOASTS_ENABLED" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Focus Assist disabled.
 
+    :: Lockscreen Tooltips
+    reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338387Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "RotatingLockScreenEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "RotatingLockScreenOverlayEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Tooltips disabled.
+
+    :: Lockscreen Spotlight
+    reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableSpotlightCollectionOnDesktop" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsSpotlightFeatures" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableThirdPartySuggestions" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Spotlight disabled.
+
     :: Windows Suggestions
-    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338393Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-353694Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-353696Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SystemPaneSuggestionsEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338388Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-314559Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -1093,10 +1097,6 @@
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "PlatformAoAcOverride" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Modern Standby disabled.
 
-    :: System Responsiveness
-    reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "SystemResponsiveness" /t REG_DWORD /d 10 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% System Responsiveness Optimized.
-
     :: Time Stamp Interval & IoPriority
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability" /v "TimeStampInterval" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability" /v "IoPriority" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
@@ -1115,7 +1115,7 @@
 
     :: Hardware-Accelerated GPU Scheduling
     :: Values: 0 Disabled, 1 Default, 2 Enabled
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "HwSchMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "HwSchMode" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler" /v "EnableReclaim" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% GPU Scheduling Optimized.
 
@@ -1128,12 +1128,10 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Fullscreen Optimizations enabled.
 
     :: Windowed Optimization
+    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm" /v "FlipQueueSize" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "DisableFlipModel" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\SOFTWARE\Microsoft\DirectX\UserGpuPreferences" /v "DirectXUserGlobalSettings" /t REG_SZ /d "VRROptimizeEnable=0;SwapEffectUpgradeEnable=1;" /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Windowed Optimizations enabled.
-
-    :: Flip Model
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "DisableFlipModel" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Flip Model Enabled.
 
     :: Swap Effect Upgrade Cache
     reg add "HKCU\Software\Microsoft\DirectX\GraphicsSettings" /v "SwapEffectUpgradeEnable" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
@@ -1289,7 +1287,7 @@
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters" /v "MaxCmds" /t REG_DWORD /d 2048 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% TCP/IP Stack Optimized.
 
-    :: TCP Acknowledgement Frequency
+    :: TCP Frequency Tweaks
     reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v "TCPNoDelay" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpAckFrequency" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TCPNoDelay" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
@@ -1300,7 +1298,7 @@
     netsh int tcp set global timestamps=enabled >> "%logfile%" 2>&1
     netsh int tcp set global chimney=disabled >> "%logfile%" 2>&1
     netsh int tcp set global ecncapability=enabled >> "%logfile%" 2>&1
-    netsh int tcp set global autotuninglevel=disabled >> "%logfile%" 2>&1
+    netsh int tcp set global autotuninglevel=enabled >> "%logfile%" 2>&1
     netsh int tcp set heuristics disabled >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% TCP/IP Parameters Optimized.
 
@@ -1322,7 +1320,7 @@
     netsh int tcp set supplemental internet congestionprovider=ctcp >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% CTCP Enabled.
 
-    :: Reset IP stack if Task Offload changes require cleanup
+    :: Reset IP stack
     netsh int ip reset >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% IP Stack Reset.
 
@@ -1342,7 +1340,7 @@
     reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "DisableRawSecurity" /f >> "%logfile%" 2>&1
     reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "DisableAddressSharing" /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "DisableLargeSendOffload" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Adapter Parameters Optimized.
+    echo   %purple%[ %roxo%•%purple% ]%white% AFD Parameters Optimized.
 
     :: Power Saving
     chcp 437 >> "%logfile%" 2>&1
@@ -1398,7 +1396,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Firewall Rules Applied.
 
     :: Additional Tweaks
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Remote Assistance" /v fAllowToGetHelp /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Remote Assistance" /v "fAllowToGetHelp" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     sc stop RemoteRegistry >> "%logfile%" 2>&1
     sc config RemoteRegistry start= disabled >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Remote Registry disabled.
@@ -1414,6 +1412,12 @@
     chcp 437 >> "%logfile%" 2>&1
     dism /online /norestart /disable-feature /featurename:SMB1Protocol >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v "SMB1" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer" /v "Start" /t REG_DWORD /d 4 /f  >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\mrxsmb" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\mrxsmb20" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SMB1" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SMB2" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% SMBv1 Protocol disabled.
 
@@ -1543,7 +1547,7 @@
 
     echo   %purple%[ %roxo%•%purple% ]%white% Importing %highlight%OOSU10%reset% Profile...
     title %script% %version% %space% %winver%
-    curl -g -k -L -# -o "C:\%script%\OOSU10\GhostX-OOSU.cfg" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostX-OOSU.cfg" >> "%logfile%" 2>&1
+    curl -g -k -L -# -o "C:\%script%\OOSU10\GhostX-OOSU10.cfg" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostX-OOSU10.cfg" >> "%logfile%" 2>&1
     if errorlevel 1 (
         echo   %red%[ %red%•%red% %red%]%reset% Failed to download OOSU10 profile.
         goto telemetryend
@@ -1554,7 +1558,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Applying %highlight%OOSU10%reset% Profile...
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     if exist "C:\%script%\OOSU10\OOSU10.exe" (
-        start "" /wait "C:\%script%\OOSU10\OOSU10.exe" "C:\%script%\OOSU10\GhostX-OOSU.cfg" >> "%logfile%" 2>&1
+        start "" /wait "C:\%script%\OOSU10\OOSU10.exe" "C:\%script%\OOSU10\GhostX-OOSU10.cfg" >> "%logfile%" 2>&1
         echo.
         echo   %purple%[ %roxo%•%purple% ]%white% OOSU10 Tweaks Applied %green%successfully%white%.
         echo --- OOSU Tweaks applied --- >> "%logfile%" 2>&1
@@ -1564,15 +1568,12 @@
 
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
 
-    echo.
-
     :: Privacy Improvements
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Privacy" /v "TailoredExperiencesWithDiagnosticDataEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy" /v "HasAccepted" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Input\TIPC" /v "Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\InputPersonalization" /v "RestrictImplicitInkCollection" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\InputPersonalization" /v "RestrictImplicitTextCollection" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKCU\Software\Microsoft\InputPersonalization\TrainedDataStore" /v "HarvestContacts" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Personalization\Settings" /v "AcceptedPrivacyPolicy" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Start_TrackProgs" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v "PublishUserActivities" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -1669,8 +1670,6 @@
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableSensors" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableWindowsLocationProvider" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Geolocation disabled.
-
-    echo.
 
     :: Autologgers (from Ancel's Performance Batch)
     reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WUDF" /v "LogEnable" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -1898,14 +1897,14 @@
     reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad" /v "EnablePrecision" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Trackpad Precision Optimized.
 
-    echo.
+    timeout /t 1 /nobreak >> "%logfile%" 2>&1
 
     :: KBM Queue Size
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\mouclass\Parameters" /v "MouseDataQueueSize" /t REG_DWORD /d 32 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\kbdclass\Parameters" /v "KeyboardDataQueueSize" /t REG_DWORD /d 32 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Data Queue Size Optimized.
 
-    echo.
+    timeout /t 1 /nobreak >> "%logfile%" 2>&1
 
     :: Double Click
     reg add "HKCU\Control Panel\Mouse" /v "DoubleClickSpeed" /t REG_SZ /d 300 /f >> "%logfile%" 2>&1
@@ -1919,7 +1918,7 @@
     reg add "HKCU\Control Panel\Keyboard" /v "KeyboardSpeed" /t REG_SZ /d 31 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Key Speed Optimized.
 
-    echo.
+    timeout /t 1 /nobreak >> "%logfile%" 2>&1
 
     :: Sticky Keys
     reg add "HKCU\Control Panel\Accessibility\StickyKeys" /v "Flags" /t REG_SZ /d 506 /f >> "%logfile%" 2>&1
@@ -2035,10 +2034,41 @@
     :debloatapply
     cls
     echo.
-    echo   %purple%[ %roxo%•%purple% ]%white% Disabling %roxo%Bloatware%white% Features... 
+    echo   %purple%[ %roxo%•%purple% ]%white% Disabling %roxo%Bloatware%white% Auto Start ^& Features... 
     echo.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     echo --- Uninstalling Bloatware Apps --- >> "%logfile%" 2>&1
+
+    :: Auto Start Apps
+    reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "OneDrive" /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% OneDrive disabled.
+    reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Lghub" /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% LgHub disabled.
+    reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "RazerSynapse" /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% RazerSynapse disabled.
+    reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "iCUE" /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% iCUE disabled
+    reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Redragon" /f >> "%logfile%" 2>&1
+    reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "RDCfg" /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Redragon disabled
+    reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Chrome" /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Chrome disabled
+    reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Opera" /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Opera disabled
+    reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Opera GX" /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Opera GX disabled
+    reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Brave" /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Brave disabled
+    reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Firefox" /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Firefox disabled
+    reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Spotify" /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Spoify disabled
+    reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "msedge" /f >> "%logfile%" 2>&1
+    reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "edge" /f >> "%logfile%" 2>&1
+    reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "MicrosoftEdgeAutoLaunch_1BA94C0BA16E4AD6E747BB43BB8E8E25" /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Microsoft Edge disabled
+    reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Xbox" /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Xbox App disabled
 
     :: Advertising
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SoftLandingEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -2048,10 +2078,6 @@
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Start_Layout" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Advertising disabled.
-
-    :: OneDrive
-    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowSyncProviderNotifications" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% OneDrive Push disabled.
 
     :: News and Widgets
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Dsh" /v "AllowNewsAndInterests" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -2087,6 +2113,8 @@
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Paint" /v "DisableRemoveBackground" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Paint AI disabled.
 
+    echo.
+
     :: App preinstall
     reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "RemediationRequired" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "PreInstalledAppsEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -2097,43 +2125,6 @@
     reg add "HKCU\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableConsumerFeatures" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableConsumerFeatures" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Apps Reinstalation disabled.
-
-    :: App Suggestions
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SystemPaneSuggestionsEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338388Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-314559Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-280815Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-314563Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338393Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-353694Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-353696Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-310093Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-202914Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338387Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338389Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-353698Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Suggestions disabled.
-
-    :: Lockscreen Tooltips
-    reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338387Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "RotatingLockScreenEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "RotatingLockScreenOverlayEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Tooltips disabled.
-
-    :: Lockscreen Spotlight
-    reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableSpotlightCollectionOnDesktop" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsSpotlightFeatures" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableThirdPartySuggestions" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Spotlight disabled.
-
-    :: Delivery Optimization
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\DoSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DODownloadMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DownloadMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings" /v "DownloadMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Delivery Optimization disabled.
 
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
 
@@ -2148,7 +2139,13 @@
     powershell -Command "Get-AppxPackage -allusers *Print3D* | Remove-AppxPackage" >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *Microsoft3DViewer* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% 3D Apps uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "3D Apps" uninstalled.
+
+    :: Remote Assist
+    chcp 437 >> "%logfile%" 2>&1
+    powershell -Command "Get-AppxPackage -AllUsers *Microsoft.QuickAssist* | Remove-AppxPackage" >> "%logfile%" 2>&1
+    chcp 65001 >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% "Quick Assist" uninstalled.
 
     :: Bing
     chcp 437 >> "%logfile%" 2>&1
@@ -2159,7 +2156,7 @@
     powershell -Command "Get-AppxPackage -allusers *BingWeather* | Remove-AppxPackage" >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *News* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Bing Apps uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "Bing Apps" uninstalled.
 
     :: Phone
     chcp 437 >> "%logfile%" 2>&1
@@ -2167,144 +2164,137 @@
     powershell -Command "Get-AppxPackage -allusers *YourPhone* | Remove-AppxPackage" >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *CommsPhone* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Phone Apps uninstalled.
-
-    :: PDF
-    chcp 437 >> "%logfile%" 2>&1
-    powershell -Command "Get-AppxPackage -allusers *Drawboard PDF* | Remove-AppxPackage" >> "%logfile%" 2>&1
-    powershell -Command "Get-AppxPackage -allusers *DrawboardPDF* | Remove-AppxPackage" >> "%logfile%" 2>&1
-    chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Drawboard PDF uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "Phone Apps" uninstalled.
 
     :: Facebook
     chcp 437 >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *Facebook* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Facebook uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "Facebook" uninstalled.
 
     :: Get Started/Help
     chcp 437 >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *Getstarted* | Remove-AppxPackage" >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *GetHelp* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Get Start/Help uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "Get Help" uninstalled.
 
     :: Messaging
     chcp 437 >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *Microsoft.Messaging* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Messaging uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "Messaging" uninstalled.
 
     :: Office Hub
     chcp 437 >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *MicrosoftOfficeHub* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Office Hub uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "Office Hub" uninstalled.
 
     :: OneNote
     chcp 437 >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *OneNote* | Remove-AppxPackage" >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *Office.OneNote* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% OneNote uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "OneNote" uninstalled.
 
     :: People
     chcp 437 >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *People* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% People uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "People" uninstalled.
 
     :: Skype
     chcp 437 >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *SkypeApp* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Skype uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "Skype" uninstalled.
 
     :: Solitaire
     chcp 437 >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *solit* | Remove-AppxPackage" >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *MicrosoftSolitaireCollection* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Solitaire uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "Solitaire" uninstalled.
 
     :: Maps
     chcp 437 >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *WindowsMaps* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Maps uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "Maps" uninstalled.
 
     :: Feedback Hub
     chcp 437 >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *WindowsFeedbackHub* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Feedback Hub uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "Feedback Hub" uninstalled.
 
     :: Communications
     chcp 437 >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *windowscommunicationsapps* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Communications uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "Communications" uninstalled.
+
+    :: Cross Device
+    chcp 437 >> "%logfile%" 2>&1
+    powershell -Command "Get-AppxPackage *crossdevice* | Remove-AppxPackage" >> "%logfile%" 2>&1
+    chcp 65001 >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% "Cross Device" uninstalled.
 
     :: Cortana
     chcp 437 >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *Microsoft.549981C3F5F10* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Cortana uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "Cortana" uninstalled.
 
     :: Teams
     chcp 437 >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *Teams* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Teams uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "Teams" uninstalled.
 
     :: Sticky Notes
     chcp 437 >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *MicrosoftStickyNotes* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Sticky Notes uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "Sticky Notes" uninstalled.
 
     :: Mixed Reality Portal
     chcp 437 >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *MixedReality.Portal* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Mixed Reality Portal uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "Mixed Reality Portal" uninstalled.
 
     :: LinkedIn
     chcp 437 >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *LinkedIn* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% LinkedIn uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "LinkedIn" uninstalled.
 
-    :: Microsoft 365 Copilot
+    :: 365 Copilot
     chcp 437 >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *Copilot* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% 365 Copilot uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "365 Copilot" uninstalled.
 
     :: Outlook
     chcp 437 >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *Outlook* | Remove-AppxPackage" >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *OutlookForWindows* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Outlook uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "Outlook" uninstalled.
 
-    :: Microsoft To Do
+    :: To Do
     chcp 437 >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *Microsoft.Todos* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% To Do uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "To Do" uninstalled.
 
-    :: Cross Device
+    :: Widgets
     chcp 437 >> "%logfile%" 2>&1
-    powershell -Command "Get-AppxPackage *crossdevice* | Remove-AppxPackage" >> "%logfile%" 2>&1
+    powershell -Command "Get-AppxPackage *MicrosoftWindows.WebExperience* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Cross Device uninstalled.
-
-    :: Windows Web Experience Pack
-    chcp 437 >> "%logfile%" 2>&1
-    winget uninstall "Windows Web Experience Pack" --silent >> "%logfile%" 2>&1
-    chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Widgets uninstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% "Widgets" uninstalled.
 
     echo.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
@@ -2411,6 +2401,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Spotlight enabled.
 
     :: Delivery Optimization
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\DoSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DODownloadMode" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DownloadMode" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings" /v "DownloadMode" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
@@ -2570,7 +2561,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% UI Responsiveness Optimized.
 
     :: Energy Estimation
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "EnergyEstimationEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "EnergyEstimationEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
     echo   %purple%[ %roxo%•%purple% ]%white% Energy Estimation disabled.
 
     :: Kernel Timer Coalescing
@@ -2578,7 +2569,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Kernel Coalescing Optimized.
 
     :: Hardware Scheduling
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "HwSchMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "HwSchMode" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Hardware Scheduling disabled.
 
     :: Overlay Test Mode
@@ -2631,7 +2622,6 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Monitor Latency Optimized.
 
     :: Timer Resolution
-    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm" /v "FlipQueueSize" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "MinTimerResolution" /t REG_DWORD /d 5000 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "ClockTimerResolution" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "TimerResolution" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
@@ -3489,7 +3479,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Cross Device disabled.
 
     :: Themes
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Themes" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\Themes" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Themes disabled.
 
     :: Readiness
@@ -3527,7 +3517,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Retail Demo Service disabled.
 
     :: SmartScreen
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\smartscreen" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\smartscreen" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% SmartScreen disabled.
 
     :: Hyper-V Host Service
@@ -3537,7 +3527,6 @@
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\vmcompute" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Hyper-V host disabled.
 
-
     :: Delivery Optimization
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DODownloadMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DownloadMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -3546,7 +3535,7 @@
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\PNRPsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\p2psvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\p2pimsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Delivery Optimization (P2P) disabled.
+    echo   %purple%[ %roxo%•%purple% ]%white% Delivery Optimization disabled.
 
     :: Sharing
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
