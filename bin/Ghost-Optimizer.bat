@@ -88,9 +88,10 @@
         set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
     )
 
-:: Welcome Page
-    :welcome
     chcp 65001 >nul 2>&1
+
+:: Welcome & Restore Point
+    :welcome
     cls 
     echo.
     echo.
@@ -175,7 +176,7 @@
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Creating a %roxo%Restore Point%white%... 
     echo.
-    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    timeout /t 3 /nobreak >> "%logfile%" 2>&1
     echo --- Creating a Restore Point --- >> "%logfile%" 2>&1
 
     echo   %purple%[ %roxo%•%purple% ]%white% Starting System Restore services...
@@ -194,7 +195,7 @@
     timeout /t 3 /nobreak >> "%logfile%" 2>&1
     goto loading
 
-:: Loading Page
+:: Loading & Getting Info
     :loading
     cls
     echo !esc![?25l
@@ -262,12 +263,12 @@
             set "GPUName=%%G"
         )
 
-    :: CPU Info
+    :: CPU info
         for /f "delims=" %%A in ('powershell -NoProfile -Command "Get-CimInstance Win32_Processor | Select-Object -ExpandProperty Name"') do (
             set "CPUName=%%A"
         )
 
-    :: Winver 
+    :: Winver info
         for /f "tokens=3" %%b in ('reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v CurrentBuild ^| findstr /i "CurrentBuild"') do (
             set "BuildNumber=%%b"
         )
@@ -284,7 +285,7 @@
 
     chcp 65001 >> "%logfile%" 2>&1
 
-:: Main Menu
+:: Main Menu & Selection
     :menu
     title %script% %version% %space% %winver%
     cls
@@ -340,7 +341,7 @@
     echo !lineGradient!!esc![0m
 
     echo.
-    echo                       %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply all Tweaks/Fixes                 %purple%[ %roxo%%underline%R%reset% %purple%]%white% Revert all Tweaks/Fixes
+    echo                       %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply all Tweaks/Fixes%orange%*%reset%                 %purple%[ %roxo%%underline%R%reset% %purple%]%white% Revert all Tweaks/Fixes
     echo.
     echo.
     echo              %purple%[ %roxo%%underline%1%reset% %purple%]%white% General Tweaks               %purple%[ %roxo%%underline%2%reset% %purple%]%white% Performance Tweaks              %purple%[ %roxo%%underline%3%reset% %purple%]%white% Network Tweaks
@@ -373,21 +374,21 @@
     if "%answer%"=="R" goto revertall
     if "%answer%"=="r" goto revertall
 
-    if "%answer%"=="restart" goto :restart
+    if "%answer%"=="restart" goto restart
     if "%answer%"=="exit" exit
-    if "%answer%"=="reboot" goto :reboot
-    if "%answer%"=="rebootcancel" goto :rebootcancel
-    if "%answer%"=="cancel" goto :rebootcancel
-    if "%answer%"=="Restart" goto :restart
+    if "%answer%"=="reboot" goto reboot
+    if "%answer%"=="rebootcancel" goto rebootcancel
+    if "%answer%"=="cancel" goto rebootcancel
+    if "%answer%"=="Restart" goto restart
     if "%answer%"=="Exit" exit
-    if "%answer%"=="Reboot" goto :reboot
-    if "%answer%"=="Rebootcancel" goto :rebootcancel
-    if "%answer%"=="Cancel" goto :rebootcancel
-    if "%answer%"=="RESTART" goto :restart
+    if "%answer%"=="Reboot" goto reboot
+    if "%answer%"=="Rebootcancel" goto rebootcancel
+    if "%answer%"=="Cancel" goto rebootcancel
+    if "%answer%"=="RESTART" goto restart
     if "%answer%"=="EXIT" exit
-    if "%answer%"=="REBOOT" goto :reboot
-    if "%answer%"=="REBOOTCANCEL" goto :rebootcancel
-    if "%answer%"=="CANCEL" goto :rebootcancel
+    if "%answer%"=="REBOOT" goto reboot
+    if "%answer%"=="REBOOTCANCEL" goto rebootcancel
+    if "%answer%"=="CANCEL" goto rebootcancel
 
     if "%answer%"=="Louzkk" start https://github.com/louzkk
     if "%answer%"=="louzkk" start https://github.com/louzkk
@@ -452,7 +453,7 @@
     )
 
     echo.
-    set "lines[0]=                      Applies all Tweaks/Fixes, except Windows Clean, Integrity Fix, and NVIDIA Profile."
+    set "lines[0]=                   Tweaks: General, Performance, Network, Latency, KBM, Telemetry, Services and Power Plan."
     set "lines[1]=                           Check full documentation at: https://github.com/louzkk/Ghost-Optimizer"
 
     for /L %%i in (0,1,1) do (
@@ -507,20 +508,30 @@
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Applying %roxo%All%white% Tweaks/Fixes... 
     echo.
-    timeout /t 2 /nobreak >> "%logfile%" 2>&1
-    echo --- Applying all Tweaks/Fixes --- >> "%logfile%" 2>&1
+    timeout /t 3 /nobreak >> "%logfile%" 2>&1
 
-    echo   %purple%[ %roxo%•%purple% ]%white% Not working in this version, try manually. %reset%
-    timeout /t 1 /nobreak >> "%logfile%" 2>&1
+    set mode=none
+    call:generalapply
+    call:performanceapply
+    call:networkapply
+    call:latencyapply
+    call:kbmapply
+    call:telemetryapply
+    call:servicesapply
+    call:powerplanapply
+
+    echo.
+    echo.
+    echo   %yellow%[ • ]%reset% Remaining Tweaks: NVIDIA, Cleaner, Health and Debloat 
 
     echo.
     timeout /t 3 /nobreak >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% All Tweaks/Fixes applied %red%unsuccessfully%white%.
+    echo   %purple%[ %roxo%•%purple% ]%white% All Tweaks/Fixes applied %green%successfully%white%.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     taskkill /f /im explorer.exe >> "%logfile%" 2>&1
     start explorer.exe >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
-    echo --- Finished all Tweaks/Fixes --- >> "%logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%logfile%" 2>&1
     goto menu
 
     :documentation
@@ -658,6 +669,7 @@
 
 :: General Tweaks
     :general
+    set mode=menu
     cls
     echo.
     echo.
@@ -751,14 +763,16 @@
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     echo --- Applying General Tweaks --- >> "%logfile%" 2>&1
 
-    :: Disk Optimization
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\defragsvc" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Optimize" /v "ScheduledDefrag" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Defrag enabled.
-
     :: SysMain (Prefetcher)
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\SysMain" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% SysMain disabled.
+
+    :: Disk Optimization
+    reg add "HKLM\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction" /v "Enable" /t REG_STR /d "Y" /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\defragsvc" /v "Start" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Optimize" /v "ScheduledDefrag" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    schtasks /change /tn "\Microsoft\Windows\Defrag\ScheduledDefrag" /ri 0 /st 00:00 /du 00:00 /mo MONTHLY /enable >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Defrag enabled.
 
     :: Bing Search
     reg add "HKCU\Software\Policies\Microsoft\Windows\Explorer" /v "DisableSearchBoxSuggestions" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
@@ -782,13 +796,6 @@
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "HideSCAMeetNow" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "HideSCAMeetNow" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowTaskViewButton" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg delete "HKCR\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /f >> "%logfile%" 2>&1
-    reg delete "HKCR\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /f >> "%logfile%" 2>&1
-    reg add "HKCR\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /v "System.IsPinnedToNameSpaceTree" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCR\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /v "System.IsPinnedToNameSpaceTree" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{3dfdf296-dbec-4fb4-81d1-6a3438bcf4de}" /f >> "%logfile%" 2>&1
-    reg delete "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{3dfdf296-dbec-4fb4-81d1-6a3438bcf4de}" /f >> "%logfile%" 2>&1
-    reg add "HKCU\Software\Classes\CLSID\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" /v "System.IsPinnedToNameSpaceTree" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Explorer Tweaked.
 
     :: Taskbar
@@ -853,18 +860,6 @@
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" /v "fAllowToGetHelp" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Remote Assist disabled.
 
-    :: Send to My Phone
-    reg add "HKEY_CLASSES_ROOT\*\shell\Windows.SendToPhone" /v "Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKEY_CLASSES_ROOT\Directory\shell\Windows.SendToPhone" /v "Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" /v "{2F788D0F-1317-441B-86D2-4725301BD49D}" /t REG_SZ /d "" /f >> "%logfile%" 2>&1
-    reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" /v "{2F788D0F-1317-441B-86D2-4725301BD49D}" /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% My Phone disabled.
-
-    :: Spatial Sound
-    reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio\Spatial" /v "EnableSpatialSound" /f >> "%logfile%" 2>&1
-    reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio\Spatial" /v "SpatialFormat" /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Windows Sonic disabled.
-
     :: Dynamic Light
     reg add "HKCU\Software\Microsoft\Lighting" /v "AmbientLightingEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Dynamic Light disabled.
@@ -877,11 +872,6 @@
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\USB" /v "DisableSelectiveSuspend" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% USB Idling disabled.
 
-    :: Driver Search
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /v "ExcludeWUDriversInQualityUpdate" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\DriverSearching" /v "SearchOrderConfig" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Driver Search disabled.
-
     :: Hibernation
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "HiberBootEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "HibernateEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -893,35 +883,21 @@
     reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings" /v "FocusAssist" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Focus Assist disabled.
 
-    :: Lockscreen Tooltips
-    reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    :: LockTooltips & Spotlight
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338387Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "RotatingLockScreenEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "RotatingLockScreenOverlayEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Tooltips disabled.
-
-    :: Lockscreen Spotlight
+    reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableSpotlightCollectionOnDesktop" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsSpotlightFeatures" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableThirdPartySuggestions" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Spotlight disabled.
+    echo   %purple%[ %roxo%•%purple% ]%white% Tooltips ^& Spotlight disabled.
 
-    :: Windows Suggestions
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SystemPaneSuggestionsEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338388Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-314559Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-280815Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-314563Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338393Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-353694Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-353696Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-310093Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-202914Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338387Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338389Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-353698Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Suggestions disabled.
+    :: Driver Search
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /v "ExcludeWUDriversInQualityUpdate" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\DriverSearching" /v "SearchOrderConfig" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Driver Search disabled.
 
     echo.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
@@ -929,10 +905,12 @@
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
     echo --- Finished General Tweaks --- >> "%logfile%" 2>&1
-    goto menu
+    if "%mode%"=="menu" goto menu
+    exit /b
 
 :: Performance Tweaks
     :performance
+    set mode=menu
     cls
     echo.
     echo.
@@ -1031,14 +1009,25 @@
     reg add "HKEY_CURRENT_USER\Software\Microsoft\GameBar" /v "AutoGameModeEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Game Mode enabled.
 
+    :: Uncomment this line to keep the Game Bar and Game Capture on.
+    goto skipdvr
+
     :: Game Bar & DVR
-    reg add "HKEY_CURRENT_USER\System\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR" /v "value" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\Software\Policies\Microsoft\Windows\GameDVR" /v "AllowGameDVR" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKCU\System\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR" /v "AllowGameDVR" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameDVR" /v "AllowGameDVR" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR" /v value /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR" /v "AllowGameDVR" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Gaming.GameBar.PresenceServer.Internal.PresenceWriter" /v "ActivationType" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "AudioCaptureEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Gaming.GameBar.PresenceServer.Internal.PresenceWriter" /v "ActivationType" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKCU\System\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKCU\System\GameConfigStore" /v "GameDVR_FSEBehaviorMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKCU\System\GameConfigStore" /v "GameDVR_DXGIHonorFSEWindowsCompatible" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    :skipdvr
     echo   %purple%[ %roxo%•%purple% ]%white% Game Bar ^& DVR disabled.
 
     :: Win32PrioritySeparation
@@ -1086,12 +1075,12 @@
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Executive" /v "CoalescingTimerInterval" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\ModernSleep" /v "CoalescingTimerInterval" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "CoalescingTimerInterval" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "EnergyEstimationEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "EventProcessorEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Power Management Optimized.
 
     :: Modern Standby
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "PreferExternalManifest" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "EnergyEstimationEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "EventProcessorEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "PreferExternalManifest" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "Attributes" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "CsEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "PlatformAoAcOverride" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -1100,43 +1089,37 @@
     :: Time Stamp Interval & IoPriority
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability" /v "TimeStampInterval" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability" /v "IoPriority" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% IO Priority Interval Optimized.
-
-    :: Direct3D/DirectX
-    reg add "HKLM\SOFTWARE\Microsoft\Direct3D" /v "DisableUHDPacking" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "TdrDelay" /t REG_DWORD /d 10 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "TdrDdiDelay" /t REG_DWORD /d 10 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\Direct3D\Drivers" /v "SoftwareOnly" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\Software\Microsoft\Direct3D" /v "DisableDebugLayer" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "GpuHardwareScheduling" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\DirectX" /v "ForceGPUPreemption" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\DirectX" /v "MaxShaderCacheSize" /t REG_DWORD /d 4096 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Graphics Drivers Optimized.
+    echo   %purple%[ %roxo%•%purple% ]%white% IO Priority Optimized.
 
     :: Hardware-Accelerated GPU Scheduling
-    :: Values: 0 Disabled, 1 Default, 2 Enabled
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "HwSchMode" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler" /v "EnableReclaim" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% GPU Scheduling Optimized.
 
+    :: Direct3D/DirectX
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "TdrDelay" /t REG_DWORD /d 10 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "TdrDdiDelay" /t REG_DWORD /d 10 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Direct3D\Drivers" /v "SoftwareOnly" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\Direct3D" /v "DisableDebugLayer" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\DirectX" /v "ForceGPUPreemption" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\DirectX" /v "MaxShaderCacheSize" /t REG_DWORD /d 4096 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% DirectX/3D Optimized.
+
     :: Fullscreen Optimization
-    reg add "HKCU\SYSTEM\GameConfigStore" /v "GameDVR_DSEBehavior" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SYSTEM\GameConfigStore" /v "GameDVR_FSEBehaviorMode" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SYSTEM\GameConfigStore" /v "GameDVR_EFSEFeatureFlags" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SYSTEM\GameConfigStore" /v "GameDVR_DXGIHonorFSEWindowsCompatible" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SYSTEM\GameConfigStore" /v "GameDVR_DSEBehavior" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SYSTEM\GameConfigStore" /v "GameDVR_FSEBehaviorMode" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SYSTEM\GameConfigStore" /v "GameDVR_EFSEFeatureFlags" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SYSTEM\GameConfigStore" /v "GameDVR_DXGIHonorFSEWindowsCompatible" /t REG_DWORD  /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\SYSTEM\GameConfigStore" /v "GameDVR_HonorUserFSEBehaviorMode" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Fullscreen Optimizations enabled.
 
     :: Windowed Optimization
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm" /v "FlipQueueSize" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "DisableFlipModel" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\DirectX\UserGpuPreferences" /v "DirectXUserGlobalSettings" /t REG_SZ /d "VRROptimizeEnable=0;SwapEffectUpgradeEnable=1;" /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Windowed Optimizations enabled.
-
-    :: Swap Effect Upgrade Cache
     reg add "HKCU\Software\Microsoft\DirectX\GraphicsSettings" /v "SwapEffectUpgradeEnable" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\DirectX\GraphicsSettings" /v "SwapEffectUpgradeCache" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Swap Chain Cache enabled.
+    reg add "HKCU\SOFTWARE\Microsoft\DirectX\UserGpuPreferences" /v "DirectXUserGlobalSettings" /t REG_SZ /d "VRROptimizeEnable=0;SwapEffectUpgradeEnable=1;" /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Windowed Optimizations enabled.
 
     :: Message Signaled Interrupts (MSI)
     chcp 437 >> "%logfile%" 2>&1
@@ -1144,7 +1127,7 @@
         reg add "HKLM\SYSTEM\CurrentControlSet\Enum\%%g\Device Parameters\Interrupt Management\MessageSignaledInterruptProperties" /v "MSISupported" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
         reg add "HKLM\SYSTEM\CurrentControlSet\Enum\%%g\Device Parameters\Interrupt Management\Affinity Policy" /v "DevicePriority" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     )
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\Dwm" /v "OverlayTestMode" /t REG_DWORD /d 5 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\Dwm" /v "OverlayTestMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1    
     echo   %purple%[ %roxo%•%purple% ]%white% MSI ^& MPO Mode enabled.
 
@@ -1160,21 +1143,16 @@
     bcdedit /set hypervisorlaunch off >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% VBS and Hypervisor disabled.
 
-    :: Spectre/Meltdown
+    :: Spectre & Meltdown
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverride" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverrideMask" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Spectre ^& Meltdown disabled.
 
-    :: CPU and Timer
-    bcdedit /set tscsyncpolicy enhanced >> "%logfile%" 2>&1
-    bcdedit /deletevalue uselegacyapicmode >> "%logfile%" 2>&1
-    bcdedit /deletevalue useplatformclock >> "%logfile%" 2>&1
-    bcdedit /deletevalue useplatformtick >> "%logfile%" 2>&1
-    bcdedit /set disabledynamictick no >> "%logfile%" 2>&1
+    :: CPU & Timer
+    bcdedit /set tscsyncpolicy Enhanced >> "%logfile%" 2>&1
+    bcdedit /set disabledynamictick No >> "%logfile%" 2>&1
     bcdedit /set x2apicpolicy Enable >> "%logfile%" 2>&1
     bcdedit /set configaccesspolicy Default >> "%logfile%" 2>&1
-    bcdedit /deletevalue usephysicaldestination >> "%logfile%" 2>&1
-    bcdedit /deletevalue usefirmwarepcisettings >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Kernel Optimizations applied.
 
     echo.
@@ -1183,10 +1161,12 @@
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
     echo --- Performance Tweaks Applied --- >> "%logfile%" 2>&1
-    goto menu
+    if "%mode%"=="menu" goto menu
+    exit /b
 
-:: Network Tweaks & DNS
+:: Network & DNS Tweaks
     :network
+    set mode=menu
     cls
     echo.
     echo.
@@ -1427,10 +1407,12 @@
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
     echo --- Finished Network Tweaks --- >> "%logfile%" 2>&1
-    goto menu
+    if "%mode%"=="menu" goto menu
+    exit /b
 
 :: Telemetry & OOSU10
     :telemetry
+    set mode=menu
     cls
     echo.
     echo.
@@ -1567,6 +1549,45 @@
     )
 
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    echo.
+
+    :: User Activity Upload
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v "PublishUserActivities" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v "EnableActivityFeed" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v "UploadUserActivities" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Activity Upload disabled.
+
+    :: Advertising ID
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo" /v "DisabledByGroupPolicy" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableSoftLanding" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Advertising disabled.
+
+    :: Error reporting
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WerSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Wercplsupport" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WerSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" /v "Disabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" /v "DoReport" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" /v "LoggingDisabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting" /v "DoReport" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v "Disabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v "ForceQueue" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Error Reporting disabled.
+
+    :: Experience Feedback
+    reg add "HKCU\SOFTWARE\Microsoft\Siuf\Rules" /v "NumberOfNotificationsSent" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Assistance\Client\1.0" /v "NoExplicitFeedback" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Assistance\Client\1.0" /v "NoActiveHelp" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\SQMClient\Windows" /v "CEIPEnable" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\SQMClient\Reliability" /v "CEIPEnable" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\SQMClient\Reliability" /v "SqmLoggerRunning" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\SQMClient\Windows" /v "CEIPEnable" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\SQMClient\Windows" /v "DisableOptinExperience" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\SQMClient\Windows" /v "SqmLoggerRunning" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\SQMClient\IE" /v "SqmLoggerRunning" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Experience Feedback disabled.
 
     :: Privacy Improvements
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Privacy" /v "TailoredExperiencesWithDiagnosticDataEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -1582,21 +1603,22 @@
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "PersonalizationReportingEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Privacy Improvements applied.
 
-    :: DiagTrack
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\diagnosticshub.standardcollector.service" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TroubleshootingSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\DiagTrack" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\diagsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\DsSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\DPS" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WdiServiceHost" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WdiSystemHost" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\dmwappushsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Telemetry Services disabled.
+    :: Device Metadata/Input
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" /v "PreventDeviceMetadataFromNetwork" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SOFTWARE\Microsoft\InputPersonalization" /v "RestrictImplicitInkCollection" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SOFTWARE\Microsoft\InputPersonalization" /v "RestrictImplicitTextCollection" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKCU\SOFTWARE\Microsoft\InputPersonalization\TrainedDataStore" /v "HarvestContacts" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Input Metadata disabled.
+
+    :: Location Sensor
+    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableLocation" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableLocationScripting" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableSensors" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableWindowsLocationProvider" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Geolocation disabled.
 
     :: Telemetry/Data Collection
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Privacy" /v "TailoredExperiencesWithDiagnosticDataEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -1607,145 +1629,24 @@
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "LimitEnhancedDiagnosticDataWindowsAnalytics" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "MicrosoftEdgeDataOptIn" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\VSStandardCollectorService150" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Data Collection disabled.
+
+    :: DiagTrack
+    reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\diagnosticshub.standardcollector.service" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TroubleshootingSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\DiagTrack" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\diagsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\DsSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\DPS" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WdiServiceHost" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WdiSystemHost" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\dmwappushsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     sc config DiagTrack start= disabled >> "%logfile%" 2>&1
     sc config dmwappushservice start= disabled >> "%logfile%" 2>&1
     sc config diagnosticshub.standardcollector.service start= disabled >> "%logfile%" 2>&1
     sc config VSStandardCollectorService150 start= disabled >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Data Collection disabled.
-
-    :: Device Metadata/Input
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" /v "PreventDeviceMetadataFromNetwork" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\InputPersonalization" /v "RestrictImplicitInkCollection" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\InputPersonalization" /v "RestrictImplicitTextCollection" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\InputPersonalization\TrainedDataStore" /v "HarvestContacts" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Input Metadata disabled.
-
-    :: Error reporting
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WerSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Wercplsupport" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WerSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" /v "Disabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" /v "DoReport" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" /v "LoggingDisabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting" /v "DoReport" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v "Disabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v "ForceQueue" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Error Reporting disabled.
-
-    :: Experience Feedback
-    reg add "HKCU\SOFTWARE\Microsoft\Siuf\Rules" /v "NumberOfSIUFInPeriod" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Siuf\Rules" /v "PeriodInNanoSeconds" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Siuf\Rules" /v "NumberOfNotificationsSent" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Assistance\Client\1.0" /v "NoExplicitFeedback" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Assistance\Client\1.0" /v "NoActiveHelp" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\SQMClient\Windows" /v "CEIPEnable" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\SQMClient\Reliability" /v "CEIPEnable" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\SQMClient\Reliability" /v "SqmLoggerRunning" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\SQMClient\Windows" /v "CEIPEnable" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\SQMClient\Windows" /v "DisableOptinExperience" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\SQMClient\Windows" /v "SqmLoggerRunning" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\SQMClient\IE" /v "SqmLoggerRunning" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Experience Feedback disabled.
-
-    :: User Activity Upload
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v "PublishUserActivities" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v "EnableActivityFeed" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v "UploadUserActivities" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Activity Upload disabled.
-
-    :: Advertising ID
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo" /v "DisabledByGroupPolicy" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableSoftLanding" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Advertising disabled.
-
-    :: Biometrics
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Biometrics" /v "Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Biometrics disabled.
-
-    :: Location Sensor
-    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableLocation" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableLocationScripting" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableSensors" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableWindowsLocationProvider" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Geolocation disabled.
-
-    :: Autologgers (from Ancel's Performance Batch)
-    reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WUDF" /v "LogEnable" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WUDF" /v "LogLevel" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\EnergyEstimation\TaggedEnergy" /v "DisableTaggedEnergyLogging" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\EnergyEstimation\TaggedEnergy" /v "TelemetryMaxApplication" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\EnergyEstimation\TaggedEnergy" /v "TelemetryMaxTagPerApplication" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\AppModel" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\Cellcore" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\Circular Kernel Context Logger" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\CloudExperienceHostOobe" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\DataMarket" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\DefenderApiLogger" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\DefenderAuditLogger" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\DiagLog" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\HolographicDevice" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\iclsClient" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\iclsProxy" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\LwtNetLog" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\Mellanox-Kernel" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\Microsoft-Windows-AssignedAccess-Trace" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\Microsoft-Windows-Setup" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\NBSMBLOGGER" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\PEAuthLog" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\RdrLog" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\ReadyBoot" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\SetupPlatform" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\SetupPlatformTel" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\SocketHeciServer" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\SpoolerLogger" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\SQMLogger" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\TCPIPLOGGER" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\TileStore" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\Tpm" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\TPMProvisioningService" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\UBPM" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\WdiContextLog" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\WFP-IPsec Trace" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\WiFiDriverIHVSession" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\WiFiDriverIHVSessionRepro" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\WiFiSession" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\WinPhoneCritical" /v "Start" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WUDF" /v "LogEnable" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
-    reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WUDF" /v "LogLevel" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "HistoryViewEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableThirdPartySuggestions" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa\Credssp" /v "DebugLogLevel" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Autologgers disabled.
-
-    :: Telemetry Task Schedulings (from Ancel's Performance Batch)
-    schtasks /change /tn "\Microsoft\Windows\Customer Experience Improvement Program\Consolidator" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\Customer Experience Improvement Program\BthSQM" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\Customer Experience Improvement Program\KernelCeipTask" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\Customer Experience Improvement Program\Uploader" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\Application Experience\ProgramDataUpdater" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\Application Experience\StartupAppTask" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticResolver" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\Power Efficiency Diagnostics\AnalyzeSystem" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\Shell\FamilySafetyMonitor" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\Shell\FamilySafetyRefresh" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\Shell\FamilySafetyUpload" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\Autochk\Proxy" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\Maintenance\WinSAT" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\Application Experience\AitAgent" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\Windows Error Reporting\QueueReporting" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\CloudExperienceHost\CreateObjectTask" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\DiskFootprint\Diagnostics" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\FileHistory\File History (maintenance mode)" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\PI\Sqm-Tasks" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\NetTrace\GatherNetworkInfo" /disable >> "%logfile%" 2>&1
-    schtasks /change /tn "\Microsoft\Windows\AppID\SmartScreenSpecific" /disable >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Schedulings disabled.
+    echo   %purple%[ %roxo%•%purple% ]%white% Telemetry Services disabled.
 
     echo.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
@@ -1753,7 +1654,8 @@
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
     echo --- Finished Telemetry & Logging --- >> "%logfile%" 2>&1
-    goto menu
+    if "%mode%"=="menu" goto menu
+    exit /b
 
    :oosu10
     cls
@@ -1793,6 +1695,7 @@
 
 :: Mouse & Keyboard
     :kbm
+    set mode=menu
     cls
     echo.
     echo.
@@ -1894,14 +1797,14 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Mouse Precision Optimized.
 
     :: Trackpad Precision
-    reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad" /v "EnablePrecision" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad" /v "EnablePrecision" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Trackpad Precision Optimized.
 
     timeout /t 1 /nobreak >> "%logfile%" 2>&1
 
     :: KBM Queue Size
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\mouclass\Parameters" /v "MouseDataQueueSize" /t REG_DWORD /d 32 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\kbdclass\Parameters" /v "KeyboardDataQueueSize" /t REG_DWORD /d 32 /f >> "%logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\mouclass\Parameters" /v "MouseDataQueueSize" /t REG_DWORD /d 32 /f >> "%logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\kbdclass\Parameters" /v "KeyboardDataQueueSize" /t REG_DWORD /d 32 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Data Queue Size Optimized.
 
     timeout /t 1 /nobreak >> "%logfile%" 2>&1
@@ -1911,7 +1814,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Click Speed Optimized.
 
     :: Repeat Delay
-    reg add "HKCU\Control Panel\Keyboard" /v "KeyboardDelay" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Control Panel\Keyboard" /v "KeyboardDelay" /t REG_SZ /d 1 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Key Delay Optimized.
 
     :: Repeat Rate
@@ -1941,7 +1844,8 @@
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
     echo --- KBM Tweaks Applied --- >> "%logfile%" 2>&1
-    goto menu
+    if "%mode%"=="menu" goto menu
+    exit /b
 
 :: Bloatware Apps
     :debloat
@@ -2113,8 +2017,6 @@
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Paint" /v "DisableRemoveBackground" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Paint AI disabled.
 
-    echo.
-
     :: App preinstall
     reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "RemediationRequired" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "PreInstalledAppsEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -2171,13 +2073,6 @@
     powershell -Command "Get-AppxPackage -allusers *Facebook* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% "Facebook" uninstalled.
-
-    :: Get Started/Help
-    chcp 437 >> "%logfile%" 2>&1
-    powershell -Command "Get-AppxPackage -allusers *Getstarted* | Remove-AppxPackage" >> "%logfile%" 2>&1
-    powershell -Command "Get-AppxPackage -allusers *GetHelp* | Remove-AppxPackage" >> "%logfile%" 2>&1
-    chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% "Get Help" uninstalled.
 
     :: Messaging
     chcp 437 >> "%logfile%" 2>&1
@@ -2441,8 +2336,9 @@
     echo --- Reverted Debloat --- >> "%logfile%" 2>&1
     goto debloat
 
-:: Latency Tweaks
+:: Latency & Input-Lag
     :latency
+    set mode=menu
     cls
     echo.
     echo.
@@ -2529,7 +2425,6 @@
     echo.
     goto latency
 
-
     :latencyapply
     cls
     echo.
@@ -2550,8 +2445,8 @@
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoComplete" /v "AutoSuggest" /t REG_SZ /d "yes" /f >> "%logfile%" 2>&1
     reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "menuShowDelay" /t REG_SZ /d 100 /f >> "%logfile%" 2>&1
     reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ExtendedUIHoverTime" /t REG_DWORD /d 20 /f >> "%logfile%" 2>&1
-    reg add "HKCU\Control Panel\Mouse" /v "MouseHoverTime" /t REG_SZ /d 10 /f >> "%logfile%" 2>&1
-    reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "MouseHoverTime" /t REG_SZ /d 10 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Control Panel\Mouse" /v "MouseHoverTime" /t REG_SZ /d 20 /f >> "%logfile%" 2>&1
+    reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "MouseHoverTime" /t REG_SZ /d 20 /f >> "%logfile%" 2>&1
     reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "LowLevelHooksTimeout" /t REG_SZ /d 300 /f >> "%logfile%" 2>&1
     reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "AutoEndTasks" /t REG_SZ /d 1 /f >> "%logfile%" 2>&1
     reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "WaitToKillAppTimeout" /t REG_SZ /d 3000 /f >> "%logfile%" 2>&1
@@ -2647,10 +2542,12 @@
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
     echo --- Latency and Input-Lag Tweaks Applied --- >> "%logfile%" 2>&1
-    goto menu
+    if "%mode%"=="menu" goto menu
+    exit /b
 
-:: GhostX Power Plan
+:: GhostX Powerplan
     :powerplan
+    set mode=menu
     cls
     echo.
     echo.
@@ -2801,9 +2698,10 @@
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
     echo --- Power Plan applied --- >> "%logfile%" 2>&1
-    goto menu
+    if "%mode%"=="menu" goto menu
+    exit /b
 
-:: Integrity Fix
+:: Integrity & Health
     :health
     cls
     echo.
@@ -2841,7 +2739,7 @@
     )
 
     echo.
-    set "lines[0]=                        Performs a scan and repairs corrupted files, Windows health, updates, and disk errors."
+    set "lines[0]=                        Performs a scan and repairs corrupted files, system health, updates, and disk errors."
     set "lines[1]=                                Check full documentation at: https://github.com/louzkk/Ghost-Optimizer"
 
     for /L %%i in (0,1,1) do (
@@ -3127,66 +3025,49 @@
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     echo --- Starting Xbox Fix --- >> "%logfile%" 2>&1
 
-    :: Restart Xbox Services
-    chcp 437 >> "%logfile%" 2>&1
-    powershell -Command "Set-Service -Name XblAuthManager -StartupType Manual" >> "%logfile%" 2>&1
-    powershell -Command "Set-Service -Name XblGameSave -StartupType Manual" >> "%logfile%" 2>&1
-    powershell -Command "Set-Service -Name XboxNetApiSvc -StartupType Automatic" >> "%logfile%" 2>&1
-    powershell -Command "Set-Service -Name XboxGipSvc -StartupType Manual" >> "%logfile%" 2>&1
-    chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Xbox Core restored.
-
-    :: Xbox Services
-    sc config XblAuthManager start= demand >> "%logfile%" 2>&1
-    sc config XblGameSave start= demand >> "%logfile%" 2>&1
-    sc config XboxGipSvc start= demand >> "%logfile%" 2>&1
-    sc config XboxNetApiSvc start= auto >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Xbox Services restored.
-
     :: Reinstall Xbox App & Identity Provider
     chcp 437 >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage Microsoft.XboxApp -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage Microsoft.Xbox.TCUI -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage Microsoft.XboxIdentityProvider -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Xbox App reinstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% Xbox App restored.
+
+    :: Xbox Services
+    sc config XblAuthManager start= auto >> "%logfile%" 2>&1
+    sc config XblGameSave start= auto >> "%logfile%" 2>&1
+    sc config XboxGipSvc start= auto >> "%logfile%" 2>&1
+    sc config XboxNetApiSvc start= auto >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Xbox Services enabled.
 
     :: Reinstall Xbox Game Bar
     chcp 437 >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage Microsoft.XboxGamingOverlay -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Game Bar reinstalled.
+    echo   %purple%[ %roxo%•%purple% ]%white% Game Bar restored.
 
     :: Game Bar Registry
-    reg add "HKCU\Software\Microsoft\GameBar" /v "AllowAutoGameMode" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKCU\Software\Microsoft\GameBar" /v "ShowStartupPanel" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKCU\Software\Microsoft\GameBar" /v "GamePanelStartupTipIndex" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
-    reg add "HKCU\Software\Microsoft\GameBar" /v "UseNexusForGameBarEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKCU\Software\Microsoft\GameBar" /v "AllowBroadcasting" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR" /v "value" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\Software\Policies\Microsoft\Windows\GameDVR" /v "AllowGameDVR" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKCU\System\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    reg add "HKCU\System\GameConfigStore" /v "GameDVR_FSEBehaviorMode" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
-    reg add "HKCU\System\GameConfigStore" /v "GameDVR_DXGIHonorFSEWindowsCompatible" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Game Bar Support restored.
-
-    :: App Capture
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR" /v "AllowGameDVR" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameDVR" /v "AllowGameDVR" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR" /v value /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "AudioCaptureEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% App Capture restored.
-
-    :: Restart Xbox Overlay
-    chcp 437 >> "%logfile%" 2>&1
-    powershell -Command "Get-AppxPackage Microsoft.XboxGamingOverlay | Foreach {Start-Process 'shell:appsfolder\' + $_.PackageFamilyName + '!App'}" >> "%logfile%" 2>&1
-    chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Xbox Overlay restored.
+    reg add "HKLM\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Gaming.GameBar.PresenceServer.Internal.PresenceWriter" /v "ActivationType" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    ::reg add "HKCU\System\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    ::reg add "HKCU\System\GameConfigStore" /v "GameDVR_FSEBehaviorMode" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    ::reg add "HKCU\System\GameConfigStore" /v "GameDVR_DXGIHonorFSEWindowsCompatible" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Game Bar enabled.
 
     echo.
     echo   %yellow%[ • ]%reset% If that doesn't solve your problem, try running Full Integrity Fix.
 
     echo.
     timeout /t 4 /nobreak >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Xbox fixed %green%successfully%white%.
+    echo   %purple%[ %roxo%•%purple% ]%white% Xbox App ^& Game Bar fixed %green%successfully%white%.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
     echo --- Finished Xbox Fix --- >> "%logfile%" 2>&1
@@ -3360,6 +3241,7 @@
 
 :: Unecessary Services
     :services
+    set mode=menu
     cls
     echo.
     echo.
@@ -3454,11 +3336,11 @@
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     echo --- Disabling Unnecessary Services --- >> "%logfile%" 2>&1
 
-    :: SysMain (Superfetch)
+    :: SysMain/Superfetch
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\SysMain" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% SysMain (Superfetch) disabled.
+    echo   %purple%[ %roxo%•%purple% ]%white% SysMain disabled.
 
-    :: Sensor / Location
+    :: Sensor/Location
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\SensorDataService" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\SensrSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\SensorService" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
@@ -3477,15 +3359,6 @@
     reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\default\Connectivity\DisableCrossDeviceResume" /v "value" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\CrossDeviceResume\Configuration" /v "IsResumeAllowed" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Cross Device disabled.
-
-    :: Themes
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\Themes" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Themes disabled.
-
-    :: Readiness
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AppReadiness" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\OSRSS" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Readiness disabled.
 
     :: Messages
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\MessagingService" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
@@ -3516,10 +3389,6 @@
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\RetailDemo" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Retail Demo Service disabled.
 
-    :: SmartScreen
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\smartscreen" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% SmartScreen disabled.
-
     :: Hyper-V Host Service
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\HvHost" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\HvHost" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
@@ -3528,13 +3397,13 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Hyper-V host disabled.
 
     :: Delivery Optimization
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DODownloadMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DownloadMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings" /v "DownloadMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\DoSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\PNRPsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\p2psvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\p2pimsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    ::reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DODownloadMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    ::reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DownloadMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    ::reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings" /v "DownloadMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\DoSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\PNRPsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\p2psvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\p2pimsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Delivery Optimization disabled.
 
     :: Sharing
@@ -3558,17 +3427,6 @@
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\OneSyncSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Microsoft OneSync disabled.
 
-    :: DVRU
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WMPNetworkSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BcastDVRUserService" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Broadcast disabled.
-
-    :: Edge
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\edgeupdatem" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\edgeupdate" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\MicrosoftEdgeElevationService" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Edge Update disabled.
-
     :: Wallet
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\WalletService" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Wallet disabled.
@@ -3584,31 +3442,17 @@
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\WSearch" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Search Index disabled.
 
-    :: Remote Registry
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\RemoteRegistry" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Remote Registry disabled.
-
-    :: Biometrics
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\bthhfhid" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\bthhfsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WbioSrvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Biometric disabled.
-
     :: Print Spooler / Fax
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Spooler" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Fax" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Spooler services disabled.
 
-    :: Insider
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\wisvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Windows Insider disabled.
-
     :: Xbox Services
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\xbgm" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblAuthManager" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblGameSave" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxGipSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxNetApiSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\xbgm" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblAuthManager" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblGameSave" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxGipSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxNetApiSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Xbox services disabled.
 
     :: Intel Software
@@ -3617,15 +3461,11 @@
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\jhi_service" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\esifsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\igccservice" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\igfxCUIService2.0.0.0" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\WMIRegistrationService" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\RstMwService" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Intel(R) TPM Provisioning Service" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\IntelAudioService" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Intel services disabled.
-
-    :: AMD Software (Soon...)
-    echo   %purple%[ %roxo%•%purple% ]%white% AMD services disabled.
 
     echo.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
@@ -3633,7 +3473,8 @@
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
     echo --- Unnecessary Services Disabled --- >> "%logfile%" 2>&1
-    goto menu
+    if "%mode%"=="menu" goto menu
+    exit /b
 
     :servicesrevert
     cls
@@ -3747,10 +3588,6 @@
     :: Remote Registry
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\RemoteRegistry" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Remote Registry enabled.
-
-    :: Biometrics
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WbioSrvc" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Biometric enabled.
 
     :: Insider
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\wisvc" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1

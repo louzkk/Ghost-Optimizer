@@ -1,5 +1,3 @@
-"Snap Tap" (SOCD Cleaner) discontinued.
-
 I_Icon := A_ScriptDir . "\Icon.ico"
 IfExist, %I_Icon%
 {

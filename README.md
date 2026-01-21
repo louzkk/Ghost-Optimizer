@@ -1,7 +1,7 @@
 # 💜 About
-**Ghost Optimizer** is a lightweight, open-source optimization tool made to **boost performance** (FPS), **enhance network speed** (reduce ping), **minimize latency** (input lag), **disable telemetry** and **data collection** (OOSU10+), and **protect your privacy**, while also **ensuring system integrity**.
+**Ghost Optimizer** is a lightweight script made to optimize Windows, **boost performance**, **enhance network speed**, **minimize latency**, **reduce telemetry** and **protect your privacy** (OOSU) while **ensuring system integrity**.
 
-[![Version](https://img.shields.io/badge/Version-4.9.6-indigo)](https://github.com/louzkk/Ghost-Optimizer)
+[![Version](https://img.shields.io/badge/Version-4.9.7-indigo)](https://github.com/louzkk/Ghost-Optimizer)
 [![Download](https://img.shields.io/badge/Download-indigo)](https://github.com/louzkk/Ghost-Optimizer/releases)
 
 ![Banner](images/GhostX-BANNER-denoised-4x.png)
