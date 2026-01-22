@@ -1,5 +1,6 @@
-Menu, Tray, Icon, %A_ScriptDir%\..\Images\GhostX-ICON1-denoised-4x.ico
-Menu, Tray, Tip, Ghost Optimizer | Snaptap
+IconPath := A_ScriptDir "\..\Images\GhostX-ICON1-denoised-4x.ico"
+if FileExist(IconPath)
+    Menu, Tray, Icon, %IconPath%
 
 ;;
 
