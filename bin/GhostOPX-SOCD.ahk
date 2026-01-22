@@ -1,4 +1,4 @@
-Menu, Tray, Icon, GhostX-ICON1-denoised-4x.ico
+Menu, Tray, Icon, %A_ScriptDir%\..\Images\GhostX-ICON1-denoised-4x.ico
 
 IfExist, %I_Icon%
 {

@@ -4221,7 +4221,8 @@
     title %script% %version% %space% %winver%
     curl -g -k -L -# -o "C:\%script%\GhostAHK\GhostOPX-SOCD.ahk" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostOPX-SOCD.ahk" >> "%logfile%" 2>&1)
     if errorlevel 1 (
-        echo   %red%[ • ]%reset% Failed to download Snaptap autohotkey.
+        echo   %red%[ • ]%reset% Fainled to download Snaptap autohotkey.
+        timeout /t 3 /nobreak >> "%logfile%" 2>&1
         goto menu
     )
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
@@ -4235,6 +4236,7 @@
         echo   %purple%[ %roxo%•%purple% ]%white% %purple%Ghost Snaptap%white% autootkey running.
     ) else (
         echo   %red%[ • ]%reset% %purple%Ghost Snaptap%white% autohotkey not found!
+        timeout /t 3 /nobreak >> "%logfile%" 2>&1
     )
 
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
