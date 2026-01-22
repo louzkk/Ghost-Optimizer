@@ -390,6 +390,8 @@
     if "%answer%"=="REBOOTCANCEL" goto rebootcancel
     if "%answer%"=="CANCEL" goto rebootcancel
 
+    if "%answer%"=="socd" goto socd
+
     if "%answer%"=="Louzkk" start https://github.com/louzkk
     if "%answer%"=="louzkk" start https://github.com/louzkk
     if "%answer%"=="@louzkk" start https://github.com/louzkk
@@ -1010,7 +1012,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Game Mode enabled.
 
     :: Uncomment this line to keep the Game Bar and Game Capture on.
-    goto skipdvr
+    ::goto keepgamebar
 
     :: Game Bar & DVR
     reg add "\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR" /v "value" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -1027,7 +1029,7 @@
     reg add "HKCU\System\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\System\GameConfigStore" /v "GameDVR_FSEBehaviorMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\System\GameConfigStore" /v "GameDVR_DXGIHonorFSEWindowsCompatible" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    :skipdvr
+    :keepgamebar
     echo   %purple%[ %roxo%•%purple% ]%white% Game Bar ^& DVR disabled.
 
     :: Win32PrioritySeparation
@@ -1519,7 +1521,7 @@
         chcp 65001 >> "%logfile%" 2>&1
     title %script% %version% %space% %winver%
         if not exist "C:\%script%\OOSU10\OOSU10.exe" (
-            echo   %red%[ %red%•%red% %red%]%reset% Failed to download OOSU10 executable.
+            echo   %red%[ • ]%reset% Failed to download OOSU10 executable.
             goto telemetryend
         )
     ) else (
@@ -1531,7 +1533,7 @@
     title %script% %version% %space% %winver%
     curl -g -k -L -# -o "C:\%script%\OOSU10\GhostX-OOSU10.cfg" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostX-OOSU10.cfg" >> "%logfile%" 2>&1
     if errorlevel 1 (
-        echo   %red%[ %red%•%red% %red%]%reset% Failed to download OOSU10 profile.
+        echo   %red%[ • ]%reset% Failed to download OOSU10 profile.
         goto telemetryend
     )
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
@@ -1545,7 +1547,7 @@
         echo   %purple%[ %roxo%•%purple% ]%white% OOSU10 Tweaks Applied %green%successfully%white%.
         echo --- OOSU Tweaks applied --- >> "%logfile%" 2>&1
     ) else (
-        echo   %red%[ %red%•%red% %red%]%reset% OOSU10 executable not found!
+        echo   %red%[ • ]%reset% OOSU10 executable not found!
     )
 
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
@@ -3737,7 +3739,7 @@
         echo   %verde%[ %green%•%verde% ]%reset% Downloading %green%Profile Inspector%reset% package...
         curl -g -k -L -# -o "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" "https://github.com/Orbmu2k/nvidiaProfileInspector/releases/download/2.4.0.27/nvidiaProfileInspector.zip" >> "%logfile%" 2>&1
         if errorlevel 1 (
-            echo   %red%[ %red%•%red% %red%]%reset% Failed to download NVIDIA Profile Inspector.
+            echo   %red%[ • ]%reset% Failed to download NVIDIA Profile Inspector.
             goto :nvidiaend1
         )
     ) else (
@@ -3752,7 +3754,7 @@
         chcp 65001 >> "%logfile%" 2>&1
         del /q "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" >nul 2>&1
         if not exist "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" (
-            echo   %red%[ %red%•%red% %red%]%reset% Extraction failed, executable not found.
+            echo   %red%[ • ]%reset% Extraction failed, executable not found.
             goto :nvidiaend1
         )
     )
@@ -3760,7 +3762,7 @@
     echo   %verde%[ %green%•%verde% ]%reset% Importing %green%GhostX Optimized%reset% profile...
     curl -g -k -L -# -o "C:\%script%\NVIDIA\GhostX1-NVIDIA.nip" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostX1-NVIDIA.nip" >> "%logfile%" 2>&1
     if errorlevel 1 (
-        echo   %red%[ %red%•%red% %red%]%reset% Failed to download NVIDIA profile.
+        echo   %red%[ • ]%reset% Failed to download NVIDIA profile.
         goto :nvidiaend1
     )
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
@@ -3773,7 +3775,7 @@
         echo   %verde%[ %green%•%verde% ]%reset% Profile Inspector Tweaks Applied %green%successfully%white%.
         echo --- NVIDIA Profile applied --- >> "%logfile%" 2>&1
     ) else (
-        echo   %red%[ %red%•%red% %red%]%reset% NVIDIA Profile Inspector executable not found.
+        echo   %red%[ • ]%reset% NVIDIA Profile Inspector executable not found.
     )
 
     :nvidiaend1
@@ -3881,7 +3883,7 @@
         echo   %verde%[ %green%•%verde% ]%reset% Downloading %green%Profile Inspector%reset% package...
         curl -g -k -L -# -o "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" "https://github.com/Orbmu2k/nvidiaProfileInspector/releases/download/2.4.0.27/nvidiaProfileInspector.zip" >> "%logfile%" 2>&1
         if errorlevel 1 (
-            echo   %red%[ %red%•%red% %red%]%reset% Failed to download NVIDIA Profile Inspector.
+            echo   %red%[ • ]%reset% Failed to download NVIDIA Profile Inspector.
             goto :nvidiaend2
         )
     ) else (
@@ -3896,7 +3898,7 @@
         chcp 65001 >> "%logfile%" 2>&1
         del /q "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" >nul 2>&1
         if not exist "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" (
-            echo   %red%[ %red%•%red% %red%]%reset% Extraction failed, executable not found.
+            echo   %red%[ • ]%reset% Extraction failed, executable not found.
             goto :nvidiaend2
         )
     )
@@ -3904,7 +3906,7 @@
     echo   %verde%[ %green%•%verde% ]%reset% Importing %green%GhostX Performance%reset% profile...
     curl -g -k -L -# -o "C:\%script%\NVIDIA\GhostX2-NVIDIA.nip" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostX2-NVIDIA.nip" >> "%logfile%" 2>&1
     if errorlevel 1 (
-        echo   %red%[ %red%•%red% %red%]%reset% Failed to download NVIDIA profile.
+        echo   %red%[ • ]%reset% Failed to download NVIDIA profile.
         goto :nvidiaend2
     )
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
@@ -3917,7 +3919,7 @@
         echo   %verde%[ %green%•%verde% ]%reset% Profile Inspector Tweaks Applied %green%successfully%white%.
         echo --- NVIDIA Profile applied --- >> "%logfile%" 2>&1
     ) else (
-        echo   %red%[ %red%•%red% %red%]%reset% NVIDIA Profile Inspector executable not found.
+        echo   %red%[ • ]%reset% NVIDIA Profile Inspector executable not found.
     )
 
     :nvidiaend2
@@ -4035,7 +4037,7 @@
         chcp 65001 >> "%logfile%" 2>&1
         del /q "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" >nul 2>&1
         if not exist "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" (
-            echo   %red%[ %red%•%red% %red%]%reset% Extraction failed, executable not found.
+            echo   %red%[ • ]%reset% Extraction failed, executable not found.
             goto :nvidiaend
         )
     )
@@ -4198,3 +4200,41 @@
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     start "" "%~f0"
     exit
+
+:: Snap tap
+    :socd
+    cls
+    echo.
+    echo   %red%[ Note ]%white% Experimenal Feature, anti-cheats may detect this.
+    echo            Ghost Snaptap (Input Cleaner) optimize the "A-D" movement in games.
+    echo.
+    echo            Press any key to continue.
+    pause  >nul 2>&1
+    goto socd2
+    :socd2
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Checking %purple%Ghost Snaptap%white% autohotkey...
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    if not exist "C:\%script%\GhostAHK\GhostOPX-SOCD.ahk" (
+    echo   %purple%[ %roxo%•%purple% ]%white% Downloading %purple%Ghost Snaptap%white% autohotkey...
+    title %script% %version% %space% %winver%
+    curl -g -k -L -# -o "C:\%script%\GhostAHK\GhostOPX-SOCD.ahk" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostOPX-SOCD.ahk" >> "%logfile%" 2>&1)
+    if errorlevel 1 (
+        echo   %red%[ • ]%reset% Failed to download Snaptap autohotkey.
+        goto menu
+    )
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    title %script% %version% %space% %winver%
+
+    echo   %purple%[ %roxo%•%purple% ]%white% Starting %purple%Ghost Snaptap%white%...
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    if exist "C:\%script%\GhostAHK\GhostOPX-SOCD.ahk" (
+        start "" "C:\%script%\GhostAHK\GhostOPX-SOCD.ahk"
+        echo.
+        echo   %purple%[ %roxo%•%purple% ]%white% %purple%Ghost Snaptap%white% autootkey running.
+    ) else (
+        echo   %red%[ • ]%reset% %purple%Ghost Snaptap%white% autohotkey not found!
+    )
+
+    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    echo.

@@ -1,4 +1,5 @@
-I_Icon := A_ScriptDir . "\Icon.ico"
+Menu, Tray, Icon, GhostX-ICON1-denoised-4x.ico
+
 IfExist, %I_Icon%
 {
     Menu, Tray, Icon, %I_Icon%
