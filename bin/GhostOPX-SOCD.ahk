@@ -1,4 +1,4 @@
-IconPath := A_ScriptDir "\..\Images\GhostX-ICON1-denoised-4x.ico"
+IconPath := A_ScriptDir "\..\Images\GhostX-ICON1-denoised-4x.png"
 if FileExist(IconPath)
     Menu, Tray, Icon, %IconPath%
 
