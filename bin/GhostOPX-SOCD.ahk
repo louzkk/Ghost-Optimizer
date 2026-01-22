@@ -4,7 +4,10 @@
 #MaxHotkeysPerInterval 200
 #Persistent
 
-IconPath := A_ScriptDir "\..\Images\GhostX-ICON1-denoised-4x.ico"
+Menu, Tray, Tip, Ghost Optimizer
+Sleep, 50
+
+IconPath := A_ScriptDir "\..\images\GhostX-ICON1-denoised-4x.ico"
 if FileExist(IconPath)
     Menu, Tray, Icon, %IconPath%
 
