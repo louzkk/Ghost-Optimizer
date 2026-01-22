@@ -4220,7 +4220,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Downloading %purple%Ghost Snaptap%white% autohotkey...
     title %script% %version% %space% %winver%
     curl -g -k -L -# -o "C:\%script%\GhostAHK\GhostOPX-SOCD.ahk" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostOPX-SOCD.ahk" >> "%logfile%" 2>&1)
-    curl -g -k -L -# -o "C:\%script%\GhostAHK\GhostOPX-SOCD.ahk" "https://github.com/louzkk/Ghost-Optimizer/raw/main/Images/GhostX-ICON1-denoised-4x.ico" >> "%logfile%" 2>&1)
+    curl -g -k -L -# -o "C:\%script%\Icons\GhostX-ICON1-denoised-4x.ico" "https://github.com/louzkk/Ghost-Optimizer/raw/main/Images/GhostX-ICON1-denoised-4x.ico" >> "%logfile%" 2>&1)
     if errorlevel 1 (
         echo   %red%[ • ]%reset% Fainled to download Snaptap autohotkey.
         timeout /t 3 /nobreak >> "%logfile%" 2>&1
