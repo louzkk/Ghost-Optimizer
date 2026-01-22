@@ -4207,6 +4207,7 @@
     echo.
     echo   %red%[ Note ]%white% Experimenal Feature, anti-cheats may detect this.
     echo            Ghost Snaptap (Input Cleaner) optimize the "A-D" movement in games.
+    echo            Autohotkey 1.0/2.0 required.
     echo.
     echo            Press any key to continue.
     pause  >nul 2>&1
