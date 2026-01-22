@@ -1,11 +1,5 @@
 Menu, Tray, Icon, %A_ScriptDir%\..\Images\GhostX-ICON1-denoised-4x.ico
-
-IfExist, %I_Icon%
-{
-    Menu, Tray, Icon, %I_Icon%
-    Menu, Tray, Tip, Ghost Optimizer | SOCD Cleaner
-}
-return
+Menu, Tray, Tip, Ghost Optimizer | Snaptap
 
 ;;
 
