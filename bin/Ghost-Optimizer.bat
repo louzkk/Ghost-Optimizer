@@ -4242,3 +4242,4 @@
 
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     echo.
+    goto menu

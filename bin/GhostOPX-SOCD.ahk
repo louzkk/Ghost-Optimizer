@@ -1,13 +1,12 @@
-IconPath := A_ScriptDir "\..\images\GhostX-ICON1-denoised-4x.ico"
-if FileExist(IconPath)
-    Menu, Tray, Icon, %IconPath%
-
-;;
-
+#SingleInstance Force
 #InstallKeybdhook
-#SingleInstance
 #UseHook On
 #MaxHotkeysPerInterval 200
+#Persistent
+
+IconPath := A_ScriptDir "\..\Images\GhostX-ICON1-denoised-4x.ico"
+if FileExist(IconPath)
+    Menu, Tray, Icon, %IconPath%
 
 lastHorizontal := ""
 lastVertical := ""
