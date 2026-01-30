@@ -10,7 +10,7 @@ Windows is made to work on any kind of hardware and for any kind of user. This m
 Do not minimize or move the CMD window while Ghost Optimizer is running, as this can cause the script to stop unexpectedly.
 Do not close the CMD window while creating a restore point.
 
-Script not opening?
+## Script not opening?
 - Antivirus issues: Add the script to your antivirus allowed/whitelist.
 - Permissions: Right-click the script and choose Run as Administrator.
 - Terminal run: Open CMD or PowerShell and run the script there to see any error messages.

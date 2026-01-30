@@ -36,7 +36,7 @@
     (for /f %%a in ('echo prompt $E^| cmd') do set "esc=%%a")
 
     :: Variables
-    set "version=4.9.7"
+    set "version=4.9.8"
     set "space= / "
     set "script=Ghost Optimizer"
     set "reboot=Reboot required"
@@ -47,8 +47,9 @@
     title %script% %version%
 
 :: Colors & Gradient
-    set red=[38;2;255;0;0m
     set purple=[38;5;93m
+    set roxo=[38;5;129m
+    set red=[38;2;255;0;0m
     set yellow=[33m
     set orange=[38;5;202m
     set green=[38;2;0;255;0m
@@ -59,7 +60,6 @@
     set reset=[0m
     set white=[0m
     set underline=[4m
-    set roxo=[38;5;129m
     set cinza=[38;5;8m
     set highlight=[97;48;5;93m
 
@@ -182,9 +182,12 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Starting System Restore services...
     sc config srservice start= auto >nul 2>&1
     sc start srservice >nul 2>&1
+    
     echo   %purple%[ %roxo%•%purple% ]%white% Tweaking System Protection...
     reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" /v "SystemRestorePointCreationFrequency" /t REG_DWORD /d 0 /f >nul 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\SystemRestore" /v "DisableSR" /t REG_DWORD /d 0 /f >nul 2>&1
+    vssadmin resize shadowstorage /for=C: /on=C: /maxsize=10% >nul 2>&1
+
     echo   %purple%[ %roxo%•%purple% ]%white% Creating a Restore Point...
     chcp 437 >nul 2>&1
     powershell -ExecutionPolicy Bypass -Command "Checkpoint-Computer -Description '%script% %version% - Restore Point' -RestorePointType 'MODIFY_SETTINGS'" >nul 2>&1
@@ -325,7 +328,7 @@
     )
 
     echo.
-    echo                        %purple%%underline%GPU%reset%%purple%:%reset% %GPUName%        %purple%%underline%CPU%reset%%purple%:%reset% %CPUName%
+    echo                       %purple%%underline%GPU%reset%%purple%:%reset% %GPUName%        %purple%%underline%CPU%reset%%purple%:%reset% %CPUName%
     echo.
 
     set "lineGradient="
@@ -523,17 +526,13 @@
     call:powerplanapply
 
     echo.
-    echo.
     echo   %yellow%[ • ]%reset% Remaining Tweaks: NVIDIA, Cleaner, Health and Debloat 
 
     echo.
     timeout /t 3 /nobreak >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% All Tweaks/Fixes applied %green%successfully%white%.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
-    taskkill /f /im explorer.exe >> "%logfile%" 2>&1
-    start explorer.exe >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
-    timeout /t 1 /nobreak >> "%logfile%" 2>&1
     goto menu
 
     :documentation
@@ -784,10 +783,17 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Bing search disabled.
 
     :: Snap Assist
+    reg add "HKCU\Control Panel\Desktop" /v "WindowArrangementActive" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "EnableSnapBar" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "SnapAssist" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "EnableSnapAssistFlyout" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "EnableSnapAssistFlyoutPreview" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Snap Assist disabled.
+
+    :: Drag Tray
+    reg add "HKLM\SYSTEM\ControlSet001\Control\FeatureManagement\Overrides\14\3895955085" /v "EnabledState" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\ControlSet001\Control\FeatureManagement\Overrides\14\3895955085" /v "EnabledStateOptions" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Drag Tray disabled.
 
     :: Explorer
     reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "AppsUseLightTheme" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -847,8 +853,8 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Tablet Mode disabled.
 
     :: Storage Sense
-    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy" /v 1 /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Storage Sense disabled.
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Storage Sense enabled.
 
     :: Background Apps
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy" /v "LetAppsRunInBackground" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
@@ -894,9 +900,10 @@
     reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableSpotlightCollectionOnDesktop" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsSpotlightFeatures" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableThirdPartySuggestions" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Tooltips ^& Spotlight disabled.
+    echo   %purple%[ %roxo%•%purple% ]%white% Tooltips/Spotlight disabled.
 
     :: Driver Search
+    :: May break Windows Update or Driver Update
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /v "ExcludeWUDriversInQualityUpdate" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\DriverSearching" /v "SearchOrderConfig" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Driver Search disabled.
@@ -904,7 +911,9 @@
     echo.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% General Tweaks applied %green%successfully%white%.
-    timeout /t 2 /nobreak >> "%logfile%" 2>&1
+    timeout /t 3 /nobreak >> "%logfile%" 2>&1
+    taskkill /f /im explorer.exe >> "%logfile%" 2>&1
+    start explorer.exe >> "%logfile%" 2>&1
     title %script% %version% %space% %reboot%
     echo --- Finished General Tweaks --- >> "%logfile%" 2>&1
     if "%mode%"=="menu" goto menu
@@ -1012,7 +1021,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Game Mode enabled.
 
     :: Uncomment this line to keep the Game Bar and Game Capture on.
-    ::goto keepgamebar
+    goto keepgamebar
 
     :: Game Bar & DVR
     reg add "\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR" /v "value" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -1030,7 +1039,7 @@
     reg add "HKCU\System\GameConfigStore" /v "GameDVR_FSEBehaviorMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\System\GameConfigStore" /v "GameDVR_DXGIHonorFSEWindowsCompatible" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     :keepgamebar
-    echo   %purple%[ %roxo%•%purple% ]%white% Game Bar ^& DVR disabled.
+    echo   %purple%[ %roxo%•%purple% ]%white% Game Bar/DVR disabled.
 
     :: Win32PrioritySeparation
     :: You can mannually find the best value for your system: 22 - 26 - 36 - 38 - 40 - 42
@@ -1080,9 +1089,10 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Power Management Optimized.
 
     :: Modern Standby
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "EnergyEstimationEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "EventProcessorEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "PreferExternalManifest" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    :: Comment this lines if Battery/Energy configs dont work
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "EnergyEstimationEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "EventProcessorEnabled" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "PreferExternalManifest" /t REG_DWORD /d 1 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "Attributes" /t REG_DWORD /d 2 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "CsEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "PlatformAoAcOverride" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -1133,6 +1143,11 @@
     chcp 65001 >> "%logfile%" 2>&1    
     echo   %purple%[ %roxo%•%purple% ]%white% MSI ^& MPO Mode enabled.
 
+    :: Spectre & Meltdown
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverride" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverrideMask" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Spectre ^& Meltdown disabled.
+
     :: Virtualization Based Security
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v "EnableVirtualizationBasedSecurity" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v "RequirePlatformSecurityFeatures" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -1143,12 +1158,7 @@
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" /v "Enabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\LSA" /v "LsaCfgFlags" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     bcdedit /set hypervisorlaunch off >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% VBS and Hypervisor disabled.
-
-    :: Spectre & Meltdown
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverride" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverrideMask" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Spectre ^& Meltdown disabled.
+    echo   %purple%[ %roxo%•%purple% ]%white% VBS ^& Hypervisor disabled.
 
     :: CPU & Timer
     bcdedit /set tscsyncpolicy Enhanced >> "%logfile%" 2>&1
@@ -1356,7 +1366,7 @@
     )
     ipconfig /flushdns >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% DNS Servers set to %roxo%Cloudflare%reset%.
+    echo   %purple%[ %roxo%•%purple% ]%white% DNS set to %roxo%Cloudflare%reset%.
 
     :: DNS Cache Tweaks
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "CacheHashTableBucketSize" /t REG_DWORD /d 384 /f >> "%logfile%" 2>&1
@@ -1372,8 +1382,8 @@
 
     :: Firewall Rules
     netsh advfirewall firewall add rule name="Ghost Optimizer LPD TCP" protocol=TCP localport=515 dir=in action=block >> "%logfile%" 2>&1
-    netsh advfirewall firewall add rule name="Ghost Optimizer mDNS UDP IN"  protocol=UDP localport=5353 dir=in  action=block >> "%logfile%" 2>&1
-    netsh advfirewall firewall add rule name="Ghost Optimizer mDNS UDP OUT" protocol=UDP localport=5353 dir=out action=block >> "%logfile%" 2>&1
+    netsh advfirewall firewall add rule name="Ghost Optimizer DNS UDP IN"  protocol=UDP localport=5353 dir=in  action=block >> "%logfile%" 2>&1
+    netsh advfirewall firewall add rule name="Ghost Optimizer DNS UDP OUT" protocol=UDP localport=5353 dir=out action=block >> "%logfile%" 2>&1
     netsh advfirewall firewall add rule name="Ghost Optimizer RDP TCP" protocol=TCP localport=3389 dir=in action=block >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Firewall Rules Applied.
 
@@ -1948,33 +1958,49 @@
     :: Auto Start Apps
     reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "OneDrive" /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% OneDrive disabled.
+
     reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Lghub" /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% LgHub disabled.
+    
     reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "RazerSynapse" /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% RazerSynapse disabled.
+
     reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "iCUE" /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% iCUE disabled
+    echo   %purple%[ %roxo%•%purple% ]%white% iCUE disabled.
+
     reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Redragon" /f >> "%logfile%" 2>&1
     reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "RDCfg" /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Redragon disabled
+    echo   %purple%[ %roxo%•%purple% ]%white% Redragon disabled.
+
     reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Chrome" /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Chrome disabled
+    echo   %purple%[ %roxo%•%purple% ]%white% Chrome disabled.
+
     reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Opera" /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Opera disabled
+    echo   %purple%[ %roxo%•%purple% ]%white% Opera disabled.
+
     reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Opera GX" /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Opera GX disabled
+    echo   %purple%[ %roxo%•%purple% ]%white% Opera GX disabled.
+
     reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Brave" /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Brave disabled
+    echo   %purple%[ %roxo%•%purple% ]%white% Brave disabled.
+
     reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Firefox" /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Firefox disabled
+    echo   %purple%[ %roxo%•%purple% ]%white% Firefox disabled.
+
     reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Spotify" /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Spoify disabled
+    echo   %purple%[ %roxo%•%purple% ]%white% Spotify disabled.
+
     reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "msedge" /f >> "%logfile%" 2>&1
     reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "edge" /f >> "%logfile%" 2>&1
+    reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Edge" /f >> "%logfile%" 2>&1
     reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "MicrosoftEdgeAutoLaunch_1BA94C0BA16E4AD6E747BB43BB8E8E25" /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Microsoft Edge disabled
+    echo   %purple%[ %roxo%•%purple% ]%white% Microsoft Edge disabled.
+
     reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Xbox" /f >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Xbox App disabled
+    echo   %purple%[ %roxo%•%purple% ]%white% Xbox App disabled.
+
+    reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run" /v "SunJavaUpdateSched" /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Java Updater disabled.
 
     :: Advertising
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SoftLandingEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -2121,10 +2147,10 @@
     echo   %purple%[ %roxo%•%purple% ]%white% "Maps" uninstalled.
 
     :: Feedback Hub
-    chcp 437 >> "%logfile%" 2>&1
-    powershell -Command "Get-AppxPackage -allusers *WindowsFeedbackHub* | Remove-AppxPackage" >> "%logfile%" 2>&1
-    chcp 65001 >> "%logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% "Feedback Hub" uninstalled.
+    ::chcp 437 >> "%logfile%" 2>&1
+    ::powershell -Command "Get-AppxPackage -allusers *WindowsFeedbackHub* | Remove-AppxPackage" >> "%logfile%" 2>&1
+    ::chcp 65001 >> "%logfile%" 2>&1
+    ::echo   %purple%[ %roxo%•%purple% ]%white% "Feedback Hub" uninstalled.
 
     :: Communications
     chcp 437 >> "%logfile%" 2>&1
@@ -2434,6 +2460,7 @@
     echo.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     echo --- Applying Latency and Input-Lag Tweaks --- >> "%logfile%" 2>&1
+
     :: All commented lines are unstable or undocumented tweaks.
 
     :: System Responsivness
@@ -2458,7 +2485,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% UI Responsiveness Optimized.
 
     :: Energy Estimation
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "EnergyEstimationEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "EnergyEstimationEnabled" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1 
     echo   %purple%[ %roxo%•%purple% ]%white% Energy Estimation disabled.
 
     :: Kernel Timer Coalescing
@@ -2722,12 +2749,12 @@
         set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
     )
 
-    set "lines[0]=                              ██╗███╗   ██╗████████╗███████╗ ██████╗ ██████╗ ██╗████████╗██╗   ██╗ "
-    set "lines[1]=                              ██║████╗  ██║╚══██╔══╝██╔════╝██╔════╝ ██╔══██╗██║╚══██╔══╝╚██╗ ██╔╝"
-    set "lines[2]=                              ██║██╔██╗ ██║   ██║   █████╗  ██║  ███╗██████╔╝██║   ██║    ╚████╔╝ "
-    set "lines[3]=                              ██║██║╚██╗██║   ██║   ██╔══╝  ██║   ██║██╔══██╗██║   ██║     ╚██╔╝  "
-    set "lines[4]=                              ██║██║ ╚████║   ██║   ███████╗╚██████╔╝██║  ██║██║   ██║      ██║   "
-    set "lines[5]=                              ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝   ╚═╝      ╚═╝   "
+    set "lines[0]=                             ██╗███╗   ██╗████████╗███████╗ ██████╗ ██████╗ ██╗████████╗██╗   ██╗ "
+    set "lines[1]=                             ██║████╗  ██║╚══██╔══╝██╔════╝██╔════╝ ██╔══██╗██║╚══██╔══╝╚██╗ ██╔╝"
+    set "lines[2]=                             ██║██╔██╗ ██║   ██║   █████╗  ██║  ███╗██████╔╝██║   ██║    ╚████╔╝ "
+    set "lines[3]=                             ██║██║╚██╗██║   ██║   ██╔══╝  ██║   ██║██╔══██╗██║   ██║     ╚██╔╝  "
+    set "lines[4]=                             ██║██║ ╚████║   ██║   ███████╗╚██████╔╝██║  ██║██║   ██║      ██║   "
+    set "lines[5]=                             ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝   ╚═╝      ╚═╝   "
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -2741,8 +2768,8 @@
     )
 
     echo.
-    set "lines[0]=                        Performs a scan and repairs corrupted files, system health, updates, and disk errors."
-    set "lines[1]=                                Check full documentation at: https://github.com/louzkk/Ghost-Optimizer"
+    set "lines[0]=                    Performs a scan and repairs corrupted files, system health, updates, and disk errors."
+    set "lines[1]=                            Check full documentation at: https://github.com/louzkk/Ghost-Optimizer"
 
     for /L %%i in (0,1,1) do (
         set "text=!lines[%%i]!"
@@ -2769,9 +2796,9 @@
     echo !lineGradient!!esc![0m
 
     echo.
-    echo                                    %purple%[ %roxo%%underline%S%reset% %purple%] %white%Fast Integrity Fix        %purple%[ %roxo%%underline%F%reset% %purple%] %white%Full Integrity Fix
+    echo                                   %purple%[ %roxo%%underline%S%reset% %purple%] %white%Fast Integrity Fix        %purple%[ %roxo%%underline%F%reset% %purple%] %white%Full Integrity Fix
     echo.                 
-    echo                                    %purple%[ %roxo%%underline%BT%reset% %purple%] %white%Bluetooth Fix            %purple%[ %roxo%%underline%XB%reset% %purple%] %white%Xbox Services Fix
+    echo                                   %purple%[ %roxo%%underline%BT%reset% %purple%] %white%Bluetooth Fix            %purple%[ %roxo%%underline%XB%reset% %purple%] %white%Xbox Services Fix
     echo.
     echo.
     echo                                                    %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
@@ -3308,7 +3335,7 @@
     echo !lineGradient!!esc![0m
 
     echo.
-    echo                       %purple%[ %roxo%%underline%D%reset% %purple%]%white% Disable Unnecessary Services                %purple%[ %roxo%%underline%R%reset% %purple%]%white% Revert Unecessary Services
+    echo                      %purple%[ %roxo%%underline%D%reset% %purple%]%white% Disable Unnecessary Services                %purple%[ %roxo%%underline%R%reset% %purple%]%white% Revert Unecessary Services
     echo.                 
     echo.
     echo                                                     %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
@@ -3399,6 +3426,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Hyper-V host disabled.
 
     :: Delivery Optimization
+    :: Unncomment this may broke Windows Update and Defender Update
     ::reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DODownloadMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     ::reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DownloadMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     ::reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings" /v "DownloadMode" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -3450,6 +3478,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Spooler services disabled.
 
     :: Xbox Services
+    :: Unncomment this may broke login features, Xbox app or gaming features 
     ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\xbgm" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblAuthManager" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblGameSave" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
@@ -3468,6 +3497,14 @@
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Intel(R) TPM Provisioning Service" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\IntelAudioService" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Intel services disabled.
+
+    :: AMD Software
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "EnableUlps" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\AMD External Events Utility" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\amdfendrsr" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AMD Crash User Uplink Service" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AMDRyzenMasterDataService" /v "Start" /t REG_DWORD /d 4 /f >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% AMD services disabled.
 
     echo.
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
@@ -3620,7 +3657,12 @@
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\IntelAudioService" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Intel services enabled.
 
-    :: AMD Software (Soon...)
+    :: AMD Software
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "EnableUlps" /f >> "%logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\AMD External Events Utility" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\amdfendrsr" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AMD Crash User Uplink Service" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AMDRyzenMasterDataService" /v "Start" /t REG_DWORD /d 3 /f >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% AMD services enabled.
 
     echo.
@@ -3695,8 +3737,8 @@
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
     echo !lineGradient!!esc![0m     
 
-    echo.
     echo                        %nvidia%[ %verde%%underline%O%reset% %nvidia%]%white% Apply Optimized Profile                %nvidia%[ %verde%%underline%P%reset% %nvidia%]%white% Apply Performance Profile
+    echo.
     echo.
     echo                                                %nvidia%[ %verde%%underline%PI%reset% %nvidia%]%white% Open Profile Inspector
     echo.
