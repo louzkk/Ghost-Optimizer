@@ -1,4 +1,4 @@
-@echo off
+﻿@echo off
 
 :: Check for Admin
     title Checking for Admin Rights...
@@ -36,7 +36,7 @@
     (for /f %%a in ('echo prompt $E^| cmd') do set "esc=%%a")
 
     :: Variables
-    set "version=4.9.8"
+    set "version=4.9.9"
     set "space= / "
     set "script=Ghost Optimizer"
     set "reboot=Reboot required"
