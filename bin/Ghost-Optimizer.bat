@@ -783,7 +783,8 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Bing search disabled.
 
     :: Snap Assist
-    reg add "HKCU\Control Panel\Desktop" /v "WindowArrangementActive" /t REG_SZ /d 0 /f >> "%logfile%" 2>&1
+    :: Keeping drag to resize
+    reg add "HKCU\Control Panel\Desktop" /v "WindowArrangementActive" /t REG_SZ /d 1 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "EnableSnapBar" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "SnapAssist" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "EnableSnapAssistFlyout" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -1021,7 +1022,7 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Game Mode enabled.
 
     :: Uncomment this line to keep the Game Bar and Game Capture on.
-    goto keepgamebar
+    ::goto keepgamebar
 
     :: Game Bar & DVR
     reg add "\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR" /v "value" /t REG_DWORD /d 0 /f >> "%logfile%" 2>&1
@@ -2212,6 +2213,18 @@
     powershell -Command "Get-AppxPackage -allusers *Microsoft.Todos* | Remove-AppxPackage" >> "%logfile%" 2>&1
     chcp 65001 >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% "To Do" uninstalled.
+
+    :: Power Automate
+    chcp 437 >> "%logfile%" 2>&1
+    powershell -Command "Get-AppxPackage -allusers *Microsoft.PowerAutomateDesktop* | Remove-AppxPackage" >> "%logfile%" 2>&1
+    chcp 65001 >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% "Power Automate" uninstalled.
+
+    :: Remote Desktop
+    chcp 437 >> "%logfile%" 2>&1
+    powershell -Command "Get-AppxPackage -allusers *Microsoft.RemoteDesktop* | Remove-AppxPackage" >> "%logfile%" 2>&1
+    chcp 65001 >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% "Remote Desktop" uninstalled.
 
     :: Widgets
     chcp 437 >> "%logfile%" 2>&1
