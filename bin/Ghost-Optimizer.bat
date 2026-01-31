@@ -4300,7 +4300,6 @@
         echo   %red%[ • ]%reset% %purple%Ghost Snaptap%white% autohotkey not found!
         timeout /t 3 /nobreak >> "%logfile%" 2>&1
     )
-
     timeout /t 2 /nobreak >> "%logfile%" 2>&1
     echo.
     goto menu
