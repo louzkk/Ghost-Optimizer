@@ -1,5 +1,4 @@
 @echo off
-    chcp 65001 >nul 2>&1
 
 :: Check for Admin
     title Checking for Admin Rights...
