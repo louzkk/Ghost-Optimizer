@@ -2226,6 +2226,12 @@
     chcp 65001 >> "%logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% "Remote Desktop" uninstalled.
 
+    :: Clipchamp
+    chcp 437 >> "%logfile%" 2>&1
+    powershell -Command "Get-AppxPackage -allusers *Clipchamp* | Remove-AppxPackage" >> "%logfile%" 2>&1
+    chcp 65001 >> "%logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% "Clipchamp" uninstalled.
+
     :: Widgets
     chcp 437 >> "%logfile%" 2>&1
     powershell -Command "Get-AppxPackage *MicrosoftWindows.WebExperience* | Remove-AppxPackage" >> "%logfile%" 2>&1
