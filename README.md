@@ -34,7 +34,7 @@ Some software and parts of the code were adapted from other developers, with pro
 
 # ❓ How to Use
 ### Manual Install
-1. Go to [Releases](https://github.com/louzkk/Ghost-Optimizer/releases)  
+1. Go to [**Releases**](https://github.com/louzkk/Ghost-Optimizer/releases)  
 2. Download **Ghost Optimizer.bat**  
 3. Run the script as **Administrator**
 
