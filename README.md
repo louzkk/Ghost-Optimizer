@@ -1,7 +1,7 @@
 # 💜 About
 **Ghost Optimizer** – the original project is a lightweight script made to optimize Windows by improving **performance**, **network efficiency**, **latency**, **telemetry reduction** and **privacy**, while **preserving system integrity**.
 
-[![Version](https://img.shields.io/badge/Version-4.9.9.3-indigo)](https://github.com/louzkk/Ghost-Optimizer)
+[![Version](https://img.shields.io/badge/Version-5.0-indigo)](https://github.com/louzkk/Ghost-Optimizer)
 [![Official](https://img.shields.io/badge/Official-indigo)](https://github.com/louzkk/Ghost-Optimizer)
 [![Download](https://img.shields.io/badge/Download-indigo)](https://github.com/louzkk/Ghost-Optimizer/releases)
  
@@ -34,17 +34,18 @@ Some software and parts of the code were adapted from other developers, with pro
 
 # ❓ How to Use
 ### Manual Install
-1. Go to [Releases](https://github.com/louzkk/Ghost-Optimizer/releases) page  
+1. Go to [Releases](https://github.com/louzkk/Ghost-Optimizer/releases)  
 2. Download **Ghost Optimizer.bat**  
-3. Temporarily disable your antivirus
-4. Run the script as **Administrator**
+3. Run the script as **Administrator**
+
 ### Quick Install
-1. Make sure [Git](https://git-scm.com/downloads) is installed
-2. Open **PowerShell** as **Administrator**
-3. **Copy** and **Paste** this command:
+1. Open **PowerShell** as **Administrator**  
+2. **Copy and Paste** this command:
 ```
 PowerShell -ExecutionPolicy Bypass -Command "if (!(Get-Command git -ErrorAction SilentlyContinue)) { Write-Host 'Downloading Git...'; start-process winget -ArgumentList 'install --id Git.Git -e --source winget --silent' -Wait }; Remove-Item '$env:TEMP\Ghost' -Recurse -Force -ErrorAction SilentlyContinue; git clone https://github.com/louzkk/Ghost-Optimizer.git '$env:TEMP\Ghost'; Set-Location '$env:TEMP\Ghost\bin'; chcp 65001 | Out-Null; .\Ghost-Optimizer.bat"
 ```
+
+*Your antivirus may need to be temporarily disabled to avoid issues.*
 
 # 🚨 Disclaimer
 Use this script at your own risk, I take no responsibility for any damage or data loss.   
