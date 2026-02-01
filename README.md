@@ -49,7 +49,7 @@ PowerShell -ExecutionPolicy Bypass -Command "if (!(Get-Command git -ErrorAction 
 
 # 🚨 Disclaimer
 Use this script at your own risk, I take no responsibility for any damage or data loss.   
-If you are unable to run the script or apply the optimizations, please visit the [Help](https://github.com/louzkk/Ghost-Optimizer/blob/main/GUIDE.md#troubleshooting--notes) page.
+If you are unable to run the script or apply the optimizations, visit the [Help](https://github.com/louzkk/Ghost-Optimizer/blob/main/GUIDE.md#troubleshooting--notes) page.
 
 # 📜 License
 This project is released under the [MIT License](LICENSE), allowing open use, modification, and distribution with attribution.  
