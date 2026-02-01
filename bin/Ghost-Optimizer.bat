@@ -36,7 +36,7 @@
     (for /f %%a in ('echo prompt $E^| cmd') do set "esc=%%a")
 
     :: Variables
-    set "version=4.9.9.3"
+    set "version=4.9.9.4"
     set "space= / "
     set "script=Ghost Optimizer"
     set "reboot=Reboot required"
@@ -1433,6 +1433,959 @@
     if "%mode%"=="menu" goto menu
     exit /b
 
+    :: NVIDIA Profile
+    :nvidia
+    cls
+    echo.
+    echo.
+
+    set "W=120"
+    set /a "LAST=W-2"
+    set /a "MID=(W-2)/2"
+
+    for /L %%j in (0,1,!LAST!) do (
+        set /a "colorR=0"
+        set /a "colorG=255 - (105 * %%j / !LAST!)"
+        set /a "colorB=100 + (155 * %%j / !LAST!)"
+        set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
+    )
+
+    set "lines[0]=                                         ███╗   ██╗██╗   ██╗██╗██████╗ ██╗ █████╗ "
+    set "lines[1]=                                         ████╗  ██║██║   ██║██║██╔══██╗██║██╔══██╗"
+    set "lines[2]=                                         ██╔██╗ ██║██║   ██║██║██║  ██║██║███████║"
+    set "lines[3]=                                         ██║╚██╗██║╚██╗ ██╔╝██║██║  ██║██║██╔══██║"
+    set "lines[4]=                                         ██║ ╚████║ ╚████╔╝ ██║██████╔╝██║██║  ██║"
+    set "lines[5]=                                         ╚═╝  ╚═══╝  ╚═══╝  ╚═╝╚═════╝ ╚═╝╚═╝  ╚═╝"
+
+    for /L %%i in (0,1,5) do (
+        set "text=!lines[%%i]!"
+        set "textGradient="
+        for /L %%j in (0,1,!LAST!) do (
+            set "char=!text:~%%j,1!"
+            if "!char!"=="" set "char= "
+            set "textGradient=!textGradient!!esc[%%j]!!char!"
+        )
+        echo !textGradient!!esc![0m
+    )
+
+    echo.
+    set "lines[0]=                  Optimizes NVIDIA drivers to improve performance and latency while disabling telemetry."
+    set "lines[1]=                         Check full documentation at: https://github.com/louzkk/Ghost-Optimizer"
+
+    for /L %%i in (0,1,1) do (
+        set "text=!lines[%%i]!"
+        set "textGradient="
+        for /L %%j in (0,1,129) do (
+            set "char=!text:~%%j,1!"
+            if "!char!"=="" set "char= "
+            set "textGradient=!textGradient!!esc[%%j]!!char!"
+        )
+        echo !textGradient!!esc![0m
+    )
+
+    echo.
+    set "lineGradient="
+    set /a "BeforeSpace=(135 - 121) / 2"
+    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
+    for /L %%j in (0,1,108) do (
+        set /a "colorR=0"
+        set /a "colorG=255 - (105 * %%j / 108)"
+        set /a "colorB=100 + (155 * %%j / 108)"
+        set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
+    )
+
+    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
+    echo !lineGradient!!esc![0m     
+
+    echo                        %nvidia%[ %verde%%underline%O%reset% %nvidia%]%white% Apply Optimized Profile                %nvidia%[ %verde%%underline%P%reset% %nvidia%]%white% Apply Performance Profile
+    echo.
+    echo.
+    echo                                                %nvidia%[ %verde%%underline%PI%reset% %nvidia%]%white% Open Profile Inspector
+    echo.
+    echo.
+    echo                                                    %nvidia%[ %verde%%underline%B%reset% %nvidia%]%white% Back to menu 
+    echo.
+    set /p answer="%reset% >:%roxo%"
+
+    if "%answer%"=="o" call :nvidiaoptimized
+    if "%answer%"=="O" call :nvidiaoptimized
+    if "%answer%"=="p" call :nvidiaperformance
+    if "%answer%"=="P" call :nvidiaperformance
+    if "%answer%"=="pi" call :inspector
+    if "%answer%"=="PI" call :inspector
+    if "%answer%"=="pI" call :inspector
+    if "%answer%"=="Pi" call :inspector
+    if "%answer%"=="b" call :menu
+    if "%answer%"=="B" call :menu
+
+    :: Invalid Input
+    echo.
+    echo.
+    echo %red%                                                     Invalid Input.%reset%
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
+    echo.
+    goto nvidia
+
+    :nvidiaoptimized
+    cls
+    echo.
+    echo   %verde%[ %green%•%verde% ]%reset% Applying %green%NVIDIA Profile Inspector%reset% Tweaks...
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo --- Applying NVIDIA Profile --- >> "%ghost-logfile%" 2>&1
+
+    echo   %verde%[ %green%•%verde% ]%reset% Checking %green%Profile Inspector%reset% executable...
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+
+    if not exist "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" (
+        echo   %verde%[ %green%•%verde% ]%reset% Downloading %green%Profile Inspector%reset% package...
+        curl -g -k -L -# -o "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" "https://github.com/Orbmu2k/nvidiaProfileInspector/releases/download/2.4.0.27/nvidiaProfileInspector.zip" >> "%ghost-logfile%" 2>&1
+        if errorlevel 1 (
+            echo   %red%[ • ]%reset% Failed to download NVIDIA Profile Inspector.
+            goto :nvidiaend1
+        )
+    ) else (
+        echo   %verde%[ %green%•%verde% ]%reset% %green%Profile Inspector%reset% already downloaded.
+        timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    )
+
+    if not exist "C:\%script%\NVIDIA\NvidiaProfileInspector" (
+        echo   %verde%[ %green%•%verde% ]%reset% Extracting %green%Profile Inspector%reset% package...
+        chcp 437 >> "%ghost-logfile%" 2>&1
+        powershell -NoProfile Expand-Archive 'C:\%script%\NVIDIA\nvidiaProfileInspector.zip' -DestinationPath 'C:\%script%\NVIDIA\' >> "%ghost-logfile%" 2>&1
+        chcp 65001 >> "%ghost-logfile%" 2>&1
+        del /q "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" >nul 2>&1
+        if not exist "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" (
+            echo   %red%[ • ]%reset% Extraction failed, executable not found.
+            goto :nvidiaend1
+        )
+    )
+
+    echo   %verde%[ %green%•%verde% ]%reset% Importing %green%GhostX Optimized%reset% profile...
+    curl -g -k -L -# -o "C:\%script%\NVIDIA\GhostX1-NVIDIA.nip" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostX1-NVIDIA.nip" >> "%ghost-logfile%" 2>&1
+    if errorlevel 1 (
+        echo   %red%[ • ]%reset% Failed to download NVIDIA profile.
+        goto :nvidiaend1
+    )
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+
+    echo   %verde%[ %green%•%verde% ]%reset% Applying %green%GhostX Optimized%reset% profile...
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    if exist "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" (
+        start "" /wait "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" "C:\%script%\NVIDIA\GhostX1-NVIDIA.nip" >> "%ghost-logfile%" 2>&1
+        echo.
+        echo   %verde%[ %green%•%verde% ]%reset% Profile Inspector Tweaks Applied %green%successfully%white%.
+        echo --- NVIDIA Profile applied --- >> "%ghost-logfile%" 2>&1
+    ) else (
+        echo   %red%[ • ]%reset% NVIDIA Profile Inspector executable not found.
+    )
+
+    :nvidiaend1
+
+    cls
+    echo.
+    echo   %verde%[ %green%•%verde% ]%reset% Applying %green%NVIDIA%reset% Tweaks... 
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo --- Applying NVIDIA Tweaks --- >> "%ghost-logfile%" 2>&1
+
+    :: Latency Tolerance (from Ancel's Performance Batch)
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "D3PCLatency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "F1TransitionLatency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "LOWLATENCY" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "Node3DLowLatency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "PciLatencyTimerControl" /t REG_DWORD /d 20 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RMDeepL1EntryLatencyUsec" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RmGspcMaxFtuS" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RmGspcMinFtuS" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RmGspcPerioduS" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RMLpwrEiIdleThresholdUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RMLpwrGrIdleThresholdUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RMLpwrGrRgIdleThresholdUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RMLpwrMsIdleThresholdUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "VRDirectFlipDPCDelayUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "VRDirectFlipTimingMarginUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "VRDirectJITFlipMsHybridFlipDelayUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "vrrCursorMarginUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "vrrDeflickerMarginUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "vrrDeflickerMaxUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% Latency Tolerance Optimized.
+
+    :: Power Saving (from Ancel's Performance Batch)
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\Global\NVTweak" /v "DisplayPowerSaving" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% Power Saving disabled.
+
+    :: Driver Telemetry (from Ancel's Performance Batch)
+    reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "NvBackend" /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\NVIDIA Corporation\NvControlPanel2\Client" /v "OptInOrOutPreference" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID66610" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID64640" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID44231" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    schtasks /change /disable /tn "NvTmRep_CrashReport1_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
+    schtasks /change /disable /tn "NvTmRep_CrashReport2_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
+    schtasks /change /disable /tn "NvTmRep_CrashReport3_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
+    schtasks /change /disable /tn "NvTmRep_CrashReport4_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
+    schtasks /change /disable /tn "NvDriverUpdateCheckDaily_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
+    schtasks /change /disable /tn "NVIDIA GeForce Experience SelfUpdate_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
+    schtasks /change /disable /tn "NvTmMon_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% Driver Telemetry disabled.
+
+    :: DirectX Event Tracking (from Ancel's Performance Batch)
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "TrackResetEngine" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% Event Tracking disabled.
+
+    :: Dedicated Video Memory (from Ancel's Performance Batch)
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RmCacheLoc" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% Increased Dedicated VRAM.
+
+    :: Redraw Acceleration (from Ancel's Performance Batch)
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "Acceleration.Level" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% Setting Driver Accelerationss.
+
+    :: Filters (from Ancel's Performance Batch)
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "NVDeviceSupportKFilter" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% Overlay Filter disabled.
+
+    :: Write Combining (from Ancel's Performance Batch)
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "DisableWriteCombining" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% Write Combining disabled.
+
+    :: Contigous Memory Allocation (from Ancel's Performance Batch)
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "PreferSystemMemoryContiguous" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% Forcing Contigous Memory Allocation.
+
+    :: DPC'S (from Ancel's Performance Batch)
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\NVAPI" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\Global\NVTweak" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% Core DPC enabled.
+
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% NVIDIA Tweaks applied %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    title %script% %version% %space% %reboot%
+    echo --- NVIDIA Tweaks applied --- >> "%ghost-logfile%" 2>&1
+    goto nvidia
+
+    :nvidiaperformance
+    cls
+    echo.
+    echo   %verde%[ %green%•%verde% ]%reset% Applying %green%NVIDIA Profile Inspector%reset% Tweaks...
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo --- Applying NVIDIA Profile --- >> "%ghost-logfile%" 2>&1
+
+    echo   %verde%[ %green%•%verde% ]%reset% Checking %green%Profile Inspector%reset% executable...
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+
+    if not exist "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" (
+        echo   %verde%[ %green%•%verde% ]%reset% Downloading %green%Profile Inspector%reset% package...
+        curl -g -k -L -# -o "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" "https://github.com/Orbmu2k/nvidiaProfileInspector/releases/download/2.4.0.27/nvidiaProfileInspector.zip" >> "%ghost-logfile%" 2>&1
+        if errorlevel 1 (
+            echo   %red%[ • ]%reset% Failed to download NVIDIA Profile Inspector.
+            goto :nvidiaend2
+        )
+    ) else (
+        echo   %verde%[ %green%•%verde% ]%reset% %green%Profile Inspector%reset% already downloaded.
+        timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    )
+
+    if not exist "C:\%script%\NVIDIA\NvidiaProfileInspector" (
+        echo   %verde%[ %green%•%verde% ]%reset% Extracting %green%Profile Inspector%reset% package...
+        chcp 437 >> "%ghost-logfile%" 2>&1
+        powershell -NoProfile Expand-Archive 'C:\%script%\NVIDIA\nvidiaProfileInspector.zip' -DestinationPath 'C:\%script%\NVIDIA\' >> "%ghost-logfile%" 2>&1
+        chcp 65001 >> "%ghost-logfile%" 2>&1
+        del /q "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" >nul 2>&1
+        if not exist "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" (
+            echo   %red%[ • ]%reset% Extraction failed, executable not found.
+            goto :nvidiaend2
+        )
+    )
+
+    echo   %verde%[ %green%•%verde% ]%reset% Importing %green%GhostX Performance%reset% profile...
+    curl -g -k -L -# -o "C:\%script%\NVIDIA\GhostX2-NVIDIA.nip" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostX2-NVIDIA.nip" >> "%ghost-logfile%" 2>&1
+    if errorlevel 1 (
+        echo   %red%[ • ]%reset% Failed to download NVIDIA profile.
+        goto :nvidiaend2
+    )
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+
+    echo   %verde%[ %green%•%verde% ]%reset% Applying %green%GhostX Performance%reset% profile...
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    if exist "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" (
+        start "" /wait "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" "C:\%script%\NVIDIA\GhostX2-NVIDIA.nip" >> "%ghost-logfile%" 2>&1
+        echo.
+        echo   %verde%[ %green%•%verde% ]%reset% Profile Inspector Tweaks Applied %green%successfully%white%.
+        echo --- NVIDIA Profile applied --- >> "%ghost-logfile%" 2>&1
+    ) else (
+        echo   %red%[ • ]%reset% NVIDIA Profile Inspector executable not found.
+    )
+
+    :nvidiaend2
+
+    cls
+    echo.
+    echo   %verde%[ %green%•%verde% ]%reset% Applying %green%NVIDIA%reset% Tweaks... 
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo --- Applying NVIDIA Tweaks --- >> "%ghost-logfile%" 2>&1
+
+    :: Latency Tolerance (from Ancel's Performance Batch)
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "D3PCLatency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "F1TransitionLatency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "LOWLATENCY" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "Node3DLowLatency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "PciLatencyTimerControl" /t REG_DWORD /d 20 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RMDeepL1EntryLatencyUsec" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RmGspcMaxFtuS" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RmGspcMinFtuS" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RmGspcPerioduS" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RMLpwrEiIdleThresholdUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RMLpwrGrIdleThresholdUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RMLpwrGrRgIdleThresholdUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RMLpwrMsIdleThresholdUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "VRDirectFlipDPCDelayUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "VRDirectFlipTimingMarginUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "VRDirectJITFlipMsHybridFlipDelayUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "vrrCursorMarginUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "vrrDeflickerMarginUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "vrrDeflickerMaxUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% Latency Tolerance Optimized.
+
+    :: Power Saving (from Ancel's Performance Batch)
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\Global\NVTweak" /v "DisplayPowerSaving" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% Power Saving disabled.
+
+    :: Driver Telemetry (from Ancel's Performance Batch)
+    reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "NvBackend" /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\NVIDIA Corporation\NvControlPanel2\Client" /v "OptInOrOutPreference" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID66610" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID64640" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID44231" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    schtasks /change /disable /tn "NvTmRep_CrashReport1_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
+    schtasks /change /disable /tn "NvTmRep_CrashReport2_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
+    schtasks /change /disable /tn "NvTmRep_CrashReport3_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
+    schtasks /change /disable /tn "NvTmRep_CrashReport4_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
+    schtasks /change /disable /tn "NvDriverUpdateCheckDaily_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
+    schtasks /change /disable /tn "NVIDIA GeForce Experience SelfUpdate_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
+    schtasks /change /disable /tn "NvTmMon_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% Driver Telemetry disabled.
+
+    :: DirectX Event Tracking (from Ancel's Performance Batch)
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "TrackResetEngine" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% Event Tracking disabled.
+
+    :: Dedicated Video Memory (from Ancel's Performance Batch)
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RmCacheLoc" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% Increased Dedicated VRAM.
+
+    :: Redraw Acceleration (from Ancel's Performance Batch)
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "Acceleration.Level" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% Setting Driver Accelerationss.
+
+    :: Filters (from Ancel's Performance Batch)
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "NVDeviceSupportKFilter" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% Overlay Filter disabled.
+
+    :: Write Combining (from Ancel's Performance Batch)
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "DisableWriteCombining" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% Write Combining disabled.
+
+    :: Contigous Memory Allocation (from Ancel's Performance Batch)
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "PreferSystemMemoryContiguous" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% Forcing Contigous Memory Allocation.
+
+    :: DPC'S (from Ancel's Performance Batch)
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\NVAPI" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\Global\NVTweak" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% Core DPC enabled.
+
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% NVIDIA Tweaks applied %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    title %script% %version% %space% %reboot%
+    echo --- NVIDIA Tweaks applied --- >> "%ghost-logfile%" 2>&1
+    goto nvidia
+
+   :inspector
+    cls
+    echo.
+    echo   %verde%[ %green%•%verde% ]%reset% Opening %green%NVIDIA Profile Inspector%reset% Software...
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo --- Opening Profile Inspector --- >> "%ghost-logfile%" 2>&1
+
+    echo   %verde%[ %green%•%verde% ]%reset% Checking %green%Profile Inspector%reset% executable...
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    if not exist "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" (
+        echo   %verde%[ %green%•%verde% ]%reset% Downloading %green%Profile Inspector%reset% executable...
+        curl -g -k -L -# -o "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" "https://github.com/Orbmu2k/nvidiaProfileInspector/releases/download/2.4.0.27/nvidiaProfileInspector.zip" >> "%ghost-logfile%" 2>&1
+    ) else (
+        echo   %verde%[ %green%•%verde% ]%reset% %green%Profile Inspector%reset% already downloaded.
+        timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    )
+
+    if not exist "C:\%script%\NVIDIA\NvidiaProfileInspector" (
+        echo   %verde%[ %green%•%verde% ]%reset% Extracting %green%Profile Inspector%reset% package...
+        chcp 437 >> "%ghost-logfile%" 2>&1
+        powershell -NoProfile Expand-Archive 'C:\%script%\NVIDIA\nvidiaProfileInspector.zip' -DestinationPath 'C:\%script%\NVIDIA\' >> "%ghost-logfile%" 2>&1
+        chcp 65001 >> "%ghost-logfile%" 2>&1
+        del /q "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" >nul 2>&1
+        if not exist "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" (
+            echo   %red%[ • ]%reset% Extraction failed, executable not found.
+            goto :nvidiaend
+        )
+    )
+
+    echo   %verde%[ %green%•%verde% ]%reset% Opening %green%Profile Inspector%reset% software...
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
+    start /wait "" "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" >> "%ghost-logfile%" 2>&1
+
+    echo.
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
+    echo   %verde%[ %green%•%verde% ]%reset% %green%Profile Inspector%reset% Software closed.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    title %script% %version% %space% %reboot%
+    echo --- Closing Profile Inspector --- >> "%ghost-logfile%" 2>&1
+    goto menu
+
+    :: Latency & Input-Lag
+    :latency
+    set mode=menu
+    cls
+    echo.
+    echo.
+    set "W=120"
+    set /a "LAST=W-2"
+    set /a "MID=(W-2)/2"
+
+    for /L %%j in (0,1,!LAST!) do (
+        if %%j LEQ !MID! (
+            set /a "colorR=40 + (88 * %%j / !MID!)"
+        ) else (
+            set /a "colorR=128 - (128 * (%%j-!MID!) / (!LAST!-!MID!))"
+        )
+        set /a "colorG=0", "colorB=255"
+        set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
+    )
+
+    set "lines[0]=                                 ██╗      █████╗ ████████╗███████╗███╗   ██╗ ██████╗██╗   ██╗"
+    set "lines[1]=                                 ██║     ██╔══██╗╚══██╔══╝██╔════╝████╗  ██║██╔════╝╚██╗ ██╔╝"
+    set "lines[2]=                                 ██║     ███████║   ██║   █████╗  ██╔██╗ ██║██║      ╚████╔╝ "
+    set "lines[3]=                                 ██║     ██╔══██║   ██║   ██╔══╝  ██║╚██╗██║██║       ╚██╔╝  "
+    set "lines[4]=                                 ███████╗██║  ██║   ██║   ███████╗██║ ╚████║╚██████╗   ██║   "
+    set "lines[5]=                                 ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝ ╚═════╝   ╚═╝   "
+
+    for /L %%i in (0,1,5) do (
+        set "text=!lines[%%i]!"
+        set "textGradient="
+        for /L %%j in (0,1,!LAST!) do (
+            set "char=!text:~%%j,1!"
+            if "!char!"=="" set "char= "
+            set "textGradient=!textGradient!!esc[%%j]!!char!"
+        )
+        echo !textGradient!!esc![0m
+    )
+
+    echo.
+    set "lines[0]=                         Applies advanced tweaks to minimize system latency and improve responsivness."
+    set "lines[1]=                            Check full documentation at: https://github.com/louzkk/Ghost-Optimizer"
+
+    for /L %%i in (0,1,1) do (
+        set "text=!lines[%%i]!"
+        set "textGradient="
+        for /L %%j in (0,1,129) do (
+            set "char=!text:~%%j,1!"
+            if "!char!"=="" set "char= "
+            set "textGradient=!textGradient!!esc[%%j]!!char!"
+        )
+        echo !textGradient!!esc![0m
+    )
+
+    echo.
+    set "lineGradient="
+    set /a "BeforeSpace=(135 - 121) / 2"
+    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
+    for /L %%j in (0,1,108) do (
+        set /a "colorR=colorBaseR + (variationR * %%j / 108)"
+        set /a "colorG=colorBaseG + (variationG * %%j / 108)"
+        set /a "colorB=colorBaseB + (variationB * %%j / 108)"
+        set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
+    )
+    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
+    echo !lineGradient!!esc![0m
+
+    echo.
+    echo                                           %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply Latency ^& Input-Lag Tweaks
+    echo.                 
+    echo.
+    echo                                                    %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
+    echo.
+    set /p answer="%reset% >:%roxo%"
+
+    if "%answer%"=="a" call :latencyapply
+    if "%answer%"=="r" call :latencyrevert
+    if "%answer%"=="A" call :latencyapply
+    if "%answer%"=="R" call :latencyrevert
+    if "%answer%"=="b" call :menu
+    if "%answer%"=="B" call :menu
+
+    :: Invalid Input
+    echo.
+    echo.
+    echo %red%                                                     Invalid Input.%reset%
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
+    echo.
+    goto latency
+
+    :latencyapply
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Applying %roxo%Latency %white%^& %roxo%Input-Lag%white% Tweaks... 
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo --- Applying Latency and Input-Lag Tweaks --- >> "%ghost-logfile%" 2>&1
+
+    :: All commented lines are unstable or undocumented tweaks.
+
+    :: System Responsivness
+    reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "SystemResponsiveness" /t REG_DWORD /d 10 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "AlwaysOn" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "NoLazyMode" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% System Responsivness Optimized.
+
+    :: Desktop time
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoComplete" /v "Append Completion" /t REG_SZ /d "yes" /f >> "%ghost-logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoComplete" /v "AutoSuggest" /t REG_SZ /d "yes" /f >> "%ghost-logfile%" 2>&1
+    reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "menuShowDelay" /t REG_SZ /d 100 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ExtendedUIHoverTime" /t REG_DWORD /d 20 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKCU\Control Panel\Mouse" /v "MouseHoverTime" /t REG_SZ /d 20 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "MouseHoverTime" /t REG_SZ /d 20 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "LowLevelHooksTimeout" /t REG_SZ /d 300 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "AutoEndTasks" /t REG_SZ /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "WaitToKillAppTimeout" /t REG_SZ /d 3000 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "HungAppTimeout" /t REG_SZ /d 2000 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "ForegroundLockTimeout" /t REG_DWORD /d 50 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control" /v "WaitToKillServiceTimeout" /t REG_SZ /d 3000 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% UI Responsiveness Optimized.
+
+    :: Energy Estimation
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "EnergyEstimationEnabled" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1 
+    echo   %purple%[ %roxo%•%purple% ]%white% Energy Estimation disabled.
+
+    :: Kernel Timer Coalescing
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "CoalescingTimerInterval" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Kernel Coalescing Optimized.
+
+    :: Hardware Scheduling
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "HwSchMode" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Hardware Scheduling disabled.
+
+    :: Overlay Test Mode
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "OverlayTestMode" /t REG_DWORD /d 5 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Overlay Test Mode enabled.
+
+    :: Control Power Latency
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "ExitLatency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "ExitLatencyCheckEnabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "Latency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "LatencyToleranceDefault" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "LatencyToleranceFSVP" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "LatencyTolerancePerfOverride" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "LatencyToleranceScreenOffIR" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "LatencyToleranceVSyncEnabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "RtlCapabilityCheckLatency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% System Latency Optimized.
+
+    :: Graphics Power Latency
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "Latency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultD3TransitionLatencyActivelyUsed" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultD3TransitionLatencyIdleLongTime" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultD3TransitionLatencyIdleNoContext" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultD3TransitionLatencyIdleShortTime" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultD3TransitionLatencyIdleVeryLongTime" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceIdle0" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceIdle1" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceMemory" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceNoContext" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceOther" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceTimerPeriod" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultMemoryRefreshLatencyToleranceActivelyUsed" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultMemoryRefreshLatencyToleranceNoContext" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "MaxIAverageGraphicsLatencyInOneBucket" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "MiracastPerfTrackGraphicsLatency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "TransitionLatency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "FrameLatency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Graphics Latency Optimized.
+
+    :: DXGKrnl/Power Monitor Latency
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\DXGKrnl" /v "MonitorLatencyTolerance" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\DXGKrnl" /v "MonitorRefreshLatencyTolerance" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "MonitorLatencyTolerance" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "MonitorRefreshLatencyTolerance" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultMemoryRefreshLatencyToleranceMonitorOff" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceNoContextMonitorOff" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceIdle1MonitorOff" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceIdle0MonitorOff" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultD3TransitionLatencyIdleMonitorOff" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Monitor Latency Optimized.
+
+    :: Timer Resolution
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "MinTimerResolution" /t REG_DWORD /d 5000 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "ClockTimerResolution" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "TimerResolution" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Timer Resolution Optimized.
+
+    :: Distribute Timers
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "DistributeTimers" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Timer Distribution enabled.
+
+    :: HPET disable
+    bcdedit /deletevalue useplatformclock >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% High Precision Timer tweaked.
+
+    :: DXGKrnl latency
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\DXGKrnl" /v "TdrLevel" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\DXGKrnl" /v "TdrDelay" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\DXGKrnl" /v "TdrDdiDelay" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% DXGKrnl Latency Optimized.
+
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Latency ^& Input-Lag Tweaks applied %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    title %script% %version% %space% %reboot%
+    echo --- Latency and Input-Lag Tweaks Applied --- >> "%ghost-logfile%" 2>&1
+    if "%mode%"=="menu" goto menu
+    exit /b
+
+    :: Mouse & Keyboard
+    :kbm
+    set mode=menu
+    cls
+    echo.
+    echo.
+    set "W=120"
+    set /a "LAST=W-2"
+    set /a "MID=(W-2)/2"
+
+    for /L %%j in (0,1,!LAST!) do (
+        if %%j LEQ !MID! (
+            set /a "colorR=40 + (88 * %%j / !MID!)"
+        ) else (
+            set /a "colorR=128 - (128 * (%%j-!MID!) / (!LAST!-!MID!))"
+        )
+        set /a "colorG=0", "colorB=255"
+        set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
+    )
+
+    set "lines[0]=                                                ██╗  ██╗██████╗ ███╗   ███╗"
+    set "lines[1]=                                                ██║ ██╔╝██╔══██╗████╗ ████║"
+    set "lines[2]=                                                █████╔╝ ██████╔╝██╔████╔██║"
+    set "lines[3]=                                                ██╔═██╗ ██╔══██╗██║╚██╔╝██║"
+    set "lines[4]=                                                ██║  ██╗██████╔╝██║ ╚═╝ ██║"
+    set "lines[5]=                                                ╚═╝  ╚═╝╚═════╝ ╚═╝     ╚═╝"
+
+    for /L %%i in (0,1,5) do (
+        set "text=!lines[%%i]!"
+        set "textGradient="
+        for /L %%j in (0,1,!LAST!) do (
+            set "char=!text:~%%j,1!"
+            if "!char!"=="" set "char= "
+            set "textGradient=!textGradient!!esc[%%j]!!char!"
+        )
+        echo !textGradient!!esc![0m
+    )
+
+    echo.
+    set "lines[0]=                Tweaks mouse and keyboard for minimal input lag, maximum responsiveness, and precise control."
+    set "lines[1]=                         Check full documentation at: https://github.com/louzkk/Ghost-Optimizer"
+
+    for /L %%i in (0,1,1) do (
+        set "text=!lines[%%i]!"
+        set "textGradient="
+        for /L %%j in (0,1,129) do (
+            set "char=!text:~%%j,1!"
+            if "!char!"=="" set "char= "
+            set "textGradient=!textGradient!!esc[%%j]!!char!"
+        )
+        echo !textGradient!!esc![0m
+    )
+
+    echo.
+    set "lineGradient="
+    set /a "BeforeSpace=(135 - 121) / 2"
+    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
+    for /L %%j in (0,1,108) do (
+        set /a "colorR=colorBaseR + (variationR * %%j / 108)"
+        set /a "colorG=colorBaseG + (variationG * %%j / 108)"
+        set /a "colorB=colorBaseB + (variationB * %%j / 108)"
+        set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
+    )
+    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
+    echo !lineGradient!!esc![0m
+
+    echo.
+    echo                                           %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply Mouse ^& Keyboard Tweaks
+    echo.                 
+    echo.
+    echo                                                   %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
+    echo.
+    set /p answer="%reset% >:%roxo%"
+
+    if "%answer%"=="a" call :kbmapply
+    if "%answer%"=="r" call :kbmrevert
+    if "%answer%"=="A" call :kbmapply
+    if "%answer%"=="R" call :kbmrevert
+    if "%answer%"=="b" call :menu
+    if "%answer%"=="B" call :menu
+
+    :: Invalid Input
+    echo.
+    echo.
+    echo %red%                                                     Invalid Input.%reset%
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
+    echo.
+    goto kbm
+
+    :kbmapply
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Applying %roxo%Mouse %white%^& %roxo%Keyboard%white% Tweaks... 
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo --- Applying KBM Tweaks --- >> "%ghost-logfile%" 2>&1
+
+    :: Mouse Precision
+    reg add "HKEY_CURRENT_USER\Control Panel\Mouse" /v "MouseSpeed" /t REG_SZ /d 0 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKEY_CURRENT_USER\Control Panel\Mouse" /v "MouseThreshold1" /t REG_SZ /d 0 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKEY_CURRENT_USER\Control Panel\Mouse" /v "MouseThreshold2" /t REG_SZ /d 0 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Mouse Precision Optimized.
+
+    :: Trackpad Precision
+    reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad" /v "EnablePrecision" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Trackpad Precision Optimized.
+
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
+
+    :: KBM Queue Size
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\mouclass\Parameters" /v "MouseDataQueueSize" /t REG_DWORD /d 32 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\kbdclass\Parameters" /v "KeyboardDataQueueSize" /t REG_DWORD /d 32 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Data Queue Size Optimized.
+
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
+
+    :: Double Click
+    reg add "HKCU\Control Panel\Mouse" /v "DoubleClickSpeed" /t REG_SZ /d 300 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Click Speed Optimized.
+
+    :: Repeat Delay
+    reg add "HKCU\Control Panel\Keyboard" /v "KeyboardDelay" /t REG_SZ /d 1 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Key Delay Optimized.
+
+    :: Repeat Rate
+    reg add "HKCU\Control Panel\Keyboard" /v "KeyboardSpeed" /t REG_SZ /d 31 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Key Speed Optimized.
+
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
+
+    :: Sticky Keys
+    reg add "HKCU\Control Panel\Accessibility\StickyKeys" /v "Flags" /t REG_SZ /d 506 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Sticky Keys disabled.
+
+    :: Filter Keys
+    reg add "HKCU\Control Panel\Accessibility\Keyboard Response" /v "Flags" /t REG_SZ /d 122 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Filter Keys disabled.
+
+    :: Toggle Keys
+    reg add "HKCU\Control Panel\Accessibility\ToggleKeys" /v "Flags" /t REG_SZ /d 58 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Toggle Keys disabled.
+
+    echo.
+    echo   %yellow%[ • ]%reset% Set the highest polling rate value avaliable for your mouse/keyboard.
+
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Mouse ^& Keyboard Tweaks applied %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    title %script% %version% %space% %reboot%
+    echo --- KBM Tweaks Applied --- >> "%ghost-logfile%" 2>&1
+    if "%mode%"=="menu" goto menu
+    exit /b
+
+    :: Temporary Files
+    :clean
+    cls
+    echo.
+    echo.
+    set "W=120"
+    set /a "LAST=W-2"
+    set /a "MID=(W-2)/2"
+
+    for /L %%j in (0,1,!LAST!) do (
+        if %%j LEQ !MID! (
+            set /a "colorR=40 + (88 * %%j / !MID!)"
+        ) else (
+            set /a "colorR=128 - (128 * (%%j-!MID!) / (!LAST!-!MID!))"
+        )
+        set /a "colorG=0", "colorB=255"
+        set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
+    )
+
+    set "lines[0]=                                        ██████╗██╗     ███████╗ █████╗ ███╗   ██╗ "
+    set "lines[1]=                                       ██╔════╝██║     ██╔════╝██╔══██╗████╗  ██║"
+    set "lines[2]=                                       ██║     ██║     █████╗  ███████║██╔██╗ ██║"
+    set "lines[3]=                                       ██║     ██║     ██╔══╝  ██╔══██║██║╚██╗██║"
+    set "lines[4]=                                       ╚██████╗███████╗███████╗██║  ██║██║ ╚████║"
+    set "lines[5]=                                        ╚═════╝╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝"
+
+    for /L %%i in (0,1,5) do (
+        set "text=!lines[%%i]!"
+        set "textGradient="
+        for /L %%j in (0,1,!LAST!) do (
+            set "char=!text:~%%j,1!"
+            if "!char!"=="" set "char= "
+            set "textGradient=!textGradient!!esc[%%j]!!char!"
+        )
+        echo !textGradient!!esc![0m
+    )
+
+    echo.
+    set "lines[0]=                Cleans temporary files, logs, caches, and unnecessary files to free up space and fix issues."
+    set "lines[1]=                         Check full documentation at: https://github.com/louzkk/Ghost-Optimizer"
+
+    for /L %%i in (0,1,1) do (
+        set "text=!lines[%%i]!"
+        set "textGradient="
+        for /L %%j in (0,1,129) do (
+            set "char=!text:~%%j,1!"
+            if "!char!"=="" set "char= "
+            set "textGradient=!textGradient!!esc[%%j]!!char!"
+        )
+        echo !textGradient!!esc![0m
+    )
+
+    echo.
+    set "lineGradient="
+    set /a "BeforeSpace=(135 - 121) / 2"
+    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
+    for /L %%j in (0,1,108) do (
+        set /a "colorR=colorBaseR + (variationR * %%j / 108)"
+        set /a "colorG=colorBaseG + (variationG * %%j / 108)"
+        set /a "colorB=colorBaseB + (variationB * %%j / 108)"
+        set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
+    )
+    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
+    echo !lineGradient!!esc![0m
+
+    echo.
+    echo                         %purple%[ %roxo%%underline%G%reset% %purple%]%white% Start Ghost Clean-up                %purple%[ %roxo%%underline%W%reset% %purple%]%white% Start Windows Clean-up
+    echo.
+    echo.
+    echo                                                    %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
+    echo.
+    set /p answer="%reset% >:%roxo%"
+
+    if "%answer%"=="g" call :ghostclean
+    if "%answer%"=="G" call :ghostclean
+    if "%answer%"=="w" call :windowsclean
+    if "%answer%"=="W" call :windowsclean
+    if "%answer%"=="b" call :menu
+    if "%answer%"=="B" call :menu
+
+    :: Invalid Input
+    echo.
+    echo.
+    echo %red%                                                     Invalid Input.%reset%
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
+    echo.
+    goto clean
+
+    :ghostclean
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Ghost Optimizer%white% Clean... 
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo --- Starting Ghost Optimizer Clean --- >> "%ghost-logfile%" 2>&1
+
+    :: Temporary files
+    rd /s /q "%windir%\Temp" >> "%ghost-logfile%" 2>&1
+    md "%windir%\Temp" >> "%ghost-logfile%" 2>&1
+    rd /s /q "%LocalAppData%\Temp" >> "%ghost-logfile%" 2>&1
+    md "%LocalAppData%\Temp" >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Temporary files cleaned.
+
+    :: Prefetch
+    rd /s /q "%windir%\Prefetch" >> "%ghost-logfile%" 2>&1
+    md "%windir%\Prefetch" >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Prefetch files cleaned.
+
+    :: Recycle Bin
+    rd /s /q "%systemdrive%\$Recycle.Bin" >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Recycle Bin cleaned.
+
+    :: Thumbcache
+    del /f /q "%LocalAppData%\Microsoft\Windows\Explorer\thumbcache_*.db" >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Thumbnail cache cleaned.
+
+    :: System logs
+    echo. > "%SystemRoot%\Logs\CBS\CBS.log" >> "%ghost-logfile%" 2>&1
+    echo. > "%SystemRoot%\Logs\DISM\DISM.log" >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% System logs cleared.
+
+    :: Clean Ghost Optimizer Logs
+    if exist "C:\Ghost Optimizer\Logs" (
+        del /f /q "C:\Ghost Optimizer\Logs\*.*" >> "%ghost-logfile%" 2>&1
+        echo   %purple%[ %roxo%•%purple% ]%white% Ghost logs cleared.
+    ) else (
+        echo   %purple%[ %roxo%•%purple% ]%white% Logs folder not found.
+    )
+
+    :: Clean Ghost Optimizer Cache
+    if exist "C:\Ghost Optimizer" (
+        del /f /q "C:\Ghost Optimizer\*.*" >> "%ghost-logfile%" 2>&1
+        echo   %purple%[ %roxo%•%purple% ]%white% Ghost cache cleared.
+    ) else (
+        echo   %purple%[ %roxo%•%purple% ]%white% Cache folder not found.
+    )
+
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% System cleaned %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    title %script% %version% %space% %reboot%
+
+    echo --- Finished Ghost Optimizer Clean --- >> "%ghost-logfile%" 2>&1
+    goto clean
+
+    :windowsclean
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Windows%white% Clean... 
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo --- Starting Windows Clean --- >> "%ghost-logfile%" 2>&1
+
+    echo   %purple%[ %roxo%•%purple% ]%white% Click on Temporary Files.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    start ms-settings:storagesense >> "%ghost-logfile%" 2>&1
+
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% System cleaned %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    title %script% %version% %space% %reboot%
+    echo --- Finished Windows Clean --- >> "%ghost-logfile%" 2>&1
+    goto menu
+
 :: Telemetry & OOSU10
     :telemetry
     set mode=menu
@@ -1716,8 +2669,8 @@
     echo --- Closing OOSU10 --- >> "%ghost-logfile%" 2>&1
     goto menu
 
-:: Mouse & Keyboard
-    :kbm
+    :: Unecessary Services
+    :services
     set mode=menu
     cls
     echo.
@@ -1736,12 +2689,12 @@
         set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
     )
 
-    set "lines[0]=                                                ██╗  ██╗██████╗ ███╗   ███╗"
-    set "lines[1]=                                                ██║ ██╔╝██╔══██╗████╗ ████║"
-    set "lines[2]=                                                █████╔╝ ██████╔╝██╔████╔██║"
-    set "lines[3]=                                                ██╔═██╗ ██╔══██╗██║╚██╔╝██║"
-    set "lines[4]=                                                ██║  ██╗██████╔╝██║ ╚═╝ ██║"
-    set "lines[5]=                                                ╚═╝  ╚═╝╚═════╝ ╚═╝     ╚═╝"
+    set "lines[0]=                                ███████╗███████╗██████╗ ██╗   ██╗██╗ ██████╗███████╗███████╗ "
+    set "lines[1]=                                ██╔════╝██╔════╝██╔══██╗██║   ██║██║██╔════╝██╔════╝██╔════╝"
+    set "lines[2]=                                ███████╗█████╗  ██████╔╝██║   ██║██║██║     █████╗  ███████╗"
+    set "lines[3]=                                ╚════██║██╔══╝  ██╔══██╗╚██╗ ██╔╝██║██║     ██╔══╝  ╚════██║"
+    set "lines[4]=                                ███████║███████╗██║  ██║ ╚████╔╝ ██║╚██████╗███████╗███████║"
+    set "lines[5]=                                ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝ ╚═════╝╚══════╝╚══════╝"
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -1755,7 +2708,7 @@
     )
 
     echo.
-    set "lines[0]=                Tweaks mouse and keyboard for minimal input lag, maximum responsiveness, and precise control."
+    set "lines[0]=                  Disables unnecessary services to reduce resource usage and improve system performance."
     set "lines[1]=                         Check full documentation at: https://github.com/louzkk/Ghost-Optimizer"
 
     for /L %%i in (0,1,1) do (
@@ -1783,17 +2736,17 @@
     echo !lineGradient!!esc![0m
 
     echo.
-    echo                                           %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply Mouse ^& Keyboard Tweaks
+    echo                      %purple%[ %roxo%%underline%D%reset% %purple%]%white% Disable Unnecessary Services                %purple%[ %roxo%%underline%R%reset% %purple%]%white% Revert Unecessary Services
     echo.                 
     echo.
-    echo                                                   %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
+    echo                                                     %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
     echo.
     set /p answer="%reset% >:%roxo%"
 
-    if "%answer%"=="a" call :kbmapply
-    if "%answer%"=="r" call :kbmrevert
-    if "%answer%"=="A" call :kbmapply
-    if "%answer%"=="R" call :kbmrevert
+    if "%answer%"=="d" call :servicesapply
+    if "%answer%"=="D" call :servicesapply
+    if "%answer%"=="r" call :servicesrevert
+    if "%answer%"=="R" call :servicesrevert
     if "%answer%"=="b" call :menu
     if "%answer%"=="B" call :menu
 
@@ -1803,72 +2756,851 @@
     echo %red%                                                     Invalid Input.%reset%
     timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo.
-    goto kbm
+    goto services
 
-    :kbmapply
+    :servicesapply
     cls
     echo.
-    echo   %purple%[ %roxo%•%purple% ]%white% Applying %roxo%Mouse %white%^& %roxo%Keyboard%white% Tweaks... 
+    echo   %purple%[ %roxo%•%purple% ]%white% Disabling %roxo%Unnecessary Services%white%...
     echo.
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo --- Applying KBM Tweaks --- >> "%ghost-logfile%" 2>&1
+    echo --- Disabling Unnecessary Services --- >> "%ghost-logfile%" 2>&1
 
-    :: Mouse Precision
-    reg add "HKEY_CURRENT_USER\Control Panel\Mouse" /v "MouseSpeed" /t REG_SZ /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_CURRENT_USER\Control Panel\Mouse" /v "MouseThreshold1" /t REG_SZ /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_CURRENT_USER\Control Panel\Mouse" /v "MouseThreshold2" /t REG_SZ /d 0 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Mouse Precision Optimized.
+    :: SysMain/Superfetch
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SysMain" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% SysMain disabled.
 
-    :: Trackpad Precision
-    reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad" /v "EnablePrecision" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Trackpad Precision Optimized.
+    :: Sensor/Location
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SensorDataService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SensrSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SensorService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\shpamsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\lfsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\lfsvc\Service\Configuration" /v "Status" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Sensor services disabled.
 
-    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
+    :: Tablet
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TabletInputService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TabletInputService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TouchKeyboardAndHandwritingPanelService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Tablet Input disabled.
 
-    :: KBM Queue Size
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\mouclass\Parameters" /v "MouseDataQueueSize" /t REG_DWORD /d 32 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\kbdclass\Parameters" /v "KeyboardDataQueueSize" /t REG_DWORD /d 32 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Data Queue Size Optimized.
+    :: Cross Device
+    reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\default\Connectivity\DisableCrossDeviceResume" /v "value" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\CrossDeviceResume\Configuration" /v "IsResumeAllowed" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Cross Device disabled.
 
-    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
+    :: Messages
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\MessagingService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Messages disabled.
 
-    :: Double Click
-    reg add "HKCU\Control Panel\Mouse" /v "DoubleClickSpeed" /t REG_SZ /d 300 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Click Speed Optimized.
+    :: Cortana
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowCortana" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowCloudSearch" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowCortanaAboveLock" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowSearchToUseLocation" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchUseWeb" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchUseWebOverMeteredConnections" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "DisableWebSearch" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Cortana disabled.
 
-    :: Repeat Delay
-    reg add "HKCU\Control Panel\Keyboard" /v "KeyboardDelay" /t REG_SZ /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Key Delay Optimized.
+    :: Phone Services
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TapiSrv" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\PhoneSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Phone Services disabled.
 
-    :: Repeat Rate
-    reg add "HKCU\Control Panel\Keyboard" /v "KeyboardSpeed" /t REG_SZ /d 31 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Key Speed Optimized.
+    :: Parental Control
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WpcMonSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SEMgrSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SharedRealitySvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Parental Control disabled.
 
-    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
+    :: Retail Demo Service
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\RetailDemo" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Retail Demo Service disabled.
 
-    :: Sticky Keys
-    reg add "HKCU\Control Panel\Accessibility\StickyKeys" /v "Flags" /t REG_SZ /d 506 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Sticky Keys disabled.
+    :: Hyper-V Host Service
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\HvHost" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\HvHost" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\vmsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\vmcompute" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Hyper-V host disabled.
 
-    :: Filter Keys
-    reg add "HKCU\Control Panel\Accessibility\Keyboard Response" /v "Flags" /t REG_SZ /d 122 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Filter Keys disabled.
+    :: Delivery Optimization
+    :: Unncomment this may broke Windows Update and Defender Update
+    ::reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DODownloadMode" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DownloadMode" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings" /v "DownloadMode" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\DoSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\PNRPsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\p2psvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\p2pimsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Delivery Optimization disabled.
 
-    :: Toggle Keys
-    reg add "HKCU\Control Panel\Accessibility\ToggleKeys" /v "Flags" /t REG_SZ /d 58 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Toggle Keys disabled.
+    :: Sharing
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Netlogon" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\CscService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\svsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TrkWks" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\CDPSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\CDPUserSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% File Sharing disabled.
 
-    echo.
-    echo   %yellow%[ • ]%reset% Set the highest polling rate value avaliable for your mouse/keyboard.
+    :: Mixed Reality Portal
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\HolographicShell" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\FrameServerMonitor" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\perceptionsimulation" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\FrameServer" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Mixed Reality disabled.
+
+    :: OneSync
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\OneSyncSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Microsoft OneSync disabled.
+
+    :: Wallet
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WalletService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Wallet disabled.
+
+    :: Maps Broker
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\MapsBroker" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Maps Broker disabled.
+
+    :: Search Index
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SearchIndexer" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SearchFilterHost" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SearchProtocolHost" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WSearch" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Search Index disabled.
+
+    :: Print Spooler / Fax
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Spooler" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Fax" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Spooler services disabled.
+
+    :: Xbox Services
+    :: Unncomment this may broke login features, Xbox app or gaming features 
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\xbgm" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblAuthManager" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblGameSave" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxGipSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxNetApiSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Xbox services disabled.
+
+    :: Intel Software
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\cplspcon" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\cphs" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\jhi_service" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\esifsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\igccservice" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WMIRegistrationService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\RstMwService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Intel(R) TPM Provisioning Service" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\IntelAudioService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Intel services disabled.
+
+    :: AMD Software
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "EnableUlps" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\AMD External Events Utility" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\amdfendrsr" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AMD Crash User Uplink Service" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AMDRyzenMasterDataService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% AMD services disabled.
 
     echo.
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Mouse ^& Keyboard Tweaks applied %green%successfully%white%.
+    echo   %purple%[ %roxo%•%purple% ]%white% Unnecessary Services disabled %green%successfully%white%.
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title %script% %version% %space% %reboot%
-    echo --- KBM Tweaks Applied --- >> "%ghost-logfile%" 2>&1
+    echo --- Unnecessary Services Disabled --- >> "%ghost-logfile%" 2>&1
     if "%mode%"=="menu" goto menu
     exit /b
+
+    :servicesrevert
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Reverting %roxo%Unnecessary Services%white%...
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo --- Disabling Unnecessary Services --- >> "%ghost-logfile%" 2>&1
+
+    :: Telephony API
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TapiSrv" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\PhoneSvc" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Phone Services enabled.
+
+    :: Parental Control
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WpcMonSvc" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SEMgrSvc" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SharedRealitySvc" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Parental Control enabled.
+
+    :: P2P
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\PNRPsvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\p2psvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\p2pimsvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Peer-to-Peer enabled.
+
+    :: Sharing
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Netlogon" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\CscService" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\svsvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TrkWks" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\CDPSvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% File Sharing enabled.
+
+    :: Sensor / Location
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SensorDataService" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SensrSvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SensorService" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\shpamsvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\lfsvc" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\lfsvc\Service\Configuration" /v "Status" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Sensor services enabled.
+
+    :: Mixed Reality Portal
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\perceptionsimulation" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\FrameServer" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Mixed Reality enabled.
+
+    :: OneSync
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\OneSyncSvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Microsoft OneSync enabled.
+
+    :: DVRU
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WMPNetworkSvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BcastDVRUserService" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Broadcast enabled.
+
+    :: Edge
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\edgeupdatem" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\edgeupdate" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\MicrosoftEdgeElevationService" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Edge Update enabled.
+
+    :: Cross Device
+    reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\default\Connectivity\DisableCrossDeviceResume" /v "value" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\CrossDeviceResume\Configuration" /v "IsResumeAllowed" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Cross Device Resume enabled.
+
+    :: Tablet
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TabletInputService" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TouchKeyboardAndHandwritingPanelService" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Tablet Input enabled.
+
+    :: Themes
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Themes" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Themes enabled.
+
+    :: Readiness
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AppReadiness" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\OSRSS" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Readiness enabled.
+
+    :: Messages
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\MessagingService" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Messages enabled.
+
+    :: Cortana
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowCortana" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowCloudSearch" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowCortanaAboveLock" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowSearchToUseLocation" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchUseWeb" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchUseWebOverMeteredConnections" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "DisableWebSearch" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Cortana enabled.
+
+    :: Print Spooler / Fax
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Spooler" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Fax" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Spooler/Fax services enabled.
+
+    :: Maps Broker
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\MapsBroker" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Maps Broker enabled.
+
+    :: Search Index
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WSearch" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Search Index enabled.
+
+    :: Remote Registry
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\RemoteRegistry" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Remote Registry enabled.
+
+    :: Insider
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\wisvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Windows Insider enabled.
+
+    :: Wallet
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WalletService" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Wallet enabled.
+
+    :: Xbox Services
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\xbgm" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblAuthManager" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblGameSave" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxGipSvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxNetApiSvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Xbox services enabled.
+
+    :: Intel Software
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\cplspcon" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\cphs" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\jhi_service" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\esifsvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\igccservice" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\igfxCUIService2.0.0.0" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WMIRegistrationService" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\RstMwService" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Intel(R) TPM Provisioning Service" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\IntelAudioService" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Intel services enabled.
+
+    :: AMD Software
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "EnableUlps" /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\AMD External Events Utility" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\amdfendrsr" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AMD Crash User Uplink Service" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AMDRyzenMasterDataService" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% AMD services enabled.
+
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Services restored %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    title %script% %version% %space% %reboot%
+    echo --- Services Re-enabled --- >> "%ghost-logfile%" 2>&1
+    goto menu
+
+    :: GhostX Powerplan
+    :powerplan
+    set mode=menu
+    cls
+    echo.
+    echo.
+    set "W=120"
+    set /a "LAST=W-2"
+    set /a "MID=(W-2)/2"
+
+    for /L %%j in (0,1,!LAST!) do (
+        if %%j LEQ !MID! (
+            set /a "colorR=40 + (88 * %%j / !MID!)"
+        ) else (
+            set /a "colorR=128 - (128 * (%%j-!MID!) / (!LAST!-!MID!))"
+        )
+        set /a "colorG=0", "colorB=255"
+        set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
+    )
+
+    set "lines[0]=                      ██████╗  ██████╗ ██╗    ██╗███████╗██████╗     ██████╗ ██╗      █████╗ ███╗   ██╗"
+    set "lines[1]=                      ██╔══██╗██╔═══██╗██║    ██║██╔════╝██╔══██╗    ██╔══██╗██║     ██╔══██╗████╗  ██║"
+    set "lines[2]=                      ██████╔╝██║   ██║██║ █╗ ██║█████╗  ██████╔╝    ██████╔╝██║     ███████║██╔██╗ ██║"
+    set "lines[3]=                      ██╔═══╝ ██║   ██║██║███╗██║██╔══╝  ██╔══██╗    ██╔═══╝ ██║     ██╔══██║██║╚██╗██║"
+    set "lines[4]=                      ██║     ╚██████╔╝╚███╔███╔╝███████╗██║  ██║    ██║     ███████╗██║  ██║██║ ╚████║"
+    set "lines[5]=                      ╚═╝      ╚═════╝  ╚══╝╚══╝ ╚══════╝╚═╝  ╚═╝    ╚═╝     ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝"
+
+    for /L %%i in (0,1,5) do (
+        set "text=!lines[%%i]!"
+        set "textGradient="
+        for /L %%j in (0,1,!LAST!) do (
+            set "char=!text:~%%j,1!"
+            if "!char!"=="" set "char= "
+            set "textGradient=!textGradient!!esc[%%j]!!char!"
+        )
+        echo !textGradient!!esc![0m
+    )
+
+    echo.
+    set "lines[0]=                       Applies a custom Power Plan focused on highest performance and lowest latency."
+    set "lines[1]=                          Check full documentation at: https://github.com/louzkk/Ghost-Optimizer"
+
+    for /L %%i in (0,1,1) do (
+        set "text=!lines[%%i]!"
+        set "textGradient="
+        for /L %%j in (0,1,129) do (
+            set "char=!text:~%%j,1!"
+            if "!char!"=="" set "char= "
+            set "textGradient=!textGradient!!esc[%%j]!!char!"
+        )
+        echo !textGradient!!esc![0m
+    )
+
+    echo.
+    set "lineGradient="
+    set /a "BeforeSpace=(135 - 121) / 2"
+    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
+    for /L %%j in (0,1,108) do (
+        set /a "colorR=colorBaseR + (variationR * %%j / 108)"
+        set /a "colorG=colorBaseG + (variationG * %%j / 108)"
+        set /a "colorB=colorBaseB + (variationB * %%j / 108)"
+        set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
+    )
+    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
+    echo !lineGradient!!esc![0m
+
+    echo.
+    echo                        %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply GhostX Power Plan                %purple%[ %roxo%%underline%R%reset% %purple%]%white% Apply Balanced Power Plan
+    echo.                 
+    echo.
+    echo                                                    %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
+    echo.
+    set /p answer="%reset% >:%roxo%"
+
+    if "%answer%"=="a" call :powerplanapply
+    if "%answer%"=="A" call :powerplanapply
+    if "%answer%"=="r" call :powerplanapply2
+    if "%answer%"=="R" call :powerplanapply2
+    if "%answer%"=="b" call :menu
+    if "%answer%"=="B" call :menu
+
+    :: Invalid Input
+    echo.
+    echo.
+    echo %red%                                                     Invalid Input.%reset%
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
+    echo.
+    goto powerplan
+
+    :powerplanapply
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Applying %highlight%GhostX%reset% Power Plan... 
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo --- Applying Power Plan --- >> "%ghost-logfile%" 2>&1
+
+    echo   %purple%[ %roxo%•%purple% ]%white% Checking Github repository...
+
+    timeout /t 2 /nobreak >nul
+
+    echo   %purple%[ %roxo%•%purple% ]%white% Downloading %highlight%GhostX%reset% Power Plan...
+    curl -g -k -L -# -o "C:\%script%\GhostX\GhostX-POWER.pow" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostX-POWER.pow" >> "%ghost-logfile%" 2>&1
+    if not exist "C:\%script%\GhostX\GhostX-POWER.pow" (
+        echo   %red%[ %orange%• %red%]%white% Failed to download GhostX power plan.
+        timeout /t 2 >nul
+        goto powerplan
+    )
+
+    timeout /t 2 /nobreak >nul
+
+    echo   %purple%[ %roxo%•%purple% ]%white% Importing %highlight%GhostX%reset% Power Plan...
+
+    powercfg /import "C:\%script%\GhostX\GhostX-POWER.pow" >> "%ghost-logfile%" 2>&1
+    if errorlevel 1 (
+        echo   %red%[ %orange%• %red%]%white% Failed to import %highlight%GhostX%reset% power plan.
+        timeout /t 3 >nul
+        goto powerplan
+    )
+
+    timeout /t 2 /nobreak >nul
+
+    echo   %purple%[ %roxo%•%purple% ]%white% Applying %highlight%GhostX%reset% Power Plan...
+
+    set "GUID="
+    for /f "tokens=2 delims=:()" %%i in ('powercfg /list ^| findstr /i "GhostX"') do (
+        set "GUID=%%i"
+        set "GUID=!GUID: =!"
+    )
+
+    if not defined GUID (
+        echo   %red%[ %orange%• %red%]%white% Could not find %highlight%GhostX%reset% power plan GUID.
+        timeout /t 3 >nul
+        goto powerplan
+    )
+
+    powercfg /setactive !GUID! >> "%ghost-logfile%" 2>&1
+    if errorlevel 1 (
+        echo   %red%[ %orange%• %red%]%white% Failed to set %highlight%GhostX%reset% power plan active.
+        timeout /t 3 >nul
+        goto powerplan
+    )
+
+    chcp 437 >> "%ghost-logfile%" 2>&1
+    powershell (Get-WmiObject -Namespace root/WMI -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1,100)
+    chcp 65001 >> "%ghost-logfile%" 2>&1
+
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% GhostX power plan applied %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    title %script% %version% %space% %reboot%
+    echo --- Power Plan applied --- >> "%ghost-logfile%" 2>&1
+    if "%mode%"=="menu" goto menu
+    exit /b
+
+    :: Integrity & Health
+    :health
+    cls
+    echo.
+    echo.
+    set "W=120"
+    set /a "LAST=W-2"
+    set /a "MID=(W-2)/2"
+
+    for /L %%j in (0,1,!LAST!) do (
+        if %%j LEQ !MID! (
+            set /a "colorR=40 + (88 * %%j / !MID!)"
+        ) else (
+            set /a "colorR=128 - (128 * (%%j-!MID!) / (!LAST!-!MID!))"
+        )
+        set /a "colorG=0", "colorB=255"
+        set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
+    )
+
+    set "lines[0]=                             ██╗███╗   ██╗████████╗███████╗ ██████╗ ██████╗ ██╗████████╗██╗   ██╗ "
+    set "lines[1]=                             ██║████╗  ██║╚══██╔══╝██╔════╝██╔════╝ ██╔══██╗██║╚══██╔══╝╚██╗ ██╔╝"
+    set "lines[2]=                             ██║██╔██╗ ██║   ██║   █████╗  ██║  ███╗██████╔╝██║   ██║    ╚████╔╝ "
+    set "lines[3]=                             ██║██║╚██╗██║   ██║   ██╔══╝  ██║   ██║██╔══██╗██║   ██║     ╚██╔╝  "
+    set "lines[4]=                             ██║██║ ╚████║   ██║   ███████╗╚██████╔╝██║  ██║██║   ██║      ██║   "
+    set "lines[5]=                             ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝   ╚═╝      ╚═╝   "
+
+    for /L %%i in (0,1,5) do (
+        set "text=!lines[%%i]!"
+        set "textGradient="
+        for /L %%j in (0,1,!LAST!) do (
+            set "char=!text:~%%j,1!"
+            if "!char!"=="" set "char= "
+            set "textGradient=!textGradient!!esc[%%j]!!char!"
+        )
+        echo !textGradient!!esc![0m
+    )
+
+    echo.
+    set "lines[0]=                    Performs a scan and repairs corrupted files, system health, updates, and disk errors."
+    set "lines[1]=                            Check full documentation at: https://github.com/louzkk/Ghost-Optimizer"
+
+    for /L %%i in (0,1,1) do (
+        set "text=!lines[%%i]!"
+        set "textGradient="
+        for /L %%j in (0,1,129) do (
+            set "char=!text:~%%j,1!"
+            if "!char!"=="" set "char= "
+            set "textGradient=!textGradient!!esc[%%j]!!char!"
+        )
+        echo !textGradient!!esc![0m
+    )
+
+    echo.
+    set "lineGradient="
+    set /a "BeforeSpace=(135 - 121) / 2"
+    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
+    for /L %%j in (0,1,108) do (
+        set /a "colorR=colorBaseR + (variationR * %%j / 108)"
+        set /a "colorG=colorBaseG + (variationG * %%j / 108)"
+        set /a "colorB=colorBaseB + (variationB * %%j / 108)"
+        set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
+    )
+    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
+    echo !lineGradient!!esc![0m
+
+    echo.
+    echo                                   %purple%[ %roxo%%underline%S%reset% %purple%] %white%Fast Integrity Fix        %purple%[ %roxo%%underline%F%reset% %purple%] %white%Full Integrity Fix
+    echo.                 
+    echo                                   %purple%[ %roxo%%underline%BT%reset% %purple%] %white%Bluetooth Fix            %purple%[ %roxo%%underline%XB%reset% %purple%] %white%Xbox Services Fix
+    echo.
+    echo.
+    echo                                                    %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
+    echo.
+    set /p answer="%reset% >:%roxo%"
+
+    if "%answer%"=="s" call :healthapply1
+    if "%answer%"=="S" call :ealthapply1
+    if "%answer%"=="f" call :healthapply2
+    if "%answer%"=="F" call :healthapply2
+    if "%answer%"=="bt" call :bluetoothfix
+    if "%answer%"=="BT" call :bluetoothfix
+    if "%answer%"=="Bt" call :bluetoothfix
+    if "%answer%"=="bT" call :bluetoothfix
+    if "%answer%"=="XB" call :xboxfix
+    if "%answer%"=="Xb" call :xboxfix
+    if "%answer%"=="xB" call :xboxfix
+    if "%answer%"=="xb" call :xboxfix
+    if "%answer%"=="b" call :menu
+    if "%answer%"=="B" call :menu
+
+    :: Invalid Input
+    echo.
+    echo.
+    echo %red%                                                     Invalid Input.%reset%
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
+    echo.
+    goto health
+
+    :healthapply1
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Fast%white% Integrity ^& Health Fix... 
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo --- Starting Fast Health Fix --- >> "%ghost-logfile%" 2>&1
+
+    :: Checking Image
+    echo   %purple%[ %roxo%•%purple% ]%white% Checking Windows Image Health...
+    DISM /Online /Cleanup-Image /CheckHealth >> "%ghost-logfile%" 2>&1
+
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
+
+    :: Scanning Image
+    echo   %purple%[ %roxo%•%purple% ]%white% Scanning Windows Image Health...
+    DISM /Online /Cleanup-Image /ScanHealth >> "%ghost-logfile%" 2>&1
+
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
+
+    :: Restoring Image
+    echo   %purple%[ %roxo%•%purple% ]%white% Restoring Windows Image Health...
+    DISM /Online /Cleanup-Image /RestoreHealth >> "%ghost-logfile%" 2>&1
+
+    echo   %purple%[ %roxo%•%purple% ]%white% Windows Image Health restored.
+    echo.
+
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
+
+    :: SFC SCANNOW
+    echo   %purple%[ %roxo%•%purple% ]%white% Repairing System Integrity...
+    sfc /scannow >> "%ghost-logfile%" 2>&1
+
+    echo   %purple%[ %roxo%•%purple% ]%white% System Integrity repaired.
+    echo.
+
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
+
+    :: Reapring Microsoft Store Cache
+    echo   %purple%[ %roxo%•%purple% ]%white% Repairing Microsoft Store...
+    wsreset.exe >> "%ghost-logfile%" 2>&1
+
+    echo   %purple%[ %roxo%•%purple% ]%white% Microsoft Store repaired.
+    echo.
+
+    :: Saving Registry Integrity into Log
+    reg query HKLM\SOFTWARE >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Registry Integrity saved to Log.
+
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Integrity ^& Health fixes applied %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    title %script% %version% %space% %reboot%
+
+    echo --- Finished Fast Health Fix --- >> "%ghost-logfile%" 2>&1
+    goto menu
+
+    :healthapply2
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Full%white% Integrity ^& Health Fix (it may take a while)... 
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo --- Starting Full Health Fix --- >> "%ghost-logfile%" 2>&1
+
+    :: Checking Image
+    echo   %purple%[ %roxo%•%purple% ]%white% Checking Windows Image Health...
+    DISM /Online /Cleanup-Image /CheckHealth >> "%ghost-logfile%" 2>&1
+
+    :: Scanning Image
+    echo   %purple%[ %roxo%•%purple% ]%white% Scanning Windows Image Health...
+    DISM /Online /Cleanup-Image /ScanHealth >> "%ghost-logfile%" 2>&1
+
+    :: Restoring Image
+    echo   %purple%[ %roxo%•%purple% ]%white% Restoring Windows Image Health...
+    DISM /Online /Cleanup-Image /RestoreHealth >> "%ghost-logfile%" 2>&1
+
+    echo   %purple%[ %roxo%•%purple% ]%white% Windows Image Health restored.
+    echo.
+
+    :: Restoring Components
+    echo   %purple%[ %roxo%•%purple% ]%white% Analyzing Drivers Base...
+    DISM /Online /Cleanup-Image /AnalyzeComponentStore >> "%ghost-logfile%" 2>&1
+
+    :: Checking Components
+    echo   %purple%[ %roxo%•%purple% ]%white% Repairing Windows Drivers...
+    DISM /Online /Cleanup-Image /StartComponentCleanup /ResetBase >> "%ghost-logfile%" 2>&1
+
+    echo   %purple%[ %roxo%•%purple% ]%white% Windows Drivers restored.
+    echo.
+
+    :: SFC SCANNOW
+    echo   %purple%[ %roxo%•%purple% ]%white% Repairing System Integrity...
+    sfc /scannow >> "%ghost-logfile%" 2>&1
+
+    echo   %purple%[ %roxo%•%purple% ]%white% System Integrity repaired.
+    echo.
+
+    :: Reapring Microsoft Store Cache
+    echo   %purple%[ %roxo%•%purple% ]%white% Repairing Microsoft Store...
+    wsreset.exe >> "%ghost-logfile%" 2>&1
+
+    echo   %purple%[ %roxo%•%purple% ]%white% Microsoft Store repaired.
+    echo.
+
+    :: Stopping Windows Update
+    echo   %purple%[ %roxo%•%purple% ]%white% Stopping Windows Update services...
+    net stop wuauserv >> "%ghost-logfile%" 2>&1
+    net stop cryptSvc >> "%ghost-logfile%" 2>&1
+    net stop bits >> "%ghost-logfile%" 2>&1
+    net stop msiserver >> "%ghost-logfile%" 2>&1
+    net stop appidsvc
+
+    :: Repairing Windows Update
+    echo   %purple%[ %roxo%•%purple% ]%white% Repairing Windows Update...
+    ren C:\Windows\SoftwareDistribution SoftwareDistribution.old >> "%ghost-logfile%" 2>&1
+    ren C:\Windows\System32\catroot2 catroot2.old >> "%ghost-logfile%" 2>&1
+    del /q /f /s %windir%\SoftwareDistribution\Download\* >> "%ghost-logfile%" 2>&1
+
+    :: Cleaning CBS Logs Cache
+    echo   %purple%[ %roxo%•%purple% ]%white% Cleaning CBS ^& DISM cache...
+    del /f /q %windir%\Logs\CBS\CBS.log >> "%ghost-logfile%" 2>&1
+    del /f /q %windir%\Logs\DISM\dism.log >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% CBS ^& DISM cache cleaned.
+
+    :: Reverting Pending Actions
+    echo   %purple%[ %roxo%•%purple% ]%white% Reverting Pending Actions...
+    dism /online /cleanup-image /revertpendingactions >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Pending Actions reverted.
+
+    :: Files System Boot Check
+    echo   %purple%[ %roxo%•%purple% ]%white% Scheduling system file repair...
+    echo Y|chkdsk C: /f /r >> "%ghost-logfile%" 2>&1
+
+    echo.
+    echo   %yellow%[ • ]%reset% Files will be repaired in the next boot.
+
+    :: Saving Registry Integrity into Log
+    reg query HKLM\SOFTWARE >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Registry Integrity saved to Log.
+
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Integrity ^& Health fixes applied %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    title %script% %version% %space% %reboot%
+    echo --- Finished Full Health Fix --- >> "%ghost-logfile%" 2>&1
+    goto menu
+
+    :bluetoothfix
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Bluetooth%white% Fix... 
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo --- Starting Bluetooth Fix --- >> "%ghost-logfile%" 2>&1
+
+    :: Restart BT Drivers
+    chcp 437 >> "%ghost-logfile%" 2>&1
+    powershell -Command "Get-Service *bth* | Restart-Service -Force -ErrorAction SilentlyContinue" >> "%ghost-logfile%" 2>&1
+    powershell -Command "Get-PnpDevice -Class Bluetooth | Disable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue" >> "%ghost-logfile%" 2>&1
+    powershell -Command "Start-Sleep -Seconds 1" >> "%ghost-logfile%" 2>&1
+    powershell -Command "Get-PnpDevice -Class Bluetooth | Enable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue" >> "%ghost-logfile%" 2>&1
+    powershell -Command "pnputil /scan-devices" >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Bluetooth Drivers restored.
+
+    :: BT Registry
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters" /v "EnableOffload" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters" /v "EnableLEEncryption" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters" /v "EnableRadioOffload" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BTHUSB" /v "EnableSelectiveSuspend" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\bthserv" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BthHFSrv" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BthAvctpSvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Bluetooth features restored.
+
+    :: Radio Services
+    chcp 437 >> "%ghost-logfile%" 2>&1
+    powershell -Command "(Get-Service bthserv).StartType='Automatic'" >> "%ghost-logfile%" 2>&1
+    powershell -Command "Start-Service bthserv -ErrorAction SilentlyContinue" >> "%ghost-logfile%" 2>&1
+    powershell -Command "Start-Service DeviceAssociationService -ErrorAction SilentlyContinue" >> "%ghost-logfile%" 2>&1
+    powershell -Command "Start-Service DeviceAssociationBrokerSvc -ErrorAction SilentlyContinue" >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Radio Services restored.
+
+    :: BT Services
+    sc config bthserv start= auto >> "%ghost-logfile%" 2>&1
+    sc config BthHFSrv start= demand >> "%ghost-logfile%" 2>&1
+    sc config BthAvctpSvc start= demand >> "%ghost-logfile%" 2>&1
+    sc config bthmodem start= demand >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Bluetooth Services restored.
+
+    :: Broker Service
+    net stop DeviceAssociationService /y >> "%ghost-logfile%" 2>&1
+    net start DeviceAssociationService >> "%ghost-logfile%" 2>&1
+    net stop DeviceAssociationBrokerSvc /y >> "%ghost-logfile%" 2>&1
+    net start DeviceAssociationBrokerSvc >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Broker Service restored.
+
+    :: Enable BT
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BTHPORT" /v "Start" /t REG_DWORD /d 2 /f
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BTHUSB" /v "Start" /t REG_DWORD /d 3 /f
+    echo   %purple%[ %roxo%•%purple% ]%white% Bluetooth enabled.
+
+    echo.
+    echo   %yellow%[ • ]%reset% If that doesn't solve your problem, try running Full Integrity Fix.
+
+    echo.
+    timeout /t 4 /nobreak >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Bluetooth fixed %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    title %script% %version% %space% %reboot%
+    echo --- Finished Bluetooth Fix --- >> "%ghost-logfile%" 2>&1
+    goto menu
+
+    :xboxfix
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Xbox App/Bar%white% Fix... 
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo --- Starting Xbox Fix --- >> "%ghost-logfile%" 2>&1
+
+    :: Reinstall Xbox App & Identity Provider
+    chcp 437 >> "%ghost-logfile%" 2>&1
+    powershell -Command "Get-AppxPackage Microsoft.XboxApp -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "%ghost-logfile%" 2>&1
+    powershell -Command "Get-AppxPackage Microsoft.Xbox.TCUI -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "%ghost-logfile%" 2>&1
+    powershell -Command "Get-AppxPackage Microsoft.XboxIdentityProvider -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Xbox App restored.
+
+    :: Xbox Services
+    sc config XblAuthManager start= auto >> "%ghost-logfile%" 2>&1
+    sc config XblGameSave start= auto >> "%ghost-logfile%" 2>&1
+    sc config XboxGipSvc start= auto >> "%ghost-logfile%" 2>&1
+    sc config XboxNetApiSvc start= auto >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Xbox Services enabled.
+
+    :: Reinstall Xbox Game Bar
+    chcp 437 >> "%ghost-logfile%" 2>&1
+    powershell -Command "Get-AppxPackage Microsoft.XboxGamingOverlay -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Game Bar restored.
+
+    :: Game Bar Registry
+    reg add "HKLM\Software\Policies\Microsoft\Windows\GameDVR" /v "AllowGameDVR" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKCU\System\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR" /v "AllowGameDVR" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameDVR" /v "AllowGameDVR" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR" /v value /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "AudioCaptureEnabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Gaming.GameBar.PresenceServer.Internal.PresenceWriter" /v "ActivationType" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKCU\System\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKCU\System\GameConfigStore" /v "GameDVR_FSEBehaviorMode" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKCU\System\GameConfigStore" /v "GameDVR_DXGIHonorFSEWindowsCompatible" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Game Bar enabled.
+
+    echo.
+    echo   %yellow%[ • ]%reset% If that doesn't solve your problem, try running Full Integrity Fix.
+
+    echo.
+    timeout /t 4 /nobreak >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Xbox App ^& Game Bar fixed %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    title %script% %version% %space% %reboot%
+    echo --- Finished Xbox Fix --- >> "%ghost-logfile%" 2>&1
+    goto menu
 
 :: Bloatware Apps
     :debloat
@@ -2436,1738 +4168,6 @@
 
     echo --- Reverted Debloat --- >> "%ghost-logfile%" 2>&1
     goto debloat
-
-:: Latency & Input-Lag
-    :latency
-    set mode=menu
-    cls
-    echo.
-    echo.
-    set "W=120"
-    set /a "LAST=W-2"
-    set /a "MID=(W-2)/2"
-
-    for /L %%j in (0,1,!LAST!) do (
-        if %%j LEQ !MID! (
-            set /a "colorR=40 + (88 * %%j / !MID!)"
-        ) else (
-            set /a "colorR=128 - (128 * (%%j-!MID!) / (!LAST!-!MID!))"
-        )
-        set /a "colorG=0", "colorB=255"
-        set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
-    )
-
-    set "lines[0]=                                 ██╗      █████╗ ████████╗███████╗███╗   ██╗ ██████╗██╗   ██╗"
-    set "lines[1]=                                 ██║     ██╔══██╗╚══██╔══╝██╔════╝████╗  ██║██╔════╝╚██╗ ██╔╝"
-    set "lines[2]=                                 ██║     ███████║   ██║   █████╗  ██╔██╗ ██║██║      ╚████╔╝ "
-    set "lines[3]=                                 ██║     ██╔══██║   ██║   ██╔══╝  ██║╚██╗██║██║       ╚██╔╝  "
-    set "lines[4]=                                 ███████╗██║  ██║   ██║   ███████╗██║ ╚████║╚██████╗   ██║   "
-    set "lines[5]=                                 ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝ ╚═════╝   ╚═╝   "
-
-    for /L %%i in (0,1,5) do (
-        set "text=!lines[%%i]!"
-        set "textGradient="
-        for /L %%j in (0,1,!LAST!) do (
-            set "char=!text:~%%j,1!"
-            if "!char!"=="" set "char= "
-            set "textGradient=!textGradient!!esc[%%j]!!char!"
-        )
-        echo !textGradient!!esc![0m
-    )
-
-    echo.
-    set "lines[0]=                         Applies advanced tweaks to minimize system latency and improve responsivness."
-    set "lines[1]=                            Check full documentation at: https://github.com/louzkk/Ghost-Optimizer"
-
-    for /L %%i in (0,1,1) do (
-        set "text=!lines[%%i]!"
-        set "textGradient="
-        for /L %%j in (0,1,129) do (
-            set "char=!text:~%%j,1!"
-            if "!char!"=="" set "char= "
-            set "textGradient=!textGradient!!esc[%%j]!!char!"
-        )
-        echo !textGradient!!esc![0m
-    )
-
-    echo.
-    set "lineGradient="
-    set /a "BeforeSpace=(135 - 121) / 2"
-    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    for /L %%j in (0,1,108) do (
-        set /a "colorR=colorBaseR + (variationR * %%j / 108)"
-        set /a "colorG=colorBaseG + (variationG * %%j / 108)"
-        set /a "colorB=colorBaseB + (variationB * %%j / 108)"
-        set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
-    )
-    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m
-
-    echo.
-    echo                                           %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply Latency ^& Input-Lag Tweaks
-    echo.                 
-    echo.
-    echo                                                    %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
-    echo.
-    set /p answer="%reset% >:%roxo%"
-
-    if "%answer%"=="a" call :latencyapply
-    if "%answer%"=="r" call :latencyrevert
-    if "%answer%"=="A" call :latencyapply
-    if "%answer%"=="R" call :latencyrevert
-    if "%answer%"=="b" call :menu
-    if "%answer%"=="B" call :menu
-
-    :: Invalid Input
-    echo.
-    echo.
-    echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
-    echo.
-    goto latency
-
-    :latencyapply
-    cls
-    echo.
-    echo   %purple%[ %roxo%•%purple% ]%white% Applying %roxo%Latency %white%^& %roxo%Input-Lag%white% Tweaks... 
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo --- Applying Latency and Input-Lag Tweaks --- >> "%ghost-logfile%" 2>&1
-
-    :: All commented lines are unstable or undocumented tweaks.
-
-    :: System Responsivness
-    reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "SystemResponsiveness" /t REG_DWORD /d 10 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "AlwaysOn" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "NoLazyMode" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% System Responsivness Optimized.
-
-    :: Desktop time
-    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoComplete" /v "Append Completion" /t REG_SZ /d "yes" /f >> "%ghost-logfile%" 2>&1
-    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoComplete" /v "AutoSuggest" /t REG_SZ /d "yes" /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "menuShowDelay" /t REG_SZ /d 100 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ExtendedUIHoverTime" /t REG_DWORD /d 20 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKCU\Control Panel\Mouse" /v "MouseHoverTime" /t REG_SZ /d 20 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "MouseHoverTime" /t REG_SZ /d 20 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "LowLevelHooksTimeout" /t REG_SZ /d 300 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "AutoEndTasks" /t REG_SZ /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "WaitToKillAppTimeout" /t REG_SZ /d 3000 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "HungAppTimeout" /t REG_SZ /d 2000 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "ForegroundLockTimeout" /t REG_DWORD /d 50 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control" /v "WaitToKillServiceTimeout" /t REG_SZ /d 3000 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% UI Responsiveness Optimized.
-
-    :: Energy Estimation
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "EnergyEstimationEnabled" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1 
-    echo   %purple%[ %roxo%•%purple% ]%white% Energy Estimation disabled.
-
-    :: Kernel Timer Coalescing
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "CoalescingTimerInterval" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Kernel Coalescing Optimized.
-
-    :: Hardware Scheduling
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "HwSchMode" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Hardware Scheduling disabled.
-
-    :: Overlay Test Mode
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "OverlayTestMode" /t REG_DWORD /d 5 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Overlay Test Mode enabled.
-
-    :: Control Power Latency
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "ExitLatency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "ExitLatencyCheckEnabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "Latency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "LatencyToleranceDefault" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "LatencyToleranceFSVP" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "LatencyTolerancePerfOverride" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "LatencyToleranceScreenOffIR" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "LatencyToleranceVSyncEnabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "RtlCapabilityCheckLatency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% System Latency Optimized.
-
-    :: Graphics Power Latency
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "Latency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultD3TransitionLatencyActivelyUsed" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultD3TransitionLatencyIdleLongTime" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultD3TransitionLatencyIdleNoContext" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultD3TransitionLatencyIdleShortTime" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultD3TransitionLatencyIdleVeryLongTime" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceIdle0" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceIdle1" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceMemory" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceNoContext" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceOther" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceTimerPeriod" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultMemoryRefreshLatencyToleranceActivelyUsed" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultMemoryRefreshLatencyToleranceNoContext" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "MaxIAverageGraphicsLatencyInOneBucket" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "MiracastPerfTrackGraphicsLatency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "TransitionLatency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "FrameLatency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Graphics Latency Optimized.
-
-    :: DXGKrnl/Power Monitor Latency
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\DXGKrnl" /v "MonitorLatencyTolerance" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\DXGKrnl" /v "MonitorRefreshLatencyTolerance" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "MonitorLatencyTolerance" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "MonitorRefreshLatencyTolerance" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultMemoryRefreshLatencyToleranceMonitorOff" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceNoContextMonitorOff" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceIdle1MonitorOff" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceIdle0MonitorOff" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultD3TransitionLatencyIdleMonitorOff" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Monitor Latency Optimized.
-
-    :: Timer Resolution
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "MinTimerResolution" /t REG_DWORD /d 5000 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "ClockTimerResolution" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "TimerResolution" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Timer Resolution Optimized.
-
-    :: Distribute Timers
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "DistributeTimers" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Timer Distribution enabled.
-
-    :: HPET disable
-    bcdedit /deletevalue useplatformclock >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% High Precision Timer tweaked.
-
-    :: DXGKrnl latency
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\DXGKrnl" /v "TdrLevel" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\DXGKrnl" /v "TdrDelay" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\DXGKrnl" /v "TdrDdiDelay" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% DXGKrnl Latency Optimized.
-
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Latency ^& Input-Lag Tweaks applied %green%successfully%white%.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    title %script% %version% %space% %reboot%
-    echo --- Latency and Input-Lag Tweaks Applied --- >> "%ghost-logfile%" 2>&1
-    if "%mode%"=="menu" goto menu
-    exit /b
-
-:: GhostX Powerplan
-    :powerplan
-    set mode=menu
-    cls
-    echo.
-    echo.
-    set "W=120"
-    set /a "LAST=W-2"
-    set /a "MID=(W-2)/2"
-
-    for /L %%j in (0,1,!LAST!) do (
-        if %%j LEQ !MID! (
-            set /a "colorR=40 + (88 * %%j / !MID!)"
-        ) else (
-            set /a "colorR=128 - (128 * (%%j-!MID!) / (!LAST!-!MID!))"
-        )
-        set /a "colorG=0", "colorB=255"
-        set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
-    )
-
-    set "lines[0]=                      ██████╗  ██████╗ ██╗    ██╗███████╗██████╗     ██████╗ ██╗      █████╗ ███╗   ██╗"
-    set "lines[1]=                      ██╔══██╗██╔═══██╗██║    ██║██╔════╝██╔══██╗    ██╔══██╗██║     ██╔══██╗████╗  ██║"
-    set "lines[2]=                      ██████╔╝██║   ██║██║ █╗ ██║█████╗  ██████╔╝    ██████╔╝██║     ███████║██╔██╗ ██║"
-    set "lines[3]=                      ██╔═══╝ ██║   ██║██║███╗██║██╔══╝  ██╔══██╗    ██╔═══╝ ██║     ██╔══██║██║╚██╗██║"
-    set "lines[4]=                      ██║     ╚██████╔╝╚███╔███╔╝███████╗██║  ██║    ██║     ███████╗██║  ██║██║ ╚████║"
-    set "lines[5]=                      ╚═╝      ╚═════╝  ╚══╝╚══╝ ╚══════╝╚═╝  ╚═╝    ╚═╝     ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝"
-
-    for /L %%i in (0,1,5) do (
-        set "text=!lines[%%i]!"
-        set "textGradient="
-        for /L %%j in (0,1,!LAST!) do (
-            set "char=!text:~%%j,1!"
-            if "!char!"=="" set "char= "
-            set "textGradient=!textGradient!!esc[%%j]!!char!"
-        )
-        echo !textGradient!!esc![0m
-    )
-
-    echo.
-    set "lines[0]=                       Applies a custom Power Plan focused on highest performance and lowest latency."
-    set "lines[1]=                          Check full documentation at: https://github.com/louzkk/Ghost-Optimizer"
-
-    for /L %%i in (0,1,1) do (
-        set "text=!lines[%%i]!"
-        set "textGradient="
-        for /L %%j in (0,1,129) do (
-            set "char=!text:~%%j,1!"
-            if "!char!"=="" set "char= "
-            set "textGradient=!textGradient!!esc[%%j]!!char!"
-        )
-        echo !textGradient!!esc![0m
-    )
-
-    echo.
-    set "lineGradient="
-    set /a "BeforeSpace=(135 - 121) / 2"
-    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    for /L %%j in (0,1,108) do (
-        set /a "colorR=colorBaseR + (variationR * %%j / 108)"
-        set /a "colorG=colorBaseG + (variationG * %%j / 108)"
-        set /a "colorB=colorBaseB + (variationB * %%j / 108)"
-        set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
-    )
-    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m
-
-    echo.
-    echo                        %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply GhostX Power Plan                %purple%[ %roxo%%underline%R%reset% %purple%]%white% Apply Balanced Power Plan
-    echo.                 
-    echo.
-    echo                                                    %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
-    echo.
-    set /p answer="%reset% >:%roxo%"
-
-    if "%answer%"=="a" call :powerplanapply
-    if "%answer%"=="A" call :powerplanapply
-    if "%answer%"=="r" call :powerplanapply2
-    if "%answer%"=="R" call :powerplanapply2
-    if "%answer%"=="b" call :menu
-    if "%answer%"=="B" call :menu
-
-    :: Invalid Input
-    echo.
-    echo.
-    echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
-    echo.
-    goto powerplan
-
-    :powerplanapply
-    cls
-    echo.
-    echo   %purple%[ %roxo%•%purple% ]%white% Applying %highlight%GhostX%reset% Power Plan... 
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo --- Applying Power Plan --- >> "%ghost-logfile%" 2>&1
-
-    echo   %purple%[ %roxo%•%purple% ]%white% Checking Github repository...
-
-    timeout /t 2 /nobreak >nul
-
-    echo   %purple%[ %roxo%•%purple% ]%white% Downloading %highlight%GhostX%reset% Power Plan...
-    curl -g -k -L -# -o "C:\%script%\GhostX\GhostX-POWER.pow" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostX-POWER.pow" >> "%ghost-logfile%" 2>&1
-    if not exist "C:\%script%\GhostX\GhostX-POWER.pow" (
-        echo   %red%[ %orange%• %red%]%white% Failed to download GhostX power plan.
-        timeout /t 2 >nul
-        goto powerplan
-    )
-
-    timeout /t 2 /nobreak >nul
-
-    echo   %purple%[ %roxo%•%purple% ]%white% Importing %highlight%GhostX%reset% Power Plan...
-
-    powercfg /import "C:\%script%\GhostX\GhostX-POWER.pow" >> "%ghost-logfile%" 2>&1
-    if errorlevel 1 (
-        echo   %red%[ %orange%• %red%]%white% Failed to import %highlight%GhostX%reset% power plan.
-        timeout /t 3 >nul
-        goto powerplan
-    )
-
-    timeout /t 2 /nobreak >nul
-
-    echo   %purple%[ %roxo%•%purple% ]%white% Applying %highlight%GhostX%reset% Power Plan...
-
-    set "GUID="
-    for /f "tokens=2 delims=:()" %%i in ('powercfg /list ^| findstr /i "GhostX"') do (
-        set "GUID=%%i"
-        set "GUID=!GUID: =!"
-    )
-
-    if not defined GUID (
-        echo   %red%[ %orange%• %red%]%white% Could not find %highlight%GhostX%reset% power plan GUID.
-        timeout /t 3 >nul
-        goto powerplan
-    )
-
-    powercfg /setactive !GUID! >> "%ghost-logfile%" 2>&1
-    if errorlevel 1 (
-        echo   %red%[ %orange%• %red%]%white% Failed to set %highlight%GhostX%reset% power plan active.
-        timeout /t 3 >nul
-        goto powerplan
-    )
-
-    chcp 437 >> "%ghost-logfile%" 2>&1
-    powershell (Get-WmiObject -Namespace root/WMI -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1,100)
-    chcp 65001 >> "%ghost-logfile%" 2>&1
-
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% GhostX power plan applied %green%successfully%white%.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    title %script% %version% %space% %reboot%
-    echo --- Power Plan applied --- >> "%ghost-logfile%" 2>&1
-    if "%mode%"=="menu" goto menu
-    exit /b
-
-:: Integrity & Health
-    :health
-    cls
-    echo.
-    echo.
-    set "W=120"
-    set /a "LAST=W-2"
-    set /a "MID=(W-2)/2"
-
-    for /L %%j in (0,1,!LAST!) do (
-        if %%j LEQ !MID! (
-            set /a "colorR=40 + (88 * %%j / !MID!)"
-        ) else (
-            set /a "colorR=128 - (128 * (%%j-!MID!) / (!LAST!-!MID!))"
-        )
-        set /a "colorG=0", "colorB=255"
-        set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
-    )
-
-    set "lines[0]=                             ██╗███╗   ██╗████████╗███████╗ ██████╗ ██████╗ ██╗████████╗██╗   ██╗ "
-    set "lines[1]=                             ██║████╗  ██║╚══██╔══╝██╔════╝██╔════╝ ██╔══██╗██║╚══██╔══╝╚██╗ ██╔╝"
-    set "lines[2]=                             ██║██╔██╗ ██║   ██║   █████╗  ██║  ███╗██████╔╝██║   ██║    ╚████╔╝ "
-    set "lines[3]=                             ██║██║╚██╗██║   ██║   ██╔══╝  ██║   ██║██╔══██╗██║   ██║     ╚██╔╝  "
-    set "lines[4]=                             ██║██║ ╚████║   ██║   ███████╗╚██████╔╝██║  ██║██║   ██║      ██║   "
-    set "lines[5]=                             ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝   ╚═╝      ╚═╝   "
-
-    for /L %%i in (0,1,5) do (
-        set "text=!lines[%%i]!"
-        set "textGradient="
-        for /L %%j in (0,1,!LAST!) do (
-            set "char=!text:~%%j,1!"
-            if "!char!"=="" set "char= "
-            set "textGradient=!textGradient!!esc[%%j]!!char!"
-        )
-        echo !textGradient!!esc![0m
-    )
-
-    echo.
-    set "lines[0]=                    Performs a scan and repairs corrupted files, system health, updates, and disk errors."
-    set "lines[1]=                            Check full documentation at: https://github.com/louzkk/Ghost-Optimizer"
-
-    for /L %%i in (0,1,1) do (
-        set "text=!lines[%%i]!"
-        set "textGradient="
-        for /L %%j in (0,1,129) do (
-            set "char=!text:~%%j,1!"
-            if "!char!"=="" set "char= "
-            set "textGradient=!textGradient!!esc[%%j]!!char!"
-        )
-        echo !textGradient!!esc![0m
-    )
-
-    echo.
-    set "lineGradient="
-    set /a "BeforeSpace=(135 - 121) / 2"
-    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    for /L %%j in (0,1,108) do (
-        set /a "colorR=colorBaseR + (variationR * %%j / 108)"
-        set /a "colorG=colorBaseG + (variationG * %%j / 108)"
-        set /a "colorB=colorBaseB + (variationB * %%j / 108)"
-        set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
-    )
-    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m
-
-    echo.
-    echo                                   %purple%[ %roxo%%underline%S%reset% %purple%] %white%Fast Integrity Fix        %purple%[ %roxo%%underline%F%reset% %purple%] %white%Full Integrity Fix
-    echo.                 
-    echo                                   %purple%[ %roxo%%underline%BT%reset% %purple%] %white%Bluetooth Fix            %purple%[ %roxo%%underline%XB%reset% %purple%] %white%Xbox Services Fix
-    echo.
-    echo.
-    echo                                                    %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
-    echo.
-    set /p answer="%reset% >:%roxo%"
-
-    if "%answer%"=="s" call :healthapply1
-    if "%answer%"=="S" call :ealthapply1
-    if "%answer%"=="f" call :healthapply2
-    if "%answer%"=="F" call :healthapply2
-    if "%answer%"=="bt" call :bluetoothfix
-    if "%answer%"=="BT" call :bluetoothfix
-    if "%answer%"=="Bt" call :bluetoothfix
-    if "%answer%"=="bT" call :bluetoothfix
-    if "%answer%"=="XB" call :xboxfix
-    if "%answer%"=="Xb" call :xboxfix
-    if "%answer%"=="xB" call :xboxfix
-    if "%answer%"=="xb" call :xboxfix
-    if "%answer%"=="b" call :menu
-    if "%answer%"=="B" call :menu
-
-    :: Invalid Input
-    echo.
-    echo.
-    echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
-    echo.
-    goto health
-
-    :healthapply1
-    cls
-    echo.
-    echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Fast%white% Integrity ^& Health Fix... 
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo --- Starting Fast Health Fix --- >> "%ghost-logfile%" 2>&1
-
-    :: Checking Image
-    echo   %purple%[ %roxo%•%purple% ]%white% Checking Windows Image Health...
-    DISM /Online /Cleanup-Image /CheckHealth >> "%ghost-logfile%" 2>&1
-
-    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
-
-    :: Scanning Image
-    echo   %purple%[ %roxo%•%purple% ]%white% Scanning Windows Image Health...
-    DISM /Online /Cleanup-Image /ScanHealth >> "%ghost-logfile%" 2>&1
-
-    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
-
-    :: Restoring Image
-    echo   %purple%[ %roxo%•%purple% ]%white% Restoring Windows Image Health...
-    DISM /Online /Cleanup-Image /RestoreHealth >> "%ghost-logfile%" 2>&1
-
-    echo   %purple%[ %roxo%•%purple% ]%white% Windows Image Health restored.
-    echo.
-
-    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
-
-    :: SFC SCANNOW
-    echo   %purple%[ %roxo%•%purple% ]%white% Repairing System Integrity...
-    sfc /scannow >> "%ghost-logfile%" 2>&1
-
-    echo   %purple%[ %roxo%•%purple% ]%white% System Integrity repaired.
-    echo.
-
-    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
-
-    :: Reapring Microsoft Store Cache
-    echo   %purple%[ %roxo%•%purple% ]%white% Repairing Microsoft Store...
-    wsreset.exe >> "%ghost-logfile%" 2>&1
-
-    echo   %purple%[ %roxo%•%purple% ]%white% Microsoft Store repaired.
-    echo.
-
-    :: Saving Registry Integrity into Log
-    reg query HKLM\SOFTWARE >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Registry Integrity saved to Log.
-
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Integrity ^& Health fixes applied %green%successfully%white%.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    title %script% %version% %space% %reboot%
-
-    echo --- Finished Fast Health Fix --- >> "%ghost-logfile%" 2>&1
-    goto menu
-
-    :healthapply2
-    cls
-    echo.
-    echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Full%white% Integrity ^& Health Fix (it may take a while)... 
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo --- Starting Full Health Fix --- >> "%ghost-logfile%" 2>&1
-
-    :: Checking Image
-    echo   %purple%[ %roxo%•%purple% ]%white% Checking Windows Image Health...
-    DISM /Online /Cleanup-Image /CheckHealth >> "%ghost-logfile%" 2>&1
-
-    :: Scanning Image
-    echo   %purple%[ %roxo%•%purple% ]%white% Scanning Windows Image Health...
-    DISM /Online /Cleanup-Image /ScanHealth >> "%ghost-logfile%" 2>&1
-
-    :: Restoring Image
-    echo   %purple%[ %roxo%•%purple% ]%white% Restoring Windows Image Health...
-    DISM /Online /Cleanup-Image /RestoreHealth >> "%ghost-logfile%" 2>&1
-
-    echo   %purple%[ %roxo%•%purple% ]%white% Windows Image Health restored.
-    echo.
-
-    :: Restoring Components
-    echo   %purple%[ %roxo%•%purple% ]%white% Analyzing Drivers Base...
-    DISM /Online /Cleanup-Image /AnalyzeComponentStore >> "%ghost-logfile%" 2>&1
-
-    :: Checking Components
-    echo   %purple%[ %roxo%•%purple% ]%white% Repairing Windows Drivers...
-    DISM /Online /Cleanup-Image /StartComponentCleanup /ResetBase >> "%ghost-logfile%" 2>&1
-
-    echo   %purple%[ %roxo%•%purple% ]%white% Windows Drivers restored.
-    echo.
-
-    :: SFC SCANNOW
-    echo   %purple%[ %roxo%•%purple% ]%white% Repairing System Integrity...
-    sfc /scannow >> "%ghost-logfile%" 2>&1
-
-    echo   %purple%[ %roxo%•%purple% ]%white% System Integrity repaired.
-    echo.
-
-    :: Reapring Microsoft Store Cache
-    echo   %purple%[ %roxo%•%purple% ]%white% Repairing Microsoft Store...
-    wsreset.exe >> "%ghost-logfile%" 2>&1
-
-    echo   %purple%[ %roxo%•%purple% ]%white% Microsoft Store repaired.
-    echo.
-
-    :: Stopping Windows Update
-    echo   %purple%[ %roxo%•%purple% ]%white% Stopping Windows Update services...
-    net stop wuauserv >> "%ghost-logfile%" 2>&1
-    net stop cryptSvc >> "%ghost-logfile%" 2>&1
-    net stop bits >> "%ghost-logfile%" 2>&1
-    net stop msiserver >> "%ghost-logfile%" 2>&1
-    net stop appidsvc
-
-    :: Repairing Windows Update
-    echo   %purple%[ %roxo%•%purple% ]%white% Repairing Windows Update...
-    ren C:\Windows\SoftwareDistribution SoftwareDistribution.old >> "%ghost-logfile%" 2>&1
-    ren C:\Windows\System32\catroot2 catroot2.old >> "%ghost-logfile%" 2>&1
-    del /q /f /s %windir%\SoftwareDistribution\Download\* >> "%ghost-logfile%" 2>&1
-
-    :: Cleaning CBS Logs Cache
-    echo   %purple%[ %roxo%•%purple% ]%white% Cleaning CBS ^& DISM cache...
-    del /f /q %windir%\Logs\CBS\CBS.log >> "%ghost-logfile%" 2>&1
-    del /f /q %windir%\Logs\DISM\dism.log >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% CBS ^& DISM cache cleaned.
-
-    :: Reverting Pending Actions
-    echo   %purple%[ %roxo%•%purple% ]%white% Reverting Pending Actions...
-    dism /online /cleanup-image /revertpendingactions >> "%ghost-logfile%" 2>&1
-    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Pending Actions reverted.
-
-    :: Files System Boot Check
-    echo   %purple%[ %roxo%•%purple% ]%white% Scheduling system file repair...
-    echo Y|chkdsk C: /f /r >> "%ghost-logfile%" 2>&1
-
-    echo.
-    echo   %yellow%[ • ]%reset% Files will be repaired in the next boot.
-
-    :: Saving Registry Integrity into Log
-    reg query HKLM\SOFTWARE >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Registry Integrity saved to Log.
-
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Integrity ^& Health fixes applied %green%successfully%white%.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    title %script% %version% %space% %reboot%
-    echo --- Finished Full Health Fix --- >> "%ghost-logfile%" 2>&1
-    goto menu
-
-    :bluetoothfix
-    cls
-    echo.
-    echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Bluetooth%white% Fix... 
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo --- Starting Bluetooth Fix --- >> "%ghost-logfile%" 2>&1
-
-    :: Restart BT Drivers
-    chcp 437 >> "%ghost-logfile%" 2>&1
-    powershell -Command "Get-Service *bth* | Restart-Service -Force -ErrorAction SilentlyContinue" >> "%ghost-logfile%" 2>&1
-    powershell -Command "Get-PnpDevice -Class Bluetooth | Disable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue" >> "%ghost-logfile%" 2>&1
-    powershell -Command "Start-Sleep -Seconds 1" >> "%ghost-logfile%" 2>&1
-    powershell -Command "Get-PnpDevice -Class Bluetooth | Enable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue" >> "%ghost-logfile%" 2>&1
-    powershell -Command "pnputil /scan-devices" >> "%ghost-logfile%" 2>&1
-    chcp 65001 >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Bluetooth Drivers restored.
-
-    :: BT Registry
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters" /v "EnableOffload" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters" /v "EnableLEEncryption" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters" /v "EnableRadioOffload" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BTHUSB" /v "EnableSelectiveSuspend" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\bthserv" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BthHFSrv" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BthAvctpSvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Bluetooth features restored.
-
-    :: Radio Services
-    chcp 437 >> "%ghost-logfile%" 2>&1
-    powershell -Command "(Get-Service bthserv).StartType='Automatic'" >> "%ghost-logfile%" 2>&1
-    powershell -Command "Start-Service bthserv -ErrorAction SilentlyContinue" >> "%ghost-logfile%" 2>&1
-    powershell -Command "Start-Service DeviceAssociationService -ErrorAction SilentlyContinue" >> "%ghost-logfile%" 2>&1
-    powershell -Command "Start-Service DeviceAssociationBrokerSvc -ErrorAction SilentlyContinue" >> "%ghost-logfile%" 2>&1
-    chcp 65001 >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Radio Services restored.
-
-    :: BT Services
-    sc config bthserv start= auto >> "%ghost-logfile%" 2>&1
-    sc config BthHFSrv start= demand >> "%ghost-logfile%" 2>&1
-    sc config BthAvctpSvc start= demand >> "%ghost-logfile%" 2>&1
-    sc config bthmodem start= demand >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Bluetooth Services restored.
-
-    :: Broker Service
-    net stop DeviceAssociationService /y >> "%ghost-logfile%" 2>&1
-    net start DeviceAssociationService >> "%ghost-logfile%" 2>&1
-    net stop DeviceAssociationBrokerSvc /y >> "%ghost-logfile%" 2>&1
-    net start DeviceAssociationBrokerSvc >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Broker Service restored.
-
-    :: Enable BT
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BTHPORT" /v "Start" /t REG_DWORD /d 2 /f
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BTHUSB" /v "Start" /t REG_DWORD /d 3 /f
-    echo   %purple%[ %roxo%•%purple% ]%white% Bluetooth enabled.
-
-    echo.
-    echo   %yellow%[ • ]%reset% If that doesn't solve your problem, try running Full Integrity Fix.
-
-    echo.
-    timeout /t 4 /nobreak >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Bluetooth fixed %green%successfully%white%.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    title %script% %version% %space% %reboot%
-    echo --- Finished Bluetooth Fix --- >> "%ghost-logfile%" 2>&1
-    goto menu
-
-    :xboxfix
-    cls
-    echo.
-    echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Xbox App/Bar%white% Fix... 
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo --- Starting Xbox Fix --- >> "%ghost-logfile%" 2>&1
-
-    :: Reinstall Xbox App & Identity Provider
-    chcp 437 >> "%ghost-logfile%" 2>&1
-    powershell -Command "Get-AppxPackage Microsoft.XboxApp -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "%ghost-logfile%" 2>&1
-    powershell -Command "Get-AppxPackage Microsoft.Xbox.TCUI -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "%ghost-logfile%" 2>&1
-    powershell -Command "Get-AppxPackage Microsoft.XboxIdentityProvider -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "%ghost-logfile%" 2>&1
-    chcp 65001 >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Xbox App restored.
-
-    :: Xbox Services
-    sc config XblAuthManager start= auto >> "%ghost-logfile%" 2>&1
-    sc config XblGameSave start= auto >> "%ghost-logfile%" 2>&1
-    sc config XboxGipSvc start= auto >> "%ghost-logfile%" 2>&1
-    sc config XboxNetApiSvc start= auto >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Xbox Services enabled.
-
-    :: Reinstall Xbox Game Bar
-    chcp 437 >> "%ghost-logfile%" 2>&1
-    powershell -Command "Get-AppxPackage Microsoft.XboxGamingOverlay -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "%ghost-logfile%" 2>&1
-    chcp 65001 >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Game Bar restored.
-
-    :: Game Bar Registry
-    reg add "HKLM\Software\Policies\Microsoft\Windows\GameDVR" /v "AllowGameDVR" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKCU\System\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR" /v "AllowGameDVR" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameDVR" /v "AllowGameDVR" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR" /v value /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "AudioCaptureEnabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Gaming.GameBar.PresenceServer.Internal.PresenceWriter" /v "ActivationType" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKCU\System\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKCU\System\GameConfigStore" /v "GameDVR_FSEBehaviorMode" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKCU\System\GameConfigStore" /v "GameDVR_DXGIHonorFSEWindowsCompatible" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Game Bar enabled.
-
-    echo.
-    echo   %yellow%[ • ]%reset% If that doesn't solve your problem, try running Full Integrity Fix.
-
-    echo.
-    timeout /t 4 /nobreak >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Xbox App ^& Game Bar fixed %green%successfully%white%.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    title %script% %version% %space% %reboot%
-    echo --- Finished Xbox Fix --- >> "%ghost-logfile%" 2>&1
-    goto menu
-
-:: Temporary Files
-    :clean
-    cls
-    echo.
-    echo.
-    set "W=120"
-    set /a "LAST=W-2"
-    set /a "MID=(W-2)/2"
-
-    for /L %%j in (0,1,!LAST!) do (
-        if %%j LEQ !MID! (
-            set /a "colorR=40 + (88 * %%j / !MID!)"
-        ) else (
-            set /a "colorR=128 - (128 * (%%j-!MID!) / (!LAST!-!MID!))"
-        )
-        set /a "colorG=0", "colorB=255"
-        set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
-    )
-
-    set "lines[0]=                                        ██████╗██╗     ███████╗ █████╗ ███╗   ██╗ "
-    set "lines[1]=                                       ██╔════╝██║     ██╔════╝██╔══██╗████╗  ██║"
-    set "lines[2]=                                       ██║     ██║     █████╗  ███████║██╔██╗ ██║"
-    set "lines[3]=                                       ██║     ██║     ██╔══╝  ██╔══██║██║╚██╗██║"
-    set "lines[4]=                                       ╚██████╗███████╗███████╗██║  ██║██║ ╚████║"
-    set "lines[5]=                                        ╚═════╝╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝"
-
-    for /L %%i in (0,1,5) do (
-        set "text=!lines[%%i]!"
-        set "textGradient="
-        for /L %%j in (0,1,!LAST!) do (
-            set "char=!text:~%%j,1!"
-            if "!char!"=="" set "char= "
-            set "textGradient=!textGradient!!esc[%%j]!!char!"
-        )
-        echo !textGradient!!esc![0m
-    )
-
-    echo.
-    set "lines[0]=                Cleans temporary files, logs, caches, and unnecessary files to free up space and fix issues."
-    set "lines[1]=                         Check full documentation at: https://github.com/louzkk/Ghost-Optimizer"
-
-    for /L %%i in (0,1,1) do (
-        set "text=!lines[%%i]!"
-        set "textGradient="
-        for /L %%j in (0,1,129) do (
-            set "char=!text:~%%j,1!"
-            if "!char!"=="" set "char= "
-            set "textGradient=!textGradient!!esc[%%j]!!char!"
-        )
-        echo !textGradient!!esc![0m
-    )
-
-    echo.
-    set "lineGradient="
-    set /a "BeforeSpace=(135 - 121) / 2"
-    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    for /L %%j in (0,1,108) do (
-        set /a "colorR=colorBaseR + (variationR * %%j / 108)"
-        set /a "colorG=colorBaseG + (variationG * %%j / 108)"
-        set /a "colorB=colorBaseB + (variationB * %%j / 108)"
-        set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
-    )
-    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m
-
-    echo.
-    echo                         %purple%[ %roxo%%underline%G%reset% %purple%]%white% Start Ghost Clean-up                %purple%[ %roxo%%underline%W%reset% %purple%]%white% Start Windows Clean-up
-    echo.
-    echo.
-    echo                                                    %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
-    echo.
-    set /p answer="%reset% >:%roxo%"
-
-    if "%answer%"=="g" call :ghostclean
-    if "%answer%"=="G" call :ghostclean
-    if "%answer%"=="w" call :windowsclean
-    if "%answer%"=="W" call :windowsclean
-    if "%answer%"=="b" call :menu
-    if "%answer%"=="B" call :menu
-
-    :: Invalid Input
-    echo.
-    echo.
-    echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
-    echo.
-    goto clean
-
-    :ghostclean
-    cls
-    echo.
-    echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Ghost Optimizer%white% Clean... 
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo --- Starting Ghost Optimizer Clean --- >> "%ghost-logfile%" 2>&1
-
-    :: Temporary files
-    rd /s /q "%windir%\Temp" >> "%ghost-logfile%" 2>&1
-    md "%windir%\Temp" >> "%ghost-logfile%" 2>&1
-    rd /s /q "%LocalAppData%\Temp" >> "%ghost-logfile%" 2>&1
-    md "%LocalAppData%\Temp" >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Temporary files cleaned.
-
-    :: Prefetch
-    rd /s /q "%windir%\Prefetch" >> "%ghost-logfile%" 2>&1
-    md "%windir%\Prefetch" >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Prefetch files cleaned.
-
-    :: Recycle Bin
-    rd /s /q "%systemdrive%\$Recycle.Bin" >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Recycle Bin cleaned.
-
-    :: Thumbcache
-    del /f /q "%LocalAppData%\Microsoft\Windows\Explorer\thumbcache_*.db" >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Thumbnail cache cleaned.
-
-    :: System logs
-    echo. > "%SystemRoot%\Logs\CBS\CBS.log" >> "%ghost-logfile%" 2>&1
-    echo. > "%SystemRoot%\Logs\DISM\DISM.log" >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% System logs cleared.
-
-    :: Clean Ghost Optimizer Logs
-    if exist "C:\Ghost Optimizer\Logs" (
-        del /f /q "C:\Ghost Optimizer\Logs\*.*" >> "%ghost-logfile%" 2>&1
-        echo   %purple%[ %roxo%•%purple% ]%white% Ghost logs cleared.
-    ) else (
-        echo   %purple%[ %roxo%•%purple% ]%white% Logs folder not found.
-    )
-
-    :: Clean Ghost Optimizer Cache
-    if exist "C:\Ghost Optimizer" (
-        del /f /q "C:\Ghost Optimizer\*.*" >> "%ghost-logfile%" 2>&1
-        echo   %purple%[ %roxo%•%purple% ]%white% Ghost cache cleared.
-    ) else (
-        echo   %purple%[ %roxo%•%purple% ]%white% Cache folder not found.
-    )
-
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% System cleaned %green%successfully%white%.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    title %script% %version% %space% %reboot%
-
-    echo --- Finished Ghost Optimizer Clean --- >> "%ghost-logfile%" 2>&1
-    goto clean
-
-    :windowsclean
-    cls
-    echo.
-    echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Windows%white% Clean... 
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo --- Starting Windows Clean --- >> "%ghost-logfile%" 2>&1
-
-    echo   %purple%[ %roxo%•%purple% ]%white% Click on Temporary Files.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    start ms-settings:storagesense >> "%ghost-logfile%" 2>&1
-
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% System cleaned %green%successfully%white%.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    title %script% %version% %space% %reboot%
-    echo --- Finished Windows Clean --- >> "%ghost-logfile%" 2>&1
-    goto menu
-
-:: Unecessary Services
-    :services
-    set mode=menu
-    cls
-    echo.
-    echo.
-    set "W=120"
-    set /a "LAST=W-2"
-    set /a "MID=(W-2)/2"
-
-    for /L %%j in (0,1,!LAST!) do (
-        if %%j LEQ !MID! (
-            set /a "colorR=40 + (88 * %%j / !MID!)"
-        ) else (
-            set /a "colorR=128 - (128 * (%%j-!MID!) / (!LAST!-!MID!))"
-        )
-        set /a "colorG=0", "colorB=255"
-        set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
-    )
-
-    set "lines[0]=                                ███████╗███████╗██████╗ ██╗   ██╗██╗ ██████╗███████╗███████╗ "
-    set "lines[1]=                                ██╔════╝██╔════╝██╔══██╗██║   ██║██║██╔════╝██╔════╝██╔════╝"
-    set "lines[2]=                                ███████╗█████╗  ██████╔╝██║   ██║██║██║     █████╗  ███████╗"
-    set "lines[3]=                                ╚════██║██╔══╝  ██╔══██╗╚██╗ ██╔╝██║██║     ██╔══╝  ╚════██║"
-    set "lines[4]=                                ███████║███████╗██║  ██║ ╚████╔╝ ██║╚██████╗███████╗███████║"
-    set "lines[5]=                                ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝ ╚═════╝╚══════╝╚══════╝"
-
-    for /L %%i in (0,1,5) do (
-        set "text=!lines[%%i]!"
-        set "textGradient="
-        for /L %%j in (0,1,!LAST!) do (
-            set "char=!text:~%%j,1!"
-            if "!char!"=="" set "char= "
-            set "textGradient=!textGradient!!esc[%%j]!!char!"
-        )
-        echo !textGradient!!esc![0m
-    )
-
-    echo.
-    set "lines[0]=                  Disables unnecessary services to reduce resource usage and improve system performance."
-    set "lines[1]=                         Check full documentation at: https://github.com/louzkk/Ghost-Optimizer"
-
-    for /L %%i in (0,1,1) do (
-        set "text=!lines[%%i]!"
-        set "textGradient="
-        for /L %%j in (0,1,129) do (
-            set "char=!text:~%%j,1!"
-            if "!char!"=="" set "char= "
-            set "textGradient=!textGradient!!esc[%%j]!!char!"
-        )
-        echo !textGradient!!esc![0m
-    )
-
-    echo.
-    set "lineGradient="
-    set /a "BeforeSpace=(135 - 121) / 2"
-    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    for /L %%j in (0,1,108) do (
-        set /a "colorR=colorBaseR + (variationR * %%j / 108)"
-        set /a "colorG=colorBaseG + (variationG * %%j / 108)"
-        set /a "colorB=colorBaseB + (variationB * %%j / 108)"
-        set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
-    )
-    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m
-
-    echo.
-    echo                      %purple%[ %roxo%%underline%D%reset% %purple%]%white% Disable Unnecessary Services                %purple%[ %roxo%%underline%R%reset% %purple%]%white% Revert Unecessary Services
-    echo.                 
-    echo.
-    echo                                                     %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
-    echo.
-    set /p answer="%reset% >:%roxo%"
-
-    if "%answer%"=="d" call :servicesapply
-    if "%answer%"=="D" call :servicesapply
-    if "%answer%"=="r" call :servicesrevert
-    if "%answer%"=="R" call :servicesrevert
-    if "%answer%"=="b" call :menu
-    if "%answer%"=="B" call :menu
-
-    :: Invalid Input
-    echo.
-    echo.
-    echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
-    echo.
-    goto services
-
-    :servicesapply
-    cls
-    echo.
-    echo   %purple%[ %roxo%•%purple% ]%white% Disabling %roxo%Unnecessary Services%white%...
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo --- Disabling Unnecessary Services --- >> "%ghost-logfile%" 2>&1
-
-    :: SysMain/Superfetch
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SysMain" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% SysMain disabled.
-
-    :: Sensor/Location
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SensorDataService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SensrSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SensorService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\shpamsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\lfsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\lfsvc\Service\Configuration" /v "Status" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Sensor services disabled.
-
-    :: Tablet
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TabletInputService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TabletInputService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TouchKeyboardAndHandwritingPanelService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Tablet Input disabled.
-
-    :: Cross Device
-    reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\default\Connectivity\DisableCrossDeviceResume" /v "value" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\CrossDeviceResume\Configuration" /v "IsResumeAllowed" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Cross Device disabled.
-
-    :: Messages
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\MessagingService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Messages disabled.
-
-    :: Cortana
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowCortana" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowCloudSearch" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowCortanaAboveLock" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowSearchToUseLocation" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchUseWeb" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchUseWebOverMeteredConnections" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "DisableWebSearch" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Cortana disabled.
-
-    :: Phone Services
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TapiSrv" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\PhoneSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Phone Services disabled.
-
-    :: Parental Control
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WpcMonSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SEMgrSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SharedRealitySvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Parental Control disabled.
-
-    :: Retail Demo Service
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\RetailDemo" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Retail Demo Service disabled.
-
-    :: Hyper-V Host Service
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\HvHost" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\HvHost" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\vmsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\vmcompute" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Hyper-V host disabled.
-
-    :: Delivery Optimization
-    :: Unncomment this may broke Windows Update and Defender Update
-    ::reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DODownloadMode" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DownloadMode" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings" /v "DownloadMode" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\DoSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\PNRPsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\p2psvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\p2pimsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Delivery Optimization disabled.
-
-    :: Sharing
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Netlogon" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\CscService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\svsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TrkWks" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\CDPSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\CDPUserSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% File Sharing disabled.
-
-    :: Mixed Reality Portal
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\HolographicShell" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\FrameServerMonitor" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\perceptionsimulation" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\FrameServer" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Mixed Reality disabled.
-
-    :: OneSync
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\OneSyncSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Microsoft OneSync disabled.
-
-    :: Wallet
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WalletService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Wallet disabled.
-
-    :: Maps Broker
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\MapsBroker" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Maps Broker disabled.
-
-    :: Search Index
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SearchIndexer" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SearchFilterHost" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SearchProtocolHost" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WSearch" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Search Index disabled.
-
-    :: Print Spooler / Fax
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Spooler" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Fax" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Spooler services disabled.
-
-    :: Xbox Services
-    :: Unncomment this may broke login features, Xbox app or gaming features 
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\xbgm" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblAuthManager" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblGameSave" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxGipSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxNetApiSvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Xbox services disabled.
-
-    :: Intel Software
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\cplspcon" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\cphs" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\jhi_service" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\esifsvc" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\igccservice" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WMIRegistrationService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\RstMwService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Intel(R) TPM Provisioning Service" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\IntelAudioService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Intel services disabled.
-
-    :: AMD Software
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "EnableUlps" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\AMD External Events Utility" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\amdfendrsr" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AMD Crash User Uplink Service" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AMDRyzenMasterDataService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% AMD services disabled.
-
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Unnecessary Services disabled %green%successfully%white%.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    title %script% %version% %space% %reboot%
-    echo --- Unnecessary Services Disabled --- >> "%ghost-logfile%" 2>&1
-    if "%mode%"=="menu" goto menu
-    exit /b
-
-    :servicesrevert
-    cls
-    echo.
-    echo   %purple%[ %roxo%•%purple% ]%white% Reverting %roxo%Unnecessary Services%white%...
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo --- Disabling Unnecessary Services --- >> "%ghost-logfile%" 2>&1
-
-    :: Telephony API
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TapiSrv" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\PhoneSvc" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Phone Services enabled.
-
-    :: Parental Control
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WpcMonSvc" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SEMgrSvc" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SharedRealitySvc" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Parental Control enabled.
-
-    :: P2P
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\PNRPsvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\p2psvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\p2pimsvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Peer-to-Peer enabled.
-
-    :: Sharing
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Netlogon" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\CscService" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\svsvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TrkWks" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\CDPSvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% File Sharing enabled.
-
-    :: Sensor / Location
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SensorDataService" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SensrSvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SensorService" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\shpamsvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\lfsvc" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\lfsvc\Service\Configuration" /v "Status" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Sensor services enabled.
-
-    :: Mixed Reality Portal
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\perceptionsimulation" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\FrameServer" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Mixed Reality enabled.
-
-    :: OneSync
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\OneSyncSvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Microsoft OneSync enabled.
-
-    :: DVRU
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WMPNetworkSvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\BcastDVRUserService" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Broadcast enabled.
-
-    :: Edge
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\edgeupdatem" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\edgeupdate" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\MicrosoftEdgeElevationService" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Edge Update enabled.
-
-    :: Cross Device
-    reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\default\Connectivity\DisableCrossDeviceResume" /v "value" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\CrossDeviceResume\Configuration" /v "IsResumeAllowed" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Cross Device Resume enabled.
-
-    :: Tablet
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TabletInputService" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TouchKeyboardAndHandwritingPanelService" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Tablet Input enabled.
-
-    :: Themes
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Themes" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Themes enabled.
-
-    :: Readiness
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AppReadiness" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\OSRSS" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Readiness enabled.
-
-    :: Messages
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\MessagingService" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Messages enabled.
-
-    :: Cortana
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowCortana" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowCloudSearch" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowCortanaAboveLock" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowSearchToUseLocation" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchUseWeb" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchUseWebOverMeteredConnections" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "DisableWebSearch" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Cortana enabled.
-
-    :: Print Spooler / Fax
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Spooler" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Fax" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Spooler/Fax services enabled.
-
-    :: Maps Broker
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\MapsBroker" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Maps Broker enabled.
-
-    :: Search Index
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WSearch" /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Search Index enabled.
-
-    :: Remote Registry
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\RemoteRegistry" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Remote Registry enabled.
-
-    :: Insider
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\wisvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Windows Insider enabled.
-
-    :: Wallet
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WalletService" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Wallet enabled.
-
-    :: Xbox Services
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\xbgm" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblAuthManager" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\XblGameSave" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxGipSvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxNetApiSvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Xbox services enabled.
-
-    :: Intel Software
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\cplspcon" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\cphs" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\jhi_service" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\esifsvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\igccservice" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\igfxCUIService2.0.0.0" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WMIRegistrationService" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\RstMwService" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Intel(R) TPM Provisioning Service" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\IntelAudioService" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Intel services enabled.
-
-    :: AMD Software
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "EnableUlps" /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\AMD External Events Utility" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\amdfendrsr" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AMD Crash User Uplink Service" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\AMDRyzenMasterDataService" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% AMD services enabled.
-
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Services restored %green%successfully%white%.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    title %script% %version% %space% %reboot%
-    echo --- Services Re-enabled --- >> "%ghost-logfile%" 2>&1
-    goto menu
-
-:: NVIDIA Profile
-    :nvidia
-    cls
-    echo.
-    echo.
-
-    set "W=120"
-    set /a "LAST=W-2"
-    set /a "MID=(W-2)/2"
-
-    for /L %%j in (0,1,!LAST!) do (
-        set /a "colorR=0"
-        set /a "colorG=255 - (105 * %%j / !LAST!)"
-        set /a "colorB=100 + (155 * %%j / !LAST!)"
-        set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
-    )
-
-    set "lines[0]=                                         ███╗   ██╗██╗   ██╗██╗██████╗ ██╗ █████╗ "
-    set "lines[1]=                                         ████╗  ██║██║   ██║██║██╔══██╗██║██╔══██╗"
-    set "lines[2]=                                         ██╔██╗ ██║██║   ██║██║██║  ██║██║███████║"
-    set "lines[3]=                                         ██║╚██╗██║╚██╗ ██╔╝██║██║  ██║██║██╔══██║"
-    set "lines[4]=                                         ██║ ╚████║ ╚████╔╝ ██║██████╔╝██║██║  ██║"
-    set "lines[5]=                                         ╚═╝  ╚═══╝  ╚═══╝  ╚═╝╚═════╝ ╚═╝╚═╝  ╚═╝"
-
-    for /L %%i in (0,1,5) do (
-        set "text=!lines[%%i]!"
-        set "textGradient="
-        for /L %%j in (0,1,!LAST!) do (
-            set "char=!text:~%%j,1!"
-            if "!char!"=="" set "char= "
-            set "textGradient=!textGradient!!esc[%%j]!!char!"
-        )
-        echo !textGradient!!esc![0m
-    )
-
-    echo.
-    set "lines[0]=                  Optimizes NVIDIA drivers to improve performance and latency while disabling telemetry."
-    set "lines[1]=                         Check full documentation at: https://github.com/louzkk/Ghost-Optimizer"
-
-    for /L %%i in (0,1,1) do (
-        set "text=!lines[%%i]!"
-        set "textGradient="
-        for /L %%j in (0,1,129) do (
-            set "char=!text:~%%j,1!"
-            if "!char!"=="" set "char= "
-            set "textGradient=!textGradient!!esc[%%j]!!char!"
-        )
-        echo !textGradient!!esc![0m
-    )
-
-    echo.
-    set "lineGradient="
-    set /a "BeforeSpace=(135 - 121) / 2"
-    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    for /L %%j in (0,1,108) do (
-        set /a "colorR=0"
-        set /a "colorG=255 - (105 * %%j / 108)"
-        set /a "colorB=100 + (155 * %%j / 108)"
-        set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
-    )
-
-    for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m     
-
-    echo                        %nvidia%[ %verde%%underline%O%reset% %nvidia%]%white% Apply Optimized Profile                %nvidia%[ %verde%%underline%P%reset% %nvidia%]%white% Apply Performance Profile
-    echo.
-    echo.
-    echo                                                %nvidia%[ %verde%%underline%PI%reset% %nvidia%]%white% Open Profile Inspector
-    echo.
-    echo.
-    echo                                                    %nvidia%[ %verde%%underline%B%reset% %nvidia%]%white% Back to menu 
-    echo.
-    set /p answer="%reset% >:%roxo%"
-
-    if "%answer%"=="o" call :nvidiaoptimized
-    if "%answer%"=="O" call :nvidiaoptimized
-    if "%answer%"=="p" call :nvidiaperformance
-    if "%answer%"=="P" call :nvidiaperformance
-    if "%answer%"=="pi" call :inspector
-    if "%answer%"=="PI" call :inspector
-    if "%answer%"=="pI" call :inspector
-    if "%answer%"=="Pi" call :inspector
-    if "%answer%"=="b" call :menu
-    if "%answer%"=="B" call :menu
-
-    :: Invalid Input
-    echo.
-    echo.
-    echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
-    echo.
-    goto nvidia
-
-    :nvidiaoptimized
-    cls
-    echo.
-    echo   %verde%[ %green%•%verde% ]%reset% Applying %green%NVIDIA Profile Inspector%reset% Tweaks...
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo --- Applying NVIDIA Profile --- >> "%ghost-logfile%" 2>&1
-
-    echo   %verde%[ %green%•%verde% ]%reset% Checking %green%Profile Inspector%reset% executable...
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-
-    if not exist "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" (
-        echo   %verde%[ %green%•%verde% ]%reset% Downloading %green%Profile Inspector%reset% package...
-        curl -g -k -L -# -o "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" "https://github.com/Orbmu2k/nvidiaProfileInspector/releases/download/2.4.0.27/nvidiaProfileInspector.zip" >> "%ghost-logfile%" 2>&1
-        if errorlevel 1 (
-            echo   %red%[ • ]%reset% Failed to download NVIDIA Profile Inspector.
-            goto :nvidiaend1
-        )
-    ) else (
-        echo   %verde%[ %green%•%verde% ]%reset% %green%Profile Inspector%reset% already downloaded.
-        timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    )
-
-    if not exist "C:\%script%\NVIDIA\NvidiaProfileInspector" (
-        echo   %verde%[ %green%•%verde% ]%reset% Extracting %green%Profile Inspector%reset% package...
-        chcp 437 >> "%ghost-logfile%" 2>&1
-        powershell -NoProfile Expand-Archive 'C:\%script%\NVIDIA\nvidiaProfileInspector.zip' -DestinationPath 'C:\%script%\NVIDIA\' >> "%ghost-logfile%" 2>&1
-        chcp 65001 >> "%ghost-logfile%" 2>&1
-        del /q "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" >nul 2>&1
-        if not exist "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" (
-            echo   %red%[ • ]%reset% Extraction failed, executable not found.
-            goto :nvidiaend1
-        )
-    )
-
-    echo   %verde%[ %green%•%verde% ]%reset% Importing %green%GhostX Optimized%reset% profile...
-    curl -g -k -L -# -o "C:\%script%\NVIDIA\GhostX1-NVIDIA.nip" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostX1-NVIDIA.nip" >> "%ghost-logfile%" 2>&1
-    if errorlevel 1 (
-        echo   %red%[ • ]%reset% Failed to download NVIDIA profile.
-        goto :nvidiaend1
-    )
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-
-    echo   %verde%[ %green%•%verde% ]%reset% Applying %green%GhostX Optimized%reset% profile...
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    if exist "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" (
-        start "" /wait "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" "C:\%script%\NVIDIA\GhostX1-NVIDIA.nip" >> "%ghost-logfile%" 2>&1
-        echo.
-        echo   %verde%[ %green%•%verde% ]%reset% Profile Inspector Tweaks Applied %green%successfully%white%.
-        echo --- NVIDIA Profile applied --- >> "%ghost-logfile%" 2>&1
-    ) else (
-        echo   %red%[ • ]%reset% NVIDIA Profile Inspector executable not found.
-    )
-
-    :nvidiaend1
-
-    cls
-    echo.
-    echo   %verde%[ %green%•%verde% ]%reset% Applying %green%NVIDIA%reset% Tweaks... 
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo --- Applying NVIDIA Tweaks --- >> "%ghost-logfile%" 2>&1
-
-    :: Latency Tolerance (from Ancel's Performance Batch)
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "D3PCLatency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "F1TransitionLatency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "LOWLATENCY" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "Node3DLowLatency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "PciLatencyTimerControl" /t REG_DWORD /d 20 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RMDeepL1EntryLatencyUsec" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RmGspcMaxFtuS" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RmGspcMinFtuS" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RmGspcPerioduS" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RMLpwrEiIdleThresholdUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RMLpwrGrIdleThresholdUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RMLpwrGrRgIdleThresholdUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RMLpwrMsIdleThresholdUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "VRDirectFlipDPCDelayUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "VRDirectFlipTimingMarginUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "VRDirectJITFlipMsHybridFlipDelayUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "vrrCursorMarginUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "vrrDeflickerMarginUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "vrrDeflickerMaxUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% Latency Tolerance Optimized.
-
-    :: Power Saving (from Ancel's Performance Batch)
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\Global\NVTweak" /v "DisplayPowerSaving" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% Power Saving disabled.
-
-    :: Driver Telemetry (from Ancel's Performance Batch)
-    reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "NvBackend" /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\NVIDIA Corporation\NvControlPanel2\Client" /v "OptInOrOutPreference" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID66610" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID64640" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID44231" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    schtasks /change /disable /tn "NvTmRep_CrashReport1_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
-    schtasks /change /disable /tn "NvTmRep_CrashReport2_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
-    schtasks /change /disable /tn "NvTmRep_CrashReport3_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
-    schtasks /change /disable /tn "NvTmRep_CrashReport4_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
-    schtasks /change /disable /tn "NvDriverUpdateCheckDaily_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
-    schtasks /change /disable /tn "NVIDIA GeForce Experience SelfUpdate_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
-    schtasks /change /disable /tn "NvTmMon_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% Driver Telemetry disabled.
-
-    :: DirectX Event Tracking (from Ancel's Performance Batch)
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "TrackResetEngine" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% Event Tracking disabled.
-
-    :: Dedicated Video Memory (from Ancel's Performance Batch)
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RmCacheLoc" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% Increased Dedicated VRAM.
-
-    :: Redraw Acceleration (from Ancel's Performance Batch)
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "Acceleration.Level" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% Setting Driver Accelerationss.
-
-    :: Filters (from Ancel's Performance Batch)
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "NVDeviceSupportKFilter" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% Overlay Filter disabled.
-
-    :: Write Combining (from Ancel's Performance Batch)
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "DisableWriteCombining" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% Write Combining disabled.
-
-    :: Contigous Memory Allocation (from Ancel's Performance Batch)
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "PreferSystemMemoryContiguous" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% Forcing Contigous Memory Allocation.
-
-    :: DPC'S (from Ancel's Performance Batch)
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\NVAPI" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\Global\NVTweak" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% Core DPC enabled.
-
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% NVIDIA Tweaks applied %green%successfully%white%.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    title %script% %version% %space% %reboot%
-    echo --- NVIDIA Tweaks applied --- >> "%ghost-logfile%" 2>&1
-    goto nvidia
-
-    :nvidiaperformance
-    cls
-    echo.
-    echo   %verde%[ %green%•%verde% ]%reset% Applying %green%NVIDIA Profile Inspector%reset% Tweaks...
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo --- Applying NVIDIA Profile --- >> "%ghost-logfile%" 2>&1
-
-    echo   %verde%[ %green%•%verde% ]%reset% Checking %green%Profile Inspector%reset% executable...
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-
-    if not exist "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" (
-        echo   %verde%[ %green%•%verde% ]%reset% Downloading %green%Profile Inspector%reset% package...
-        curl -g -k -L -# -o "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" "https://github.com/Orbmu2k/nvidiaProfileInspector/releases/download/2.4.0.27/nvidiaProfileInspector.zip" >> "%ghost-logfile%" 2>&1
-        if errorlevel 1 (
-            echo   %red%[ • ]%reset% Failed to download NVIDIA Profile Inspector.
-            goto :nvidiaend2
-        )
-    ) else (
-        echo   %verde%[ %green%•%verde% ]%reset% %green%Profile Inspector%reset% already downloaded.
-        timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    )
-
-    if not exist "C:\%script%\NVIDIA\NvidiaProfileInspector" (
-        echo   %verde%[ %green%•%verde% ]%reset% Extracting %green%Profile Inspector%reset% package...
-        chcp 437 >> "%ghost-logfile%" 2>&1
-        powershell -NoProfile Expand-Archive 'C:\%script%\NVIDIA\nvidiaProfileInspector.zip' -DestinationPath 'C:\%script%\NVIDIA\' >> "%ghost-logfile%" 2>&1
-        chcp 65001 >> "%ghost-logfile%" 2>&1
-        del /q "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" >nul 2>&1
-        if not exist "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" (
-            echo   %red%[ • ]%reset% Extraction failed, executable not found.
-            goto :nvidiaend2
-        )
-    )
-
-    echo   %verde%[ %green%•%verde% ]%reset% Importing %green%GhostX Performance%reset% profile...
-    curl -g -k -L -# -o "C:\%script%\NVIDIA\GhostX2-NVIDIA.nip" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GhostX2-NVIDIA.nip" >> "%ghost-logfile%" 2>&1
-    if errorlevel 1 (
-        echo   %red%[ • ]%reset% Failed to download NVIDIA profile.
-        goto :nvidiaend2
-    )
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-
-    echo   %verde%[ %green%•%verde% ]%reset% Applying %green%GhostX Performance%reset% profile...
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    if exist "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" (
-        start "" /wait "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" "C:\%script%\NVIDIA\GhostX2-NVIDIA.nip" >> "%ghost-logfile%" 2>&1
-        echo.
-        echo   %verde%[ %green%•%verde% ]%reset% Profile Inspector Tweaks Applied %green%successfully%white%.
-        echo --- NVIDIA Profile applied --- >> "%ghost-logfile%" 2>&1
-    ) else (
-        echo   %red%[ • ]%reset% NVIDIA Profile Inspector executable not found.
-    )
-
-    :nvidiaend2
-
-    cls
-    echo.
-    echo   %verde%[ %green%•%verde% ]%reset% Applying %green%NVIDIA%reset% Tweaks... 
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo --- Applying NVIDIA Tweaks --- >> "%ghost-logfile%" 2>&1
-
-    :: Latency Tolerance (from Ancel's Performance Batch)
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "D3PCLatency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "F1TransitionLatency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "LOWLATENCY" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "Node3DLowLatency" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "PciLatencyTimerControl" /t REG_DWORD /d 20 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RMDeepL1EntryLatencyUsec" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RmGspcMaxFtuS" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RmGspcMinFtuS" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RmGspcPerioduS" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RMLpwrEiIdleThresholdUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RMLpwrGrIdleThresholdUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RMLpwrGrRgIdleThresholdUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RMLpwrMsIdleThresholdUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "VRDirectFlipDPCDelayUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "VRDirectFlipTimingMarginUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "VRDirectJITFlipMsHybridFlipDelayUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "vrrCursorMarginUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "vrrDeflickerMarginUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "vrrDeflickerMaxUs" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% Latency Tolerance Optimized.
-
-    :: Power Saving (from Ancel's Performance Batch)
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\Global\NVTweak" /v "DisplayPowerSaving" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% Power Saving disabled.
-
-    :: Driver Telemetry (from Ancel's Performance Batch)
-    reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "NvBackend" /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\NVIDIA Corporation\NvControlPanel2\Client" /v "OptInOrOutPreference" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID66610" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID64640" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID44231" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    schtasks /change /disable /tn "NvTmRep_CrashReport1_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
-    schtasks /change /disable /tn "NvTmRep_CrashReport2_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
-    schtasks /change /disable /tn "NvTmRep_CrashReport3_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
-    schtasks /change /disable /tn "NvTmRep_CrashReport4_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
-    schtasks /change /disable /tn "NvDriverUpdateCheckDaily_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
-    schtasks /change /disable /tn "NVIDIA GeForce Experience SelfUpdate_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
-    schtasks /change /disable /tn "NvTmMon_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% Driver Telemetry disabled.
-
-    :: DirectX Event Tracking (from Ancel's Performance Batch)
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "TrackResetEngine" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% Event Tracking disabled.
-
-    :: Dedicated Video Memory (from Ancel's Performance Batch)
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "RmCacheLoc" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% Increased Dedicated VRAM.
-
-    :: Redraw Acceleration (from Ancel's Performance Batch)
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "Acceleration.Level" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% Setting Driver Accelerationss.
-
-    :: Filters (from Ancel's Performance Batch)
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "NVDeviceSupportKFilter" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% Overlay Filter disabled.
-
-    :: Write Combining (from Ancel's Performance Batch)
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "DisableWriteCombining" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% Write Combining disabled.
-
-    :: Contigous Memory Allocation (from Ancel's Performance Batch)
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "PreferSystemMemoryContiguous" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% Forcing Contigous Memory Allocation.
-
-    :: DPC'S (from Ancel's Performance Batch)
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\NVAPI" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\Global\NVTweak" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% Core DPC enabled.
-
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% NVIDIA Tweaks applied %green%successfully%white%.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    title %script% %version% %space% %reboot%
-    echo --- NVIDIA Tweaks applied --- >> "%ghost-logfile%" 2>&1
-    goto nvidia
-
-   :inspector
-    cls
-    echo.
-    echo   %verde%[ %green%•%verde% ]%reset% Opening %green%NVIDIA Profile Inspector%reset% Software...
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo --- Opening Profile Inspector --- >> "%ghost-logfile%" 2>&1
-
-    echo   %verde%[ %green%•%verde% ]%reset% Checking %green%Profile Inspector%reset% executable...
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    if not exist "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" (
-        echo   %verde%[ %green%•%verde% ]%reset% Downloading %green%Profile Inspector%reset% executable...
-        curl -g -k -L -# -o "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" "https://github.com/Orbmu2k/nvidiaProfileInspector/releases/download/2.4.0.27/nvidiaProfileInspector.zip" >> "%ghost-logfile%" 2>&1
-    ) else (
-        echo   %verde%[ %green%•%verde% ]%reset% %green%Profile Inspector%reset% already downloaded.
-        timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    )
-
-    if not exist "C:\%script%\NVIDIA\NvidiaProfileInspector" (
-        echo   %verde%[ %green%•%verde% ]%reset% Extracting %green%Profile Inspector%reset% package...
-        chcp 437 >> "%ghost-logfile%" 2>&1
-        powershell -NoProfile Expand-Archive 'C:\%script%\NVIDIA\nvidiaProfileInspector.zip' -DestinationPath 'C:\%script%\NVIDIA\' >> "%ghost-logfile%" 2>&1
-        chcp 65001 >> "%ghost-logfile%" 2>&1
-        del /q "C:\%script%\NVIDIA\nvidiaProfileInspector.zip" >nul 2>&1
-        if not exist "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" (
-            echo   %red%[ • ]%reset% Extraction failed, executable not found.
-            goto :nvidiaend
-        )
-    )
-
-    echo   %verde%[ %green%•%verde% ]%reset% Opening %green%Profile Inspector%reset% software...
-    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
-    start /wait "" "C:\%script%\NVIDIA\nvidiaProfileInspector.exe" >> "%ghost-logfile%" 2>&1
-
-    echo.
-    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
-    echo   %verde%[ %green%•%verde% ]%reset% %green%Profile Inspector%reset% Software closed.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    title %script% %version% %space% %reboot%
-    echo --- Closing Profile Inspector --- >> "%ghost-logfile%" 2>&1
-    goto menu
 
 :: Reboot & Shutdown
     :reboot
