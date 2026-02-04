@@ -19,7 +19,7 @@
   **80–90%** reduction in telemetry, Ads and AI features
 - **Network:**    
   **5–20%** less background network activity  
-  **1–5 ms** lower latency in latency-sensitive scenarios
+  **1–10 ms** lower latency in latency-sensitive scenarios
 - **Bloatware:**    
   **60–80%** fewer preinstalled apps and non-essential services
 
@@ -53,7 +53,7 @@ PowerShell -ExecutionPolicy Bypass -Command "if (!(Get-Command git -ErrorAction 
 
 # 🚨 Disclaimer
 **Use this script at your own risk.** I am not responsible for any damage, instability, or data loss.     
-Disabling **VBS** (Virtualization), **HVCI** (Core Isolation), **Spectre**, and **Meltdown** mitigations is **optional** and can be found in the performance tweaks.       
+
 **Need help?** Visit the [Troubleshooting & Notes](https://github.com/louzkk/Ghost-Optimizer/blob/main/GUIDE.md#troubleshooting--notes) page.     
 
 # 📜 License
