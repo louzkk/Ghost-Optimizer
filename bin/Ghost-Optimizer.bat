@@ -36,7 +36,7 @@
     (for /f %%a in ('echo prompt $E^| cmd') do set "esc=%%a")
 
     :: Variables
-    set "version=4.9.9.4"
+    set "version=4.9.9.5"
     set "space= / "
     set "script=Ghost Optimizer"
     set "reboot=Reboot required"
@@ -271,7 +271,7 @@
             set "CPUName=%%A"
         )
 
-    :: Winver info
+    :: Win info
         for /f "tokens=3" %%b in ('reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v CurrentBuild ^| findstr /i "CurrentBuild"') do (
             set "BuildNumber=%%b"
         )
@@ -769,9 +769,9 @@
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Applying General Tweaks --- >> "%ghost-logfile%" 2>&1
 
-    :: SysMain (Prefetcher)
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SysMain" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% SysMain disabled.
+    :: SysMain/Prefetcher
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\SysMain" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    ::echo   %purple%[ %roxo%•%purple% ]%white% SysMain disabled.
 
     :: Disk Optimization
     reg add "HKLM\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction" /v "Enable" /t REG_STR /d "Y" /f >> "%ghost-logfile%" 2>&1
@@ -879,8 +879,8 @@
     echo   %purple%[ %roxo%•%purple% ]%white% Remote Assist disabled.
 
     :: Dynamic Light
-    reg add "HKCU\Software\Microsoft\Lighting" /v "AmbientLightingEnabled" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Dynamic Light disabled.
+    ::reg add "HKCU\Software\Microsoft\Lighting" /v "AmbientLightingEnabled" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    ::echo   %purple%[ %roxo%•%purple% ]%white% Dynamic Light disabled.
 
     :: Stickers
     reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\current\device\Stickers" /v "EnableStickers" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
@@ -996,7 +996,7 @@
     echo !lineGradient!!esc![0m
 
     echo.
-    echo                                             %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply Performance Tweaks
+    echo                          %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply Performance Tweaks                %purple%[ %roxo%%underline%D%reset% %purple%]%white% Disable Mitigations
     echo.                 
     echo.
     echo                                                   %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
@@ -1007,6 +1007,8 @@
     if "%answer%"=="r" call :performancerevert
     if "%answer%"=="A" call :performanceapply
     if "%answer%"=="R" call :performancerevert
+    if "%answer%"=="D" call :disablemitigations
+    if "%answer%"=="d" call :disablemitigations
     if "%answer%"=="b" call :menu
     if "%answer%"=="B" call :menu
 
@@ -1031,9 +1033,6 @@
     reg add "HKEY_CURRENT_USER\Software\Microsoft\GameBar" /v "AutoGameModeEnabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Game Mode enabled.
 
-    :: Uncomment this line to keep the Game Bar and Game Capture on.
-    ::goto keepgamebar
-
     :: Game Bar & DVR
     reg add "\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR" /v "value" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\Software\Policies\Microsoft\Windows\GameDVR" /v "AllowGameDVR" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
@@ -1049,11 +1048,10 @@
     reg add "HKCU\System\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKCU\System\GameConfigStore" /v "GameDVR_FSEBehaviorMode" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKCU\System\GameConfigStore" /v "GameDVR_DXGIHonorFSEWindowsCompatible" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    :keepgamebar
     echo   %purple%[ %roxo%•%purple% ]%white% Game Bar/DVR disabled.
 
     :: Win32PrioritySeparation
-    :: You can mannually find the best value for your system: 22 - 26 - 36 - 38 - 40 - 42
+    :: You can mannually find the best value for your system: 22, 26, 36, 38, 40 or 42
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\PriorityControl" /v "Win32PrioritySeparation" /t REG_DWORD /d 38 /f >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Priority Separation Optimized.
 
@@ -1080,9 +1078,13 @@
 
     :: Memory Management
     chcp 437 >> "%ghost-logfile%" 2>&1
-    reg delete "HKLM\SYSTEM\CurrentControlSet\Control" /v "SvcHostSplitThresholdInKB" /f >> "%ghost-logfile%" 2>&1
+    sc config "SysMain" start= auto >> "%ghost-logfile%" 2>&1
+    net start "SysMain" >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" /v "EnablePrefetcher" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" /v "EnableSuperfetch" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    powershell -command "Enable-MMAgent -MemoryCompression" >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control" /v "SvcHostSplitThresholdInKB" /t REG_DWORD /d 4096000 /f >> "%ghost-logfile%" 2>&1
     reg delete "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PagingFiles" /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "AutomaticManagedPagefile" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler" /v "EnableExplicitVidMm" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     chcp 65001 >> "%ghost-logfile%" 2>&1    
@@ -1109,7 +1111,7 @@
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "PlatformAoAcOverride" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Modern Standby disabled.
 
-    :: Time Stamp Interval & IoPriority
+    :: Time Stamp Interval & IO Priority
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability" /v "TimeStampInterval" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability" /v "IoPriority" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% IO Priority Optimized.
@@ -1154,23 +1156,6 @@
     chcp 65001 >> "%ghost-logfile%" 2>&1    
     echo   %purple%[ %roxo%•%purple% ]%white% MSI ^& MPO Mode enabled.
 
-    :: Spectre & Meltdown
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverride" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverrideMask" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Spectre ^& Meltdown disabled.
-
-    :: Virtualization Based Security
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v "EnableVirtualizationBasedSecurity" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v "RequirePlatformSecurityFeatures" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v "HVCIMATRequired" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\HypervisorEnforcedCodeIntegrity" /v "Enabled" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard" /v "EnableVirtualizationBasedSecurity" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" /v "Enabled" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" /v "Enabled" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\LSA" /v "LsaCfgFlags" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    bcdedit /set hypervisorlaunch off >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% VBS ^& Hypervisor disabled.
-
     :: CPU & Timer
     bcdedit /set tscsyncpolicy Enhanced >> "%ghost-logfile%" 2>&1
     bcdedit /set disabledynamictick No >> "%ghost-logfile%" 2>&1
@@ -1184,6 +1169,50 @@
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title %script% %version% %space% %reboot%
     echo --- Performance Tweaks Applied --- >> "%ghost-logfile%" 2>&1
+    if "%mode%"=="menu" goto menu
+    exit /b
+
+    :disablemitigations
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Disabling %roxo%Mitigations%white% Tweaks... 
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo --- Disabling Mitigations --- >> "%ghost-logfile%" 2>&1
+
+    :: Virtualization
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v "EnableVirtualizationBasedSecurity" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v "RequirePlatformSecurityFeatures" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v "HVCIMATRequired" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Virtualization disabled.
+
+    :: Hypervisor
+    reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard" /v "EnableVirtualizationBasedSecurity" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" /v "Enabled" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" /v "Enabled" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\HypervisorEnforcedCodeIntegrity" /v "Enabled" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    bcdedit /set hypervisorlaunch off >> "%ghost-logfile%" 2>&1
+    bcdedit /set vsmlaunchtype off >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Hypervisor disabled.
+
+    :: Spectre
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverride" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Spectre mitigation disabled.
+
+    :: Meltdown
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverrideMask" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Meltdown mitigation disabled.
+
+    :: LSCFG
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\LSA" /v "LsaCfgFlags" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% LSACFG flags disabled.
+
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Mitigations disabled %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    title %script% %version% %space% %reboot%
+    echo --- Mitigations Disabled --- >> "%ghost-logfile%" 2>&1
     if "%mode%"=="menu" goto menu
     exit /b
 
@@ -2767,8 +2796,8 @@
     echo --- Disabling Unnecessary Services --- >> "%ghost-logfile%" 2>&1
 
     :: SysMain/Superfetch
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\SysMain" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% SysMain disabled.
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\SysMain" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    ::echo   %purple%[ %roxo%•%purple% ]%white% SysMain disabled.
 
     :: Sensor/Location
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\SensorDataService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
@@ -2897,6 +2926,8 @@
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\RstMwService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Intel(R) TPM Provisioning Service" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\IntelAudioService" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\igfx" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\igfxCUIService2.0.0.0" /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Intel services disabled.
 
     :: AMD Software
@@ -3562,7 +3593,7 @@
     chcp 65001 >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Xbox App restored.
 
-    :: Xbox Services
+    :: Xbox Auth/App Services
     sc config XblAuthManager start= auto >> "%ghost-logfile%" 2>&1
     sc config XblGameSave start= auto >> "%ghost-logfile%" 2>&1
     sc config XboxGipSvc start= auto >> "%ghost-logfile%" 2>&1
@@ -3575,21 +3606,18 @@
     chcp 65001 >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Game Bar restored.
 
-    :: Game Bar Registry
+    :: Game Bar/DVR Registry
+    reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR" /v "value" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\Software\Policies\Microsoft\Windows\GameDVR" /v "AllowGameDVR" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKCU\System\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR" /v "AllowGameDVR" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameDVR" /v "AllowGameDVR" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR" /v value /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "AudioCaptureEnabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKCU\System\GameConfigStore" /v "GameDVR_FSEBehaviorMode" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKCU\System\GameConfigStore" /v "GameDVR_DXGIHonorFSEWindowsCompatible" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Gaming.GameBar.PresenceServer.Internal.PresenceWriter" /v "ActivationType" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKCU\System\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKCU\System\GameConfigStore" /v "GameDVR_FSEBehaviorMode" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    ::reg add "HKCU\System\GameConfigStore" /v "GameDVR_DXGIHonorFSEWindowsCompatible" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Game Bar enabled.
+    echo   %purple%[ %roxo%•%purple% ]%white% Game Bar/DVR enabled.
 
     echo.
     echo   %yellow%[ • ]%reset% If that doesn't solve your problem, try running Full Integrity Fix.
@@ -3746,7 +3774,7 @@
         echo   %purple%[ %roxo%•%purple% ]%white% RDCfg disabled.
     )
 
-    :: Browsers (Verifica individualmente para não poluir o registro)
+    :: Browsers
     for %%B in (Chrome Opera "Opera GX" Brave Firefox) do (
         reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "%%~B" >nul 2>&1
         if not errorlevel 1 (
@@ -3763,7 +3791,7 @@
         echo   %purple%[ %roxo%•%purple% ]%white% Spotify disabled.
     )
 
-    :: Microsoft Edge (Múltiplas chaves possíveis)
+    :: Microsoft Edg
     for %%E in (msedge Edge "MicrosoftEdgeAutoLaunch_1BA94C0BA16E4AD6E747BB43BB8E8E25") do (
         reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "%%~E" >nul 2>&1
         if not errorlevel 1 (
@@ -3781,12 +3809,100 @@
         echo   %purple%[ %roxo%•%purple% ]%white% Xbox App disabled.
     )
 
-    :: Java Updater (HKLM)
+    :: Java Updater
     reg query "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run" /v "SunJavaUpdateSched" >nul 2>&1
     if not errorlevel 1 (
         reg add "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run" /v "SunJavaUpdateSched" /t REG_SZ /d "" /f >> "%ghost-logfile%" 2>&1
         reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "SunJavaUpdateSched" /t REG_BINARY /d 030000000000000000000000 /f >> "%ghost-logfile%" 2>&1
         echo   %purple%[ %roxo%•%purple% ]%white% Java Updater disabled.
+    )
+
+    :: Razer Synapse
+    reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Razer Synapse" >nul 2>&1
+    if not errorlevel 1 (
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Razer Synapse" /t REG_SZ /d "" /f >> "%ghost-logfile%" 2>&1
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "Razer Synapse" /t REG_BINARY /d 030000000000000000000000 /f >> "%ghost-logfile%" 2>&1
+        echo   %purple%[ %roxo%•%purple% ]%white% Razer Synapse disabled.
+    )
+
+    :: Razer Central
+    reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Razer Central" >nul 2>&1
+    if not errorlevel 1 (
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Razer Central" /t REG_SZ /d "" /f >> "%ghost-logfile%" 2>&1
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "Razer Central" /t REG_BINARY /d 030000000000000000000000 /f >> "%ghost-logfile%" 2>&1
+        echo   %purple%[ %roxo%•%purple% ]%white% Razer Central disabled.
+    )
+
+    :: Razer Cortex
+    reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Razer Cortex" >nul 2>&1
+    if not errorlevel 1 (
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Razer Cortex" /t REG_SZ /d "" /f >> "%ghost-logfile%" 2>&1
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "Razer Cortex" /t REG_BINARY /d 030000000000000000000000 /f >> "%ghost-logfile%" 2>&1
+        echo   %purple%[ %roxo%•%purple% ]%white% Razer Cortex disabled.
+    )
+
+    :: Razer Game Booster
+    reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Razer Game Booster" >nul 2>&1
+    if not errorlevel 1 (
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Razer Game Booster" /t REG_SZ /d "" /f >> "%ghost-logfile%" 2>&1
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "Razer Game Booster" /t REG_BINARY /d 030000000000000000000000 /f >> "%ghost-logfile%" 2>&1
+        echo   %purple%[ %roxo%•%purple% ]%white% Razer Game Booster disabled.
+    )
+
+    :: MSI Center
+    reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "MSI Center" >nul 2>&1
+    if not errorlevel 1 (
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "MSI Center" /t REG_SZ /d "" /f >> "%ghost-logfile%" 2>&1
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "MSI Center" /t REG_BINARY /d 030000000000000000000000 /f >> "%ghost-logfile%" 2>&1
+        echo   %purple%[ %roxo%•%purple% ]%white% MSI Center disabled.
+    )
+
+    :: MSI Dragon Center
+    reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "MSI Dragon Center" >nul 2>&1
+    if not errorlevel 1 (
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "MSI Dragon Center" /t REG_SZ /d "" /f >> "%ghost-logfile%" 2>&1
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "MSI Dragon Center" /t REG_BINARY /d 030000000000000000000000 /f >> "%ghost-logfile%" 2>&1
+        echo   %purple%[ %roxo%•%purple% ]%white% MSI Dragon Center disabled.
+    )
+
+    :: MSI Gaming App
+    reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "MSI Gaming App" >nul 2>&1
+    if not errorlevel 1 (
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "MSI Gaming App" /t REG_SZ /d "" /f >> "%ghost-logfile%" 2>&1
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "MSI Gaming App" /t REG_BINARY /d 030000000000000000000000 /f >> "%ghost-logfile%" 2>&1
+        echo   %purple%[ %roxo%•%purple% ]%white% MSI Gaming App disabled.
+    )
+
+    :: MSI Game Booster
+    reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "MSI Game Booster" >nul 2>&1
+    if not errorlevel 1 (
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "MSI Game Booster" /t REG_SZ /d "" /f >> "%ghost-logfile%" 2>&1
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "MSI Game Booster" /t REG_BINARY /d 030000000000000000000000 /f >> "%ghost-logfile%" 2>&1
+        echo   %purple%[ %roxo%•%purple% ]%white% MSI Game Booster disabled.
+    )
+
+    :: Game Booster
+    reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Game Booster" >nul 2>&1
+    if not errorlevel 1 (
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Game Booster" /t REG_SZ /d "" /f >> "%ghost-logfile%" 2>&1
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "Game Booster" /t REG_BINARY /d 030000000000000000000000 /f >> "%ghost-logfile%" 2>&1
+        echo   %purple%[ %roxo%•%purple% ]%white% Game Booster disabled.
+    )
+
+    :: Smart Game Booster
+    reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Smart Game Booster" >nul 2>&1
+    if not errorlevel 1 (
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Smart Game Booster" /t REG_SZ /d "" /f >> "%ghost-logfile%" 2>&1
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "Smart Game Booster" /t REG_BINARY /d 030000000000000000000000 /f >> "%ghost-logfile%" 2>&1
+        echo   %purple%[ %roxo%•%purple% ]%white% Smart Game Booster disabled.
+    )
+
+    :: FPS Booster
+    reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "FPS Booster" >nul 2>&1
+    if not errorlevel 1 (
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "FPS Booster" /t REG_SZ /d "" /f >> "%ghost-logfile%" 2>&1
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "FPS Booster" /t REG_BINARY /d 030000000000000000000000 /f >> "%ghost-logfile%" 2>&1
+        echo   %purple%[ %roxo%•%purple% ]%white% FPS Booster disabled.
     )
 
     :: Advertising
