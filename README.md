@@ -53,7 +53,6 @@ PowerShell -ExecutionPolicy Bypass -Command "if (!(Get-Command git -ErrorAction 
 
 # 🚨 Disclaimer
 **Use this script at your own risk.** I am not responsible for any damage, instability, or data loss.     
-
 **Need help?** Visit the [Troubleshooting & Notes](https://github.com/louzkk/Ghost-Optimizer/blob/main/GUIDE.md#troubleshooting--notes) page.     
 
 # 📜 License
