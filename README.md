@@ -1,10 +1,8 @@
 # 💜 About
 **Ghost Optimizer** is a Windows optimization script that improves **performance**, **network**, **latency**, **responsiveness** and **privacy**, while reducing **telemetry**, **bloatware**, and **Copilot/AI components**.
 
-[![Version](https://img.shields.io/badge/Version-4.9-indigo)](https://github.com/louzkk/Ghost-Optimizer)
-[![Unstable](https://img.shields.io/badge/Unstable-indigo)](https://github.com/louzkk/Ghost-Optimizer)
-[![Official](https://img.shields.io/badge/Official-indigo)](https://github.com/louzkk/Ghost-Optimizer)
-[![Download](https://img.shields.io/badge/Download-indigo)](https://github.com/louzkk/Ghost-Optimizer/releases)
+[![Version](https://img.shields.io/badge/Version-4.9--beta-indigo)](https://github.com/louzkk/Ghost-Optimizer)
+[![Download](https://img.shields.io/badge/Download-indigo?logo=github&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer/releases)
  
 ![Banner](images/GhostX-BANNER-denoised-4x.png)
 
@@ -44,8 +42,9 @@ Some software and parts of the code were adapted from other developers, with pro
 3. Run the script as **Administrator**
 
 ### Quick Install
-1. Open **PowerShell** as **Administrator**  
-2. **Copy and Paste** this command:
+1. Download [Git](https://git-scm.com/install/windows)
+2. Open **PowerShell** as **Administrator**  
+3. **Copy and Paste** this command:
 ```
 PowerShell -ExecutionPolicy Bypass -Command "if (!(Get-Command git -ErrorAction SilentlyContinue)) { Write-Host 'Downloading Ghost Optimizer...'; start-process winget -ArgumentList 'install --id Git.Git -e --source winget --silent' -Wait }; Remove-Item '$env:TEMP\Ghost' -Recurse -Force -ErrorAction SilentlyContinue; git clone https://github.com/louzkk/Ghost-Optimizer.git '$env:TEMP\Ghost'; Set-Location '$env:TEMP\Ghost\bin'; .\Ghost-Optimizer.bat"
 ```
