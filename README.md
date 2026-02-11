@@ -1,7 +1,8 @@
 # 💜 About
 **Ghost Optimizer** is a Windows optimization script that improves **performance**, **network**, **latency**, **responsiveness** and **privacy**, while reducing **telemetry**, **bloatware**, and **Copilot/AI components**.
 
-[![Version](https://img.shields.io/badge/Version-5.0-indigo)](https://github.com/louzkk/Ghost-Optimizer)
+[![Version](https://img.shields.io/badge/Version-4.9-indigo)](https://github.com/louzkk/Ghost-Optimizer)
+[![Unstable](https://img.shields.io/badge/Official-indigo)](https://github.com/louzkk/Ghost-Optimizer)
 [![Official](https://img.shields.io/badge/Official-indigo)](https://github.com/louzkk/Ghost-Optimizer)
 [![Download](https://img.shields.io/badge/Download-indigo)](https://github.com/louzkk/Ghost-Optimizer/releases)
  
@@ -33,7 +34,7 @@
 - Internet connection
 
 # 🤝 Credits
-Thanks to [Opendows](https://github.com/MarcoRavich/Opendows) for listing this project and to **@MysteryNich** for testing each release.  
+Thanks to [Opendows](https://github.com/MarcoRavich/Opendows) for listing this project and to [@MysteryNich](https://github.com/MysteryNich) for testing each release.  
 Some software and parts of the code were adapted from other developers, with proper credits included in the script comments.
 
 # ❓ How to Use
