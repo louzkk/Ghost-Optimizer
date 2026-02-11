@@ -42,7 +42,7 @@ Some software and parts of the code were adapted from other developers, with pro
 3. Run the script as **Administrator**
 
 ### Quick Install
-1. Download [Git](https://git-scm.com/install/windows)
+1. Download [**Git**](https://git-scm.com/install/windows)
 2. Open **PowerShell** as **Administrator**  
 3. **Copy and Paste** this command:
 ```
