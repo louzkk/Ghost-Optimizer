@@ -3,9 +3,9 @@
 
 [![Version](https://img.shields.io/badge/Stable-5.0-indigo?logo=Ghostty&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer)
 [![Download](https://img.shields.io/badge/Download-indigo?logo=github&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer/releases)
- 
-![Banner](images/GhostX-BANNER-denoised-4x.png)       
 
+![Banner](images/Ghost-BANNER-denoised-4x.png)
+ 
 <details>
 <summary>See tweaks impact</summary>
 
@@ -28,9 +28,9 @@
 - Internet connection
 
 # 📥 Download
-**Manual** — Download [Ghost-Optimizer.bat](https://github.com/louzkk/Ghost-Optimizer/releases) and run as **Administrator**.
+**Manual**  —  Download [Ghost-Optimizer.bat](https://github.com/louzkk/Ghost-Optimizer/releases) and run as **Administrator**.
 
-**Quick** — Open PowerShell as **Administrator** and run:
+**Quick Install**  —  Open PowerShell as **Administrator** and run:
 
 ```
 PowerShell -ExecutionPolicy Bypass -Command "if (!(Get-Command git -ErrorAction SilentlyContinue)) { Write-Host 'Downloading Ghost Optimizer...'; start-process winget -ArgumentList 'install --id Git.Git -e --source winget --silent' -Wait }; Remove-Item '$env:TEMP\Ghost' -Recurse -Force -ErrorAction SilentlyContinue; git clone https://github.com/louzkk/Ghost-Optimizer.git '$env:TEMP\Ghost'; Set-Location '$env:TEMP\Ghost\bin'; .\Ghost-Optimizer.bat"
@@ -45,7 +45,7 @@ Use at your own risk. I'm not responsible for any damage, instability or data lo
 **Need help?** See the [Troubleshooting & Notes](https://github.com/louzkk/Ghost-Optimizer/blob/main/GUIDE.md) page.
 
 # 📜 License
-[MIT License](LICENSE) — open use, modification and distribution with attribution.
+[MIT License](LICENSE)  —  open use, modification and distribution with attribution.
 
 # 💬 Feedback
-You can [Open an issue](https://github.com/louzkk/Ghost-Optimizer/issues) or add me on Discord (@louzkk).
+[Open an issue](https://github.com/louzkk/Ghost-Optimizer/issues)  —  bugs, suggestions, etc., or add me on Discord (@louzkk).
