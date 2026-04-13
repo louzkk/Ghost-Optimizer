@@ -2,9 +2,9 @@
 **Ghost Optimizer** is an open source advanced Windows 10/11 optimization script that improves **performance**, **latency**, **network** and **privacy**, while disabling **telemetry**, **bloatware** and **AI** features.
 
 [![Version](https://img.shields.io/badge/Stable-5.0-indigo?logo=Ghostty&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer)
-[![Download](https://img.shields.io/badge/Download-indigo?logo=Github&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer/releases)
+[![Download](https://img.shields.io/badge/Download-indigo?logo=github&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer/releases)
  
-![Banner](images/GhostX-BANNER-denoised-4x.png)
+![Banner](images/GhostX-BANNER-denoised-4x.png)       
 
 <details>
 <summary>See tweaks impact</summary>
