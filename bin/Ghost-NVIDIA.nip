@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-16"?>
 <ArrayOfProfile>
   <Profile>
-    <ProfileName>GhostX Performance Profile</ProfileName>
+    <ProfileName>Ghost Optimized Profile</ProfileName>
     <Executeables />
     <Settings>
       <ProfileSetting>
@@ -13,7 +13,7 @@
       <ProfileSetting>
         <SettingNameInfo>Texture filtering - Negative LOD bias</SettingNameInfo>
         <SettingID>1686376</SettingID>
-        <SettingValue>1</SettingValue>
+        <SettingValue>0</SettingValue>
         <ValueType>Dword</ValueType>
       </ProfileSetting>
       <ProfileSetting>
@@ -49,19 +49,19 @@
       <ProfileSetting>
         <SettingNameInfo>Preferred refresh rate</SettingNameInfo>
         <SettingID>6600001</SettingID>
-        <SettingValue>1</SettingValue>
+        <SettingValue>0</SettingValue>
         <ValueType>Dword</ValueType>
       </ProfileSetting>
       <ProfileSetting>
         <SettingNameInfo>Ambient Occlusion</SettingNameInfo>
         <SettingID>6714153</SettingID>
-        <SettingValue>0</SettingValue>
+        <SettingValue>1</SettingValue>
         <ValueType>Dword</ValueType>
       </ProfileSetting>
       <ProfileSetting>
         <SettingNameInfo>Maximum pre-rendered frames</SettingNameInfo>
         <SettingID>8102046</SettingID>
-        <SettingValue>1</SettingValue>
+        <SettingValue>0</SettingValue>
         <ValueType>Dword</ValueType>
       </ProfileSetting>
       <ProfileSetting>
@@ -103,7 +103,7 @@
       <ProfileSetting>
         <SettingNameInfo>Texture filtering - Quality</SettingNameInfo>
         <SettingID>13510289</SettingID>
-        <SettingValue>20</SettingValue>
+        <SettingValue>10</SettingValue>
         <ValueType>Dword</ValueType>
       </ProfileSetting>
       <ProfileSetting>
@@ -163,7 +163,7 @@
       <ProfileSetting>
         <SettingNameInfo>Power management mode</SettingNameInfo>
         <SettingID>274197361</SettingID>
-        <SettingValue>1</SettingValue>
+        <SettingValue>5</SettingValue>
         <ValueType>Dword</ValueType>
       </ProfileSetting>
       <ProfileSetting>
@@ -181,7 +181,7 @@
       <ProfileSetting>
         <SettingNameInfo>Antialiasing - Gamma correction</SettingNameInfo>
         <SettingID>276652957</SettingID>
-        <SettingValue>0</SettingValue>
+        <SettingValue>2</SettingValue>
         <ValueType>Dword</ValueType>
       </ProfileSetting>
       <ProfileSetting>
@@ -229,13 +229,13 @@
       <ProfileSetting>
         <SettingNameInfo>Toggle the VRR global feature</SettingNameInfo>
         <SettingID>278196567</SettingID>
-        <SettingValue>0</SettingValue>
+        <SettingValue>1</SettingValue>
         <ValueType>Dword</ValueType>
       </ProfileSetting>
       <ProfileSetting>
         <SettingNameInfo>VRR requested state</SettingNameInfo>
         <SettingID>278196727</SettingID>
-        <SettingValue>0</SettingValue>
+        <SettingValue>1</SettingValue>
         <ValueType>Dword</ValueType>
       </ProfileSetting>
       <ProfileSetting>
@@ -247,7 +247,7 @@
       <ProfileSetting>
         <SettingNameInfo>G-SYNC</SettingNameInfo>
         <SettingID>279476687</SettingID>
-        <SettingValue>1</SettingValue>
+        <SettingValue>0</SettingValue>
         <ValueType>Dword</ValueType>
       </ProfileSetting>
       <ProfileSetting>
@@ -343,7 +343,7 @@
       <ProfileSetting>
         <SettingNameInfo>Antialiasing - Line gamma</SettingNameInfo>
         <SettingID>545898348</SettingID>
-        <SettingValue>0</SettingValue>
+        <SettingValue>16</SettingValue>
         <ValueType>Dword</ValueType>
       </ProfileSetting>
       <ProfileSetting>
@@ -367,7 +367,7 @@
       <ProfileSetting>
         <SettingNameInfo>Threaded optimization</SettingNameInfo>
         <SettingID>549528094</SettingID>
-        <SettingValue>1</SettingValue>
+        <SettingValue>0</SettingValue>
         <ValueType>Dword</ValueType>
       </ProfileSetting>
       <ProfileSetting>

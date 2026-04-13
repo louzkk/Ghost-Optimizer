@@ -1,63 +1,51 @@
 # 💜 About
-**Ghost Optimizer** is a Windows optimization script that improves **performance**, **network**, **latency**, **responsiveness** and **privacy**, while reducing **telemetry**, **bloatware**, and **Copilot/AI components**.
+**Ghost Optimizer** is an open source advanced Windows 10/11 optimization script that improves **performance**, **latency**, **network** and **privacy**, while disabling **telemetry**, **bloatware** and **AI** features.
 
-[![Version](https://img.shields.io/badge/Version-4.9--beta-indigo)](https://github.com/louzkk/Ghost-Optimizer)
-[![Download](https://img.shields.io/badge/Download-indigo?logo=github&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer/releases)
+[![Version](https://img.shields.io/badge/Stable-5.0-indigo?logo=Ghostty&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer)
+[![Download](https://img.shields.io/badge/Download-indigo?logo=Github&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer/releases)
  
 ![Banner](images/GhostX-BANNER-denoised-4x.png)
 
 <details>
-<summary>⚡ Click to see optimization impact</summary>
- 
-- **Performance:**    
-  **1–25%** improvement in responsiveness and FPS
-- **Resource Usage:**   
-  **10–30%** lower RAM usage in idle  
-  **5–20%** less background CPU activity
-- **Telemetry:**    
-  **80–90%** reduction in telemetry, Ads and AI features
-- **Network:**    
-  **5–20%** less background network activity  
-  **1–10 ms** lower latency in latency-sensitive scenarios
-- **Bloatware:**    
-  **60–80%** fewer preinstalled apps and non-essential services
+<summary>See tweaks impact</summary>
 
-  *Approximate values; results may vary depending on system and usage.*
- 
+| Area | Impact |
+|---|---|
+| General Performance | ↑ 5–30% |
+| General Latency | ↓ 5–30% |
+| Network Latency | ↓ 5–30% |
+| Idle Resource Usage | ↓ 20–60% |
+| Bloatware & AI | ↓ 80–90% |
+| Non-essential services | ↓ 50–80% |
+| Telemetry & Tracking | ↓ 80–90% |
+
+*Approximate values. Results vary by hardware, drivers and Windows version.*  
 </details>
 
 # 💻 Requirements
 - Windows 10 or 11
-- Terminal or CMD
+- Administrator privileges
 - Internet connection
 
-# 🤝 Credits
-Thanks to [Opendows](https://github.com/MarcoRavich/Opendows) for listing this project and to [@MysteryNich](https://github.com/MysteryNich) for testing each release.  
-Some software and parts of the code were adapted from other developers, with proper credits included in the script comments.
+# 📥 Download
+**Manual** — Download [Ghost-Optimizer.bat](https://github.com/louzkk/Ghost-Optimizer/releases) and run as **Administrator**.
 
-# ❓ How to Use
-### Manual Install
-1. Go to [**Releases**](https://github.com/louzkk/Ghost-Optimizer/releases)  
-2. Download **Ghost Optimizer.bat**  
-3. Run the script as **Administrator**
+**Quick** — Open PowerShell as **Administrator** and run:
 
-### Quick Install
-1. Download [**Git**](https://git-scm.com/install/windows)
-2. Open **PowerShell** as **Administrator**  
-3. **Copy and Paste** this command:
 ```
 PowerShell -ExecutionPolicy Bypass -Command "if (!(Get-Command git -ErrorAction SilentlyContinue)) { Write-Host 'Downloading Ghost Optimizer...'; start-process winget -ArgumentList 'install --id Git.Git -e --source winget --silent' -Wait }; Remove-Item '$env:TEMP\Ghost' -Recurse -Force -ErrorAction SilentlyContinue; git clone https://github.com/louzkk/Ghost-Optimizer.git '$env:TEMP\Ghost'; Set-Location '$env:TEMP\Ghost\bin'; .\Ghost-Optimizer.bat"
 ```
 
-*Your antivirus may need to be temporarily disabled to avoid issues.*
+# 🤝 Credits
+Project listed on [Opendows](https://github.com/MarcoRavich/Opendows). Thanks to [@MysteryNich](https://github.com/MysteryNich) for testing each release.  
+Some software and parts of the code were adapted from other developers.
 
 # 🚨 Disclaimer
-**Use this script at your own risk.** I am not responsible for any damage, instability, or data loss.     
-**Need help?** Visit the [Troubleshooting & Notes](https://github.com/louzkk/Ghost-Optimizer/blob/main/GUIDE.md#troubleshooting--notes) page.     
+Use at your own risk. I'm not responsible for any damage, instability or data loss.  
+**Need help?** See the [Troubleshooting & Notes](https://github.com/louzkk/Ghost-Optimizer/blob/main/GUIDE.md) page.
 
 # 📜 License
-This project is released under the [MIT License](LICENSE), allowing open use, modification, and distribution with attribution.  
-If you create derivative work or redistribute this project, please maintain proper credit to the original authors.   
+[MIT License](LICENSE) — open use, modification and distribution with attribution.
 
-# 💬 Bug or Suggestion
-You can send me a message on **Discord** (@louzkk) or [Open an issue](https://github.com/louzkk/Ghost-Optimizer/issues).
+# 💬 Feedback
+You can [Open an issue](https://github.com/louzkk/Ghost-Optimizer/issues) or add me on Discord (@louzkk).

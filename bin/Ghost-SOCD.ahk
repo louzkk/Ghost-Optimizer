@@ -7,7 +7,7 @@
 Menu, Tray, Tip, Ghost Optimizer
 Sleep, 50
 
-IconPath := A_ScriptDir "\..\images\GhostX-ICON1-denoised-4x.ico"
+IconPath := A_ScriptDir "\..\images\Ghost-ICON1-denoised-4x.ico"
 if FileExist(IconPath)
     Menu, Tray, Icon, %IconPath%
 
