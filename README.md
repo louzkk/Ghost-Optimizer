@@ -1,51 +1,49 @@
-# 💜 About
-**Ghost Optimizer** is an open source advanced Windows 10/11 optimization script that improves **performance**, **latency**, **network** and **privacy**, while disabling **telemetry**, **bloatware** and **AI** features.
+<div align="center">
 
-[![Version](https://img.shields.io/badge/Stable-5.0-indigo?logo=Ghostty&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer)
-[![Download](https://img.shields.io/badge/Download-indigo?logo=github&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer/releases)
+# 👻 Ghost Optimizer
+**Minimal, Private and Optimized Windows**
+
+[![Version](https://img.shields.io/badge/Version-5.1-indigo?style=for-the-badge&logo=Ghostty&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer/releases)
+[![License](https://img.shields.io/badge/License-MIT-indigo?style=for-the-badge)](LICENSE)
+[![Download](https://img.shields.io/badge/Download-indigo?style=for-the-badge&logo=Github&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer/releases)
 
 ![Banner](images/Ghost-BANNER-denoised-4x.png)
- 
-<details>
-<summary>See tweaks impact</summary>
 
-| Area | Impact |
-|---|---|
-| General Performance | ↑ 5–30% |
-| General Latency | ↓ 5–30% |
-| Network Latency | ↓ 5–30% |
-| Idle Resource Usage | ↓ 20–60% |
-| Bloatware & AI | ↓ 80–90% |
-| Non-essential services | ↓ 50–80% |
-| Telemetry & Tracking | ↓ 80–90% |
+</div>
 
-*Approximate values. Results vary by hardware, drivers and Windows version.*  
-</details>
+**Ghost Optimizer** is an open source advanced batch script that improves **performance**, **latency**, **network** and **privacy**, while disabling **bloatware** and **AI** features.
 
-# 💻 Requirements
-- Windows 10 or 11
-- Administrator privileges
-- Internet connection
+It applies system registry and policy modifications: General and Performance tweaks targeting scheduler behavior and resource allocation, Network optimizations to improve throughput and reduce overhead, Latency and Input-lag adjustments via interrupt handling and timer resolution tuning, and reducing Telemetry, Advertising, Bloatware and AI.
+All modifications are reversible via restore point option.
 
-# 📥 Download
-**Manual**  —  Download [Ghost-Optimizer.bat](https://github.com/louzkk/Ghost-Optimizer/releases) and run as **Administrator**.
+## 🚀 Download
 
-**Quick Install**  —  Open PowerShell as **Administrator** and run:
+### Requirements
+* Windows 10/11
+* [Git](https://git-scm.com/install/windows) for Quick Install
 
+### Quick Install (PowerShell Admin)
+Copy and paste the command below:
 ```
 PowerShell -ExecutionPolicy Bypass -Command "if (!(Get-Command git -ErrorAction SilentlyContinue)) { Write-Host 'Downloading Ghost Optimizer...'; start-process winget -ArgumentList 'install --id Git.Git -e --source winget --silent' -Wait }; Remove-Item '$env:TEMP\Ghost' -Recurse -Force -ErrorAction SilentlyContinue; git clone https://github.com/louzkk/Ghost-Optimizer.git '$env:TEMP\Ghost'; Set-Location '$env:TEMP\Ghost\bin'; .\Ghost-Optimizer.bat"
 ```
+### Manual Installation
+1. Temporarily disable your antivirus.
+(Scripts that modify the registry may trigger false positives)
+2. Download latest [Ghost-Optimizer.bat](https://github.com/louzkk/Ghost-Optimizer/releases).
+3. Right click and **Run as Administrator**.
 
-# 🤝 Credits
-Project listed on [Opendows](https://github.com/MarcoRavich/Opendows). Thanks to [@MysteryNich](https://github.com/MysteryNich) for testing each release.  
-Some software and parts of the code were adapted from other developers.
+## 🤝 Credits
+* Listed on [Opendows](https://github.com/MarcoRavich/Opendows).
+* Testing: [@MysteryNich](https://github.com/MysteryNich).
+* [OOSU](https://www.oo-software.com/en/shutup10) and [NvidiaProfileInspector](https://github.com/Orbmu2k/nvidiaProfileInspector).
 
-# 🚨 Disclaimer
-Use at your own risk. I'm not responsible for any damage, instability or data loss.  
-**Need help?** See the [Troubleshooting & Notes](https://github.com/louzkk/Ghost-Optimizer/blob/main/GUIDE.md) page.
+## ⚠️ Disclaimer
+This script modifies the Windows Registry and applications. **Use at your own risk.** I'm not responsible for system instability or data loss.
 
-# 📜 License
-[MIT License](LICENSE)  —  open use, modification and distribution with attribution.
-
-# 💬 Feedback
-[Open an issue](https://github.com/louzkk/Ghost-Optimizer/issues)  —  bugs, suggestions, etc., or add me on Discord (@louzkk).
+## 📄 License
+Released under the [MIT License](LICENSE). Free for modification and distribution with proper attribution.
+  
+<div align="center">
+Maintained by: <a href="https://github.com/louzkk">louzkk</a>
+</div>
