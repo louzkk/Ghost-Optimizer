@@ -3,7 +3,7 @@
 # 👻 Ghost Optimizer
 **Minimal, Private and Optimized Windows**
 
-[![Version](https://img.shields.io/badge/Version-5.1-indigo?style=for-the-badge&logo=Ghostty&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer/releases)
+[![Version](https://img.shields.io/badge/Version-5.2-indigo?style=for-the-badge&logo=Ghostty&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer/releases)
 [![License](https://img.shields.io/badge/License-MIT-indigo?style=for-the-badge)](LICENSE)
 [![Download](https://img.shields.io/badge/Download-indigo?style=for-the-badge&logo=Github&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer/releases)
 
@@ -11,7 +11,7 @@
 
 </div>
 
-**Ghost Optimizer** is an open source advanced batch script that improves **performance**, **latency**, **network** and **privacy**, while disabling **bloatware** and **AI** features.
+**Ghost Optimizer** is an open source advanced batch script that improves **performance**, **latency**, **network** and **privacy**, while removing **bloatware** and **AI** features.
 
 It applies system registry and policy modifications: General and Performance tweaks targeting scheduler behavior and resource allocation, Network optimizations to improve throughput and reduce overhead, Latency and Input-lag adjustments via interrupt handling and timer resolution tuning, and reducing Telemetry, Advertising, Bloatware and AI.
 All modifications are reversible via restore point option.
@@ -28,8 +28,8 @@ Copy and paste the command below:
 PowerShell -ExecutionPolicy Bypass -Command "if (!(Get-Command git -ErrorAction SilentlyContinue)) { Write-Host 'Downloading Ghost Optimizer...'; start-process winget -ArgumentList 'install --id Git.Git -e --source winget --silent' -Wait }; Remove-Item '$env:TEMP\Ghost' -Recurse -Force -ErrorAction SilentlyContinue; git clone https://github.com/louzkk/Ghost-Optimizer.git '$env:TEMP\Ghost'; Set-Location '$env:TEMP\Ghost\bin'; .\Ghost-Optimizer.bat"
 ```
 ### Manual Installation
-1. Temporarily disable your antivirus.
-(Scripts that modify the registry may trigger false positives)
+1. Temporarily disable your antivirus.   
+(If you are unable to open the script, the problem may be in Antivirus or Smart App Control)
 2. Download latest [Ghost-Optimizer.bat](https://github.com/louzkk/Ghost-Optimizer/releases).
 3. Right click and **Run as Administrator**.
 
