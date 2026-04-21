@@ -3,9 +3,9 @@
 # 👻 Ghost Optimizer
 **Minimal, Private and Optimized Windows**
 
-[![Version](https://img.shields.io/badge/Version-5.2-indigo?style=for-the-badge&logo=Ghostty&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer/releases)
+[![Version](https://img.shields.io/badge/Version-5.2.1-indigo?style=for-the-badge&logo=Ghostty&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer/releases)
 [![License](https://img.shields.io/badge/License-MIT-indigo?style=for-the-badge)](LICENSE)
-[![Download](https://img.shields.io/badge/Download-indigo?style=for-the-badge&logo=Github&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer/releases)
+[![Download](https://img.shields.io/badge/Download-indigo?style=for-the-badge&logo=Github&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer#quick-install-powershell-admin)
 
 ![Banner](images/Ghost-BANNER-denoised-4x.png)
 
@@ -20,7 +20,8 @@ All modifications are reversible via restore point option.
 
 ### Requirements
 * Windows 10/11
-* [Git](https://git-scm.com/install/windows) for Quick Install
+* [Git](https://git-scm.com/install/windows) for Quick Install 
+(Check: "Use Windows' Default console window")
 
 ### Quick Install (PowerShell Admin)
 Copy and paste the command below:
@@ -29,7 +30,7 @@ PowerShell -ExecutionPolicy Bypass -Command "if (!(Get-Command git -ErrorAction 
 ```
 ### Manual Installation
 1. Temporarily disable your antivirus.   
-(If you are unable to open the script, the problem may be in Antivirus or Smart App Control)
+(If you are unable to open the script, try Quick Install)
 2. Download latest [Ghost-Optimizer.bat](https://github.com/louzkk/Ghost-Optimizer/releases).
 3. Right click and **Run as Administrator**.
 
@@ -45,5 +46,5 @@ This script modifies the Windows Registry and applications. **Use at your own ri
 Released under the [MIT License](LICENSE). Free for modification and distribution with proper attribution.
   
 <div align="center">
-Maintained by: <a href="https://github.com/louzkk">louzkk</a>
+Maintained by: <a href="https://github.com/louzkk">louzkk 🇧🇷</a>
 </div>
