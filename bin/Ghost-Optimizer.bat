@@ -9,14 +9,14 @@
 
     mode 124,30
     setlocal enabledelayedexpansion
-    chcp 437 >nul 2>&1
+    chcp 437 >> null 2>&1 >nul 2>&1
     powershell "Set-ExecutionPolicy Unrestricted" >nul 2>&1
     reg add "HKCU\CONSOLE" /v "VirtualTerminalLevel" /t REG_DWORD /d 1 /f >nul 2>&1
     for /F "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1) do rem"') do (set "DEL=%%a" & set "COL=%%b")
     (for /f %%a in ('echo prompt $E^| cmd') do set "esc=%%a")
-    chcp 65001 >nul
+    chcp 65001 >> null 2>&1 >nul 2>&1
 
-    set "version=5.2.1"
+    set "version=5.2.2"
     set "script=Ghost Optimizer"
     set "reboot= (Reboot required)" 
     set "rebooting=Rebooting"
@@ -214,9 +214,9 @@
     :: vssadmin resize shadowstorage /for=C: /on=C: /maxsize=10%% >nul 2>&1
     
     echo      %purple%[ %roxo%-%purple% ]%white% Creating a Restore Point...
-    chcp 437 >nul 2>&1
+    chcp 437 >> null 2>&1 >nul 2>&1
     powershell -ExecutionPolicy Bypass -Command "Checkpoint-Computer -Description 'Ghost Optimizer %version% - Restore Point' -RestorePointType 'MODIFY_SETTINGS'" >nul 2>&1
-    chcp 65001 >nul 2>&1
+    chcp 65001 >> null 2>&1 >nul 2>&1
 
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Restore Point created %green%successfully%white%.
@@ -226,6 +226,7 @@
 
     :loading
     cls
+    chcp 65001 >> null 2>&1
     echo !esc![?25l
     echo.
     echo.
@@ -284,7 +285,7 @@
         echo URL=https://github.com/louzkk/Ghost-Optimizer
         ) > "%LinkFile%"
 
-        chcp 437 /f >> "%ghost-logfile%" 2>&1
+        chcp 437 >> null 2>&1
 
         for /f "delims=" %%G in ('powershell -NoProfile -Command "Get-CimInstance Win32_VideoController | Select-Object -ExpandProperty Name"') do (
             set "GPUName=%%G"
@@ -297,6 +298,9 @@
         for /f "tokens=3" %%b in ('reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v CurrentBuild ^| findstr /i "CurrentBuild"') do (
             set "BuildNumber=%%b"
         )
+
+        chcp 65001 >> null 2>&1
+
         if defined BuildNumber (
             if !BuildNumber! GEQ 22000 (
                 set "OS=11"
@@ -306,22 +310,20 @@
         )
         set Winver=(Windows %OS%)
 
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+        timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
 
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
-    title Ghost Optimizer %version%  %winver%
+        title Ghost Optimizer %version%  %winver%
 
     :menu
     cls
     echo.
     echo.
-
-    set "lines[0]=      ██████╗ ██╗  ██╗ ██████╗ ███████╗████████╗      ██████╗ ██████╗ ████████╗██╗███╗   ███╗██╗███████╗███████╗██████╗"
-    set "lines[1]=     ██╔════╝ ██║  ██║██╔═══██╗██╔════╝╚══██╔══╝     ██╔═══██╗██╔══██╗╚══██╔══╝██║████╗ ████║██║╚══███╔╝██╔════╝██╔══██╗"
-    set "lines[2]=     ██║ ███╗ ███████║██║   ██║███████╗   ██║        ██║   ██║██████╔╝   ██║   ██║██╔████╔██║██║  ███╔╝ █████╗  ██████╔╝"
-    set "lines[3]=     ██║  ██║ ██╔══██║██║   ██║╚════██║   ██║        ██║   ██║██╔═══╝    ██║   ██║██║╚██╔╝██║██║ ███╔╝  ██╔══╝  ██╔══██╗"
-    set "lines[4]=     ╚██████║ ██║  ██║╚██████╔╝███████║   ██║        ╚██████╔╝██║        ██║   ██║██║ ╚═╝ ██║██║███████╗███████╗██║  ██║"
-    set "lines[5]=      ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝         ╚═════╝ ╚═╝        ╚═╝   ╚═╝╚═╝     ╚═╝╚═╝╚══════╝╚══════╝╚═╝  ╚═╝"
+    set "lines[0]=     ██████╗ ██╗  ██╗ ██████╗ ███████╗████████╗      ██████╗ ██████╗ ████████╗██╗███╗   ███╗██╗███████╗███████╗██████╗"
+    set "lines[1]=    ██╔════╝ ██║  ██║██╔═══██╗██╔════╝╚══██╔══╝     ██╔═══██╗██╔══██╗╚══██╔══╝██║████╗ ████║██║╚══███╔╝██╔════╝██╔══██╗"
+    set "lines[2]=    ██║ ███╗ ███████║██║   ██║███████╗   ██║        ██║   ██║██████╔╝   ██║   ██║██╔████╔██║██║  ███╔╝ █████╗  ██████╔╝"
+    set "lines[3]=    ██║  ██║ ██╔══██║██║   ██║╚════██║   ██║        ██║   ██║██╔═══╝    ██║   ██║██║╚██╔╝██║██║ ███╔╝  ██╔══╝  ██╔══██╗"
+    set "lines[4]=    ╚██████║ ██║  ██║╚██████╔╝███████║   ██║        ╚██████╔╝██║        ██║   ██║██║ ╚═╝ ██║██║███████╗███████╗██║  ██║"
+    set "lines[5]=     ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝         ╚═════╝ ╚═╝        ╚═╝   ╚═╝╚═╝     ╚═╝╚═╝╚══════╝╚══════╝╚═╝  ╚═╝"
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -366,7 +368,6 @@
     echo.
     set /p answer="%white% >:%roxo%"
 
-    :: Options
     if "%answer%"=="1" goto general
     if "%answer%"=="2" goto performance
     if "%answer%"=="3" goto network
@@ -707,18 +708,19 @@ goto menu
 
     reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "AppsUseLightTheme"       /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "SystemUsesLightTheme"    /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-echo      %purple%[ %roxo%-%purple% ]%white% Dark mode enabled.
+    echo      %purple%[ %roxo%-%purple% ]%white% Dark mode enabled.
 
     reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Serialize" /v "StartupDelayInMSec"     /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"  /v "ShowTaskViewButton"     /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"  /v "HideSCAMeetNow"         /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"  /v "HideSCAMeetNow"         /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Dsh"                              /v "AllowNewsAndInterests"  /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-echo      %purple%[ %roxo%-%purple% ]%white% Explorer tweaked.
+    echo      %purple%[ %roxo%-%purple% ]%white% Explorer tweaked.
 
    reg add "HKCU\Control Panel\Desktop\WindowMetrics"                              /v "MinAnimate" /t REG_SZ /d 0 /f >nul 2>&1
    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" /v "VisualFXSetting" /t REG_SZ /d 2 /f >nul 2>&1
-   reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "EnableTransparency"      /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+   reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"     /v "EnableTransparency" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+   reg add "HKCU\Control Panel\Desktop"                                            /v "FontSmoothing" /t REG_SZ /d 2 /f >> "%ghost-logfile%" 2>&1
    echo      %purple%[ %roxo%-%purple% ]%white% Visual Effects optimized.
 
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Search"                                         /v "SearchboxTaskbarMode"          /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
@@ -731,23 +733,23 @@ echo      %purple%[ %roxo%-%purple% ]%white% Explorer tweaked.
     reg add "HKCU\SOFTWARE\Microsoft\TabletTip\1.7"                                                         /v "EnableDesktopModeAutoInvoke"   /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\TabletTip\1.7"                                                         /v "TipbandDesiredVisibility"      /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\PenWorkspace"                                   /v "PenWorkspaceButtonDesiredVisibility" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-echo      %purple%[ %roxo%-%purple% ]%white% Taskbar tweaks applied.
+    echo      %purple%[ %roxo%-%purple% ]%white% Taskbar tweaks applied.
 
     reg add "HKCU\Control Panel\Desktop"                                             /v "WindowArrangementActive"       /t REG_SZ    /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"       /v "EnableSnapBar"                 /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"       /v "SnapAssist"                    /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"       /v "EnableSnapAssistFlyout"        /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"       /v "EnableSnapAssistFlyoutPreview" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-echo      %purple%[ %roxo%-%purple% ]%white% Snap Assist disabled.
+    echo      %purple%[ %roxo%-%purple% ]%white% Snap Assist disabled.
 
     reg add "HKLM\SYSTEM\ControlSet001\Control\FeatureManagement\Overrides\14\3895955085" /v "EnabledState"        /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\ControlSet001\Control\FeatureManagement\Overrides\14\3895955085" /v "EnabledStateOptions" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-echo      %purple%[ %roxo%-%purple% ]%white% Drag Tray disabled.
+    echo      %purple%[ %roxo%-%purple% ]%white% Drag Tray disabled.
 
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell" /v "TabletMode"                  /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell" /v "SignInMode"                  /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell" /v "TabletModeBatteryThreshold"  /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-echo      %purple%[ %roxo%-%purple% ]%white% Tablet Mode disabled.
+    echo      %purple%[ %roxo%-%purple% ]%white% Tablet Mode disabled.
 
     ::reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings" /v "FocusAssist" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     ::echo      %purple%[ %roxo%-%purple% ]%white% Focus Assist disabled.
@@ -760,10 +762,10 @@ echo      %purple%[ %roxo%-%purple% ]%white% Tablet Mode disabled.
     reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent"                 /v "DisableSpotlightCollectionOnDesktop" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent"                 /v "DisableWindowsSpotlightFeatures"     /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent"                 /v "DisableThirdPartySuggestions"        /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-echo      %purple%[ %roxo%-%purple% ]%white% Spotlight and Tooltips disabled.
+    echo      %purple%[ %roxo%-%purple% ]%white% Spotlight and Tooltips disabled.
 
     reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\current\device\Stickers"         /v "EnableStickers"                   /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-echo      %purple%[ %roxo%-%purple% ]%white% Desktop Stickers disabled.
+    echo      %purple%[ %roxo%-%purple% ]%white% Desktop Stickers disabled.
 
     reg add "HKLM\SOFTWARE\Microsoft\Windows Search"                                        /v "AllowCortana"                                   /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKCU\Software\Policies\Microsoft\Windows\Explorer"                             /v "DisableSearchBoxSuggestions"                    /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
@@ -779,43 +781,43 @@ echo      %purple%[ %roxo%-%purple% ]%white% Desktop Stickers disabled.
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search"                       /v "PreventIndexingPublicFolders"                   /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search"                       /v "PreventIndexingEmailAttachments"                /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search"                       /v "BingSearchEnabled"                /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-echo      %purple%[ %roxo%-%purple% ]%white% Search Web ^& Index disabled.
+    echo      %purple%[ %roxo%-%purple% ]%white% Search Web ^& Index disabled.
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\FileSystem" /v "NtfsDisableLastAccessUpdate" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\FileSystem" /v "LongPathsEnabled"            /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-echo      %purple%[ %roxo%-%purple% ]%white% File system tweaked.
+    echo      %purple%[ %roxo%-%purple% ]%white% File system tweaked.
 
     reg add "HKLM\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction"          /v "Enable"          /t REG_SZ    /d "Y" /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\defragsvc"           /v "Start"           /t REG_DWORD /d 2   /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Optimize"    /v "ScheduledDefrag" /t REG_DWORD /d 1   /f >> "%ghost-logfile%" 2>&1
     schtasks /change /tn "\Microsoft\Windows\Defrag\ScheduledDefrag" /ri 0 /st 00:00 /du 00:00 /mo MONTHLY /enable /f >> "%ghost-logfile%" 2>&1
-echo      %purple%[ %roxo%-%purple% ]%white% Disk optimization tweaked.
+    echo      %purple%[ %roxo%-%purple% ]%white% Disk optimization tweaked.
 
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy" /v "01" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-echo      %purple%[ %roxo%-%purple% ]%white% Storage Sense disabled.
+    echo      %purple%[ %roxo%-%purple% ]%white% Storage Sense disabled.
 
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"                            /v "LetAppsRunInBackground" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications"    /v "GlobalUserDisabled"    /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-echo      %purple%[ %roxo%-%purple% ]%white% Background apps disabled.
+    echo      %purple%[ %roxo%-%purple% ]%white% Background apps disabled.
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\USB" /v "DisableSelectiveSuspend" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-echo      %purple%[ %roxo%-%purple% ]%white% USB selective suspend disabled.
+    echo      %purple%[ %roxo%-%purple% ]%white% USB selective suspend disabled.
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "HiberBootEnabled"                    /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power"                 /v "HibernateEnabled"                    /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power"                 /v "SleepReliabilityDetailedDiagnostics" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     powercfg -h off /f >> "%ghost-logfile%" 2>&1
-echo      %purple%[ %roxo%-%purple% ]%white% Hibernation disabled.
+    echo      %purple%[ %roxo%-%purple% ]%white% Hibernation disabled.
 
     reg add "HKLM\System\CurrentControlSet\Control\Remote Assistance"             /v "fAllowToGetHelp"   /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Remote Assistance"             /v "fAllowFullControl" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"       /v "fAllowUnsolicited" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"       /v "fAllowToGetHelp"   /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-echo      %purple%[ %roxo%-%purple% ]%white% Remote Assistance disabled.
+    echo      %purple%[ %roxo%-%purple% ]%white% Remote Assistance disabled.
 
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"                    /v "ExcludeWUDriversInQualityUpdate" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DriverSearching"            /v "SearchOrderConfig"               /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-echo      %purple%[ %roxo%-%purple% ]%white% Auto driver search disabled.
+    echo      %purple%[ %roxo%-%purple% ]%white% Auto driver search disabled.
 
     echo.
     timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
@@ -898,7 +900,7 @@ goto menu
 goto menu
 
     :performanceapply
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     cls
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Applying %roxo%Performance%white% Tweaks...
@@ -950,12 +952,12 @@ goto menu
     reg add "HKLM\SOFTWARE\Microsoft\DirectX"                       /v "ForceGPUPreemption"  /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% DirectX and Direct3D optimized.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     for /f "tokens=*" %%g in ('powershell -Command "Get-CimInstance Win32_VideoController | ForEach-Object { $_.PNPDeviceID }"') do (
         reg add "HKLM\SYSTEM\CurrentControlSet\Enum\%%g\Device Parameters\Interrupt Management\MessageSignaledInterruptProperties" /v "MSISupported"   /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
         reg add "HKLM\SYSTEM\CurrentControlSet\Enum\%%g\Device Parameters\Interrupt Management\Affinity Policy"                    /v "DevicePriority" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     )
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% MSI enabled for supported GPUs.
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\PriorityControl" /v "Win32PrioritySeparation" /t REG_DWORD /d 38 /f >> "%ghost-logfile%" 2>&1
@@ -974,7 +976,7 @@ goto menu
     reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"      /v "Latency Sensitive"   /t REG_SZ    /d "True"  /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% MMCSS game scheduling optimized.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     sc config "SysMain" start= auto /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters"  /v "EnablePrefetcher"          /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters"  /v "EnableSuperfetch"          /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
@@ -982,7 +984,7 @@ goto menu
     reg add "HKLM\SYSTEM\CurrentControlSet\Control"                                                       /v "SvcHostSplitThresholdInKB" /t REG_DWORD /d 4096000 /f >> "%ghost-logfile%" 2>&1
     reg delete "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PagingFiles" /f >> "%ghost-logfile%" 2>&1
     powershell -command "Enable-MMAgent -MemoryCompression" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Memory management optimized.
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling"             /v "PowerThrottlingOff"      /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
@@ -1247,7 +1249,7 @@ goto menu
     echo      %purple%[ %roxo%-%purple% ]%white% Network adapter tweaks applied.
 
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     set "NIC_CLASS=HKLM\SYSTEM\CurrentControlSet\Control\Class\{4D36E972-E325-11CE-BFC1-08002BE10318}"
     for /L %%i in (0,1,99) do (
         set "idx=000%%i"
@@ -1285,7 +1287,7 @@ goto menu
     reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Scan" /v "DisablePeriodicScan" /t REG_DWORD /d 1    /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\WlanSvc\Parameters"          /v "CoalescePackets"     /t REG_DWORD /d 0    /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"            /v "InitialRto"          /t REG_DWORD /d 2000 /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% NIC power saving disabled.
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Winsock" /v "MinSockAddrLength" /t REG_DWORD /d 16 /f >> "%ghost-logfile%" 2>&1
@@ -1313,10 +1315,10 @@ goto menu
     netsh interface 6to4  set state disabled /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% ISATAP and 6to4 disabled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     Powershell -command "Get-NetAdapter | Where-Object {$_.PhysicalMediaType -eq 'Native 802.11'} | Set-NetAdapter -MacAddressRandomization Enabled -Confirm:`$false" /f >> "%ghost-logfile%" 2>&1
     Powershell -command "Get-NetAdapter | Where-Object {$_.MediaType -eq '802.3' -and $_.PhysicalMediaType -ne 'Native 802.11'} | Set-NetAdapter -MacAddressRandomization Enabled -Confirm:`$false" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% MAC randomization enabled.
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Remote Assistance" /v "fAllowToGetHelp" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
@@ -1330,14 +1332,14 @@ goto menu
     sc config FDResPub start= disabled /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Function Discovery disabled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     dism /online /norestart /disable-feature /featurename:SMB1Protocol /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v "SMB1"  /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer"            /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation"       /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\mrxsmb"                  /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\SMB1"                    /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% SMBv1 protocol disabled.
 
     netsh interface teredo set state disabled /f >> "%ghost-logfile%" 2>&1
@@ -1374,7 +1376,7 @@ goto menu
     set "dns_doh_1=https://dns.nextdns.io/d38baf"
     set "dns_doh_2=https://dns.nextdns.io/d38baf"
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -NoProfile -Command "try { Add-DnsClientDohServerAddress -ServerAddress '%dns_ipv4_1%' -DohTemplate '%dns_doh_1%' -AllowFallbackToUdp $False -AutoUpgrade $True } catch { Set-DnsClientDohServerAddress -ServerAddress '%dns_ipv4_1%' -DohTemplate '%dns_doh_1%' -AllowFallbackToUdp $False -AutoUpgrade $True }" /f >> "%ghost-logfile%" 2>&1
     powershell -NoProfile -Command "try { Add-DnsClientDohServerAddress -ServerAddress '%dns_ipv4_2%' -DohTemplate '%dns_doh_2%' -AllowFallbackToUdp $False -AutoUpgrade $True } catch { Set-DnsClientDohServerAddress -ServerAddress '%dns_ipv4_2%' -DohTemplate '%dns_doh_2%' -AllowFallbackToUdp $False -AutoUpgrade $True }" /f >> "%ghost-logfile%" 2>&1
 
@@ -1384,7 +1386,7 @@ goto menu
     netsh interface ipv6 set dnsservers interface=%%I source=static address=%dns_ipv6_1%                      /f >> "%ghost-logfile%" 2>&1
     netsh interface ipv6 add dnsservers interface=%%I address=%dns_ipv6_2%            index=2                 /f >> "%ghost-logfile%" 2>&1
     )
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% DNS set to %roxo%%dns_label%%white%.
 
     ipconfig /flushdns /f >> "%ghost-logfile%" 2>&1
@@ -1399,9 +1401,9 @@ goto menu
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient" /v "DoHPolicy"       /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% DNS DoH bypass disabled.
     
-    chcp 437 /f >> "%ghost-logfile%" 2>&1 
+    chcp 437 >> null 2>&1 
     powershell -NoProfile -Command "Add-DnsClientDohServerAddress -ServerAddress '%dns_ipv6_2%' -DohTemplate '%dns_doh_2%' -AllowFallbackToUdp $False -AutoUpgrade $True" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% DoH IPV6 mapping enabled.
 
     echo.
@@ -1677,9 +1679,9 @@ goto menu
 
     if not exist "C:\Ghost Optimizer\NVIDIA\NvidiaProfileInspector" (
         echo      %verde%[ %green%-%verde% ]%reset% Extracting %green%Profile Inspector%reset% package...
-        chcp 437 /f >> "%ghost-logfile%" 2>&1
+        chcp 437 >> null 2>&1
         powershell -NoProfile Expand-Archive 'C:\Ghost Optimizer\NVIDIA\nvidiaProfileInspector.zip' -DestinationPath 'C:\Ghost Optimizer\NVIDIA\' /f >> "%ghost-logfile%" 2>&1
-        chcp 65001 /f >> "%ghost-logfile%" 2>&1
+        chcp 65001 >> null 2>&1
         del /q "C:\Ghost Optimizer\NVIDIA\nvidiaProfileInspector.zip" >nul 2>&1
         if not exist "C:\Ghost Optimizer\NVIDIA\nvidiaProfileInspector.exe" (
             echo   %red%[ • ]%reset% Extraction failed, executable not found.
@@ -2351,9 +2353,9 @@ goto menu
     timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
     if not exist "C:\Ghost Optimizer\OOSU10\OOSU10.exe" (
         echo      %purple%[ %roxo%-%purple% ]%white% Downloading %highlight%OOSU10%reset% executable...
-        chcp 437 /f >> "%ghost-logfile%" 2>&1
+        chcp 437 >> null 2>&1
         powershell -Command "Invoke-WebRequest 'https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe' -OutFile 'C:\Ghost Optimizer\OOSU10\OOSU10.exe'" /f >> "%ghost-logfile%" 2>&1
-        chcp 65001 /f >> "%ghost-logfile%" 2>&1
+        chcp 65001 >> null 2>&1
         if not exist "C:\Ghost Optimizer\OOSU10\OOSU10.exe" (
             echo   %red%[ • ]%reset% Failed to download OOSU10 executable.
         )
@@ -2893,9 +2895,9 @@ goto menu
         goto powerplan
     )
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell (Get-WmiObject -Namespace root/WMI -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1,100) /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
 
     echo.
     timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
@@ -3139,13 +3141,13 @@ goto menu
     ipconfig /flushdns /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Netsh and IP cleaned.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-Service *bth* | Restart-Service -Force -ErrorAction SilentlyContinue" /f >> "%ghost-logfile%" 2>&1
     powershell -Command "Get-PnpDevice -Class Bluetooth | Disable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue" /f >> "%ghost-logfile%" 2>&1
     powershell -Command "Start-Sleep -Seconds 1" /f >> "%ghost-logfile%" 2>&1
     powershell -Command "Get-PnpDevice -Class Bluetooth | Enable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue" /f >> "%ghost-logfile%" 2>&1
     powershell -Command "pnputil /scan-devices" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Bluetooth Drivers restored.
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters" /v "EnableOffload" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
@@ -3157,12 +3159,12 @@ goto menu
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\BthAvctpSvc" /v "Start" /t REG_DWORD /d 3 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Bluetooth features restored.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "(Get-Service bthserv).StartType='Automatic'" /f >> "%ghost-logfile%" 2>&1
     powershell -Command "Start-Service bthserv -ErrorAction SilentlyContinue" /f >> "%ghost-logfile%" 2>&1
     powershell -Command "Start-Service DeviceAssociationService -ErrorAction SilentlyContinue" /f >> "%ghost-logfile%" 2>&1
     powershell -Command "Start-Service DeviceAssociationBrokerSvc -ErrorAction SilentlyContinue" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Radio Services restored.
 
     sc config bthserv start= auto /f >> "%ghost-logfile%" 2>&1
@@ -3208,11 +3210,11 @@ goto menu
     timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
     echo --- Starting Xbox Fix --- /f >> "%ghost-logfile%" 2>&1
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage Microsoft.XboxApp -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" /f >> "%ghost-logfile%" 2>&1
     powershell -Command "Get-AppxPackage Microsoft.Xbox.TCUI -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" /f >> "%ghost-logfile%" 2>&1
     powershell -Command "Get-AppxPackage Microsoft.XboxIdentityProvider -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Xbox App restored.
 
     sc config XblAuthManager start= auto /f >> "%ghost-logfile%" 2>&1
@@ -3221,9 +3223,9 @@ goto menu
     sc config XboxNetApiSvc start= auto /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Xbox Services enabled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage Microsoft.XboxGamingOverlay -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Game Bar restored.
 
     reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR" /v "value" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
@@ -3699,154 +3701,154 @@ goto menu
     echo      %purple%[ %roxo%-%purple% ]%white% Uninstalling %roxo%Bloatware%white% Apps... 
     echo.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -allusers *3DBuilder* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *Print3D* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *Microsoft3DViewer* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% 3D Builder uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -AllUsers *Microsoft.QuickAssist* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Quick Assist uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -allusers *bing* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *bingfinance* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *BingNews* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *bingsports* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *BingWeather* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *News* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Bing Apps uninstalled.
 
-    ::chcp 437 /f >> "%ghost-logfile%" 2>&1
+    ::chcp 437 >> null 2>&1
     ::powershell -Command "Get-AppxPackage -allusers *WindowsPhone* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     ::powershell -Command "Get-AppxPackage -allusers *YourPhone* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     ::powershell -Command "Get-AppxPackage -allusers *CommsPhone* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    ::chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    ::chcp 65001 >> null 2>&1
     ::echo      %purple%[ %roxo%-%purple% ]%white% Windows Phone uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -allusers *Facebook* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Facebook uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -allusers *Microsoft.Messaging* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Messaging uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -allusers *MicrosoftOfficeHub* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Office Hub uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -allusers *OneNote* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *Office.OneNote* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% OneNote uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -allusers *People* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% People uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -allusers *SkypeApp* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Skype uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -allusers *solit* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *MicrosoftSolitaireCollection* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Solitaire uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -allusers *WindowsMaps* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Maps uninstalled.
 
     :: Uncomment this may break Windows Troubleshooting Fixes, Feedbacks or Help app 
-    ::chcp 437 /f >> "%ghost-logfile%" 2>&1
+    ::chcp 437 >> null 2>&1
     ::powershell -Command "Get-AppxPackage -allusers *WindowsFeedbackHub* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    ::chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    ::chcp 65001 >> null 2>&1
     ::echo      %purple%[ %roxo%-%purple% ]%white% "Feedback Hub" uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -allusers *windowscommunicationsapps* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Communications uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage *crossdevice* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Cross Device uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -allusers *Microsoft.549981C3F5F10* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Cortana uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -allusers *Teams* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Teams uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -allusers *MicrosoftStickyNotes* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Sticky Note" uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -allusers *MixedReality.Portal* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Mixed Reality Portal uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -allusers *LinkedIn* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% LinkedIn uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -allusers *Copilot* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     powershell -command "Get-AppxPackage *Microsoft.Copilot* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     powershell -command "Get-AppxProvisionedPackage -Online | Where-Object {$_.PackageName -like '*Microsoft.Copilot*'} | Remove-AppxProvisionedPackage -Online" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Copilot AI uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -allusers *Outlook* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     powershell -Command "Get-AppxPackage -allusers *OutlookForWindows* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Outlook uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -allusers *Microsoft.Todos* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% To Do uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -allusers *Microsoft.PowerAutomateDesktop* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Power Automate uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -allusers *Microsoft.RemoteDesktop* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Remote Desktop uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -allusers *Clipchamp* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Clipchamp uninstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage *MicrosoftWindows.WebExperience* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Widgets uninstalled.
 
     echo.
@@ -3957,19 +3959,19 @@ goto menu
     echo   %purple%[ %roxo%•%purple% ]%white% Installing %roxo%Bloatware%white% Apps... 
     echo.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxPackage -AllUsers | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"}" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Bloatware apps reinstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     powershell -Command "Get-AppxProvisionedPackage -Online | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"}" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Provisioned packages reinstalled.
 
-    chcp 437 /f >> "%ghost-logfile%" 2>&1
+    chcp 437 >> null 2>&1
     winget install "Windows Web Experience Pack" --silent /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 /f >> "%ghost-logfile%" 2>&1
+    chcp 65001 >> null 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Widgets installed.
 
     echo      %purple%[ %roxo%-%purple% ]%white% Repairing System Integrity...
