@@ -311,7 +311,6 @@
         set Winver=(Windows %OS%)
 
         timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
-
         title Ghost Optimizer %version%  %winver%
 
     :menu
@@ -358,11 +357,11 @@
     echo.
     echo               %purple%[ %roxo%%underline%1%reset% %purple%]%white% General Tweaks               %purple%[ %roxo%%underline%2%reset% %purple%]%white% Performance Tweaks              %purple%[ %roxo%%underline%3%reset% %purple%]%white% Network Tweaks
     echo.
-    echo               %purple%[ %roxo%%underline%4%reset% %purple%]%white% NVIDIA Profile               %purple%[ %roxo%%underline%5%reset% %purple%]%white% Latency ^& Input-Lag             %purple%[ %roxo%%underline%6%reset% %purple%]%white% Mouse ^& Keyboard       
+    echo               %purple%[ %roxo%%underline%4%reset% %purple%]%white% NVIDIA Profile               %purple%[ %roxo%%underline%5%reset% %purple%]%white% Latency ^& Input-Lag             %purple%[ %roxo%%underline%6%reset% %purple%]%white% Mouse ^& Keyboard
     echo.
     echo               %purple%[ %roxo%%underline%7%reset% %purple%]%white% Windows Cleaner              %purple%[ %roxo%%underline%8%reset% %purple%]%white% Telemetry ^& Logging             %purple%[ %roxo%%underline%9%reset% %purple%]%white% Running Services
     echo.
-    echo               %purple%[ %roxo%%underline%10%reset% %purple%]%white% Ghost Powerplan             %purple%[ %roxo%%underline%11%reset% %purple%]%white% Integrity ^& Health             %purple%[ %roxo%%underline%12%reset% %purple%]%white% Bloatware ^& AI                        
+    echo               %purple%[ %roxo%%underline%10%reset% %purple%]%white% Ghost Powerplan             %purple%[ %roxo%%underline%11%reset% %purple%]%white% Integrity ^& Health             %purple%[ %roxo%%underline%12%reset% %purple%]%white% Bloatware ^& AI
     echo.
     echo                                                        %purple%[ %roxo%%underline%13%reset% %purple%]%white% Other
     echo.
