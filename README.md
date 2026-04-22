@@ -21,7 +21,7 @@ All modifications are reversible via restore point option.
 
 ### Requirements
 * Windows 10/11
-* [Git](https://git-scm.com/install/windows) for Quick Install 
+* [Git](https://git-scm.com/install/windows) for Quick Install    
 (Check: "Use Windows' Default console window")
 
 ### Quick Install (PowerShell Admin)
