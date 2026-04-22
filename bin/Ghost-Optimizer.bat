@@ -363,6 +363,7 @@
     echo.
     echo               %purple%[ %roxo%%underline%10%reset% %purple%]%white% Ghost Powerplan             %purple%[ %roxo%%underline%11%reset% %purple%]%white% Integrity ^& Health             %purple%[ %roxo%%underline%12%reset% %purple%]%white% Bloatware ^& AI
     echo.
+    echo.
     echo                                                        %purple%[ %roxo%%underline%13%reset% %purple%]%white% Other
     echo.
     set /p answer="%white% >:%roxo%"
