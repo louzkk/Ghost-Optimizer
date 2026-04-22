@@ -16,7 +16,7 @@
     (for /f %%a in ('echo prompt $E^| cmd') do set "esc=%%a")
     chcp 65001 >> null 2>&1 >nul 2>&1
 
-    set "version=5.2.2"
+    set "version=5.2.3"
     set "script=Ghost Optimizer"
     set "reboot= (Reboot required)" 
     set "rebooting=Rebooting"
@@ -310,7 +310,7 @@
         )
         set Winver=(Windows %OS%)
 
-        timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+        timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
 
         title Ghost Optimizer %version%  %winver%
 
@@ -423,7 +423,7 @@
 
     echo.
     echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     goto menu
 
 goto menu
@@ -490,7 +490,7 @@ goto menu
     echo.
     echo.
     echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo.
     goto applyall
 
@@ -501,7 +501,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Applying %roxo%All%white% Tweaks/Fixes... 
     echo.
-    timeout /t 3 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 3 /nobreak >> "%ghost-logfile%" 2>&1
 
     set mode=none
     call:generalapply
@@ -524,9 +524,9 @@ goto menu
     echo   %yellow%[ • ]%reset% Remaining manual options: NVIDIA Tweaks [4], Cleaner [7], Integrity Fix [11] and Other [13]. 
 
     echo.
-    timeout /t 3 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 3 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% All Tweaks/Fixes applied %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     goto menu
 
@@ -593,7 +593,7 @@ goto menu
     echo.
     echo.
     echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo.
     goto revertall
 
@@ -604,27 +604,27 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Reverting %roxo%All%white% Tweaks/Fixes... 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Applying Restore Point --- /f >> "%ghost-logfile%" 2>&1
 
     :: Start System Restore
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% System Restore open.
     start /wait "" rstrui.exe /f >> "%ghost-logfile%" 2>&1
 
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% System Restore closed.
 
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Submit your feedback at https://github.com/louzkk/Ghost-Optimizer.
     echo.
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %yellow%[ • ]%reset% The next system reboot/restart may take some time.
 
     echo.
-    timeout /t 3 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 3 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% All Tweaks/Fixes reverted %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Restore Point reverted --- /f >> "%ghost-logfile%" 2>&1
     goto menu
@@ -692,7 +692,7 @@ goto menu
     echo.
     echo.
     echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo.
     goto general
 
@@ -703,7 +703,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Applying %roxo%General%white% Tweaks...
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Applying General Tweaks --- /f >> "%ghost-logfile%" 2>&1
 
     reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "AppsUseLightTheme"       /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
@@ -820,9 +820,9 @@ goto menu
     echo      %purple%[ %roxo%-%purple% ]%white% Auto driver search disabled.
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% General Tweaks applied %green%successfully%white%.
-    timeout /t 3 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 3 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Finished General Tweaks --- /f >> "%ghost-logfile%" 2>&1
     if "%mode%"=="menu" goto menu
@@ -893,7 +893,7 @@ goto menu
     echo.
     echo.
     echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo.
     goto performance
 
@@ -905,7 +905,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Applying %roxo%Performance%white% Tweaks...
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Applying Performance Tweaks --- /f >> "%ghost-logfile%" 2>&1
 
     reg add "HKCU\Software\Microsoft\GameBar" /v "AllowAutoGameMode"    /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
@@ -1021,9 +1021,9 @@ goto menu
     echo      %purple%[ %roxo%-%purple% ]%white% Boot parameters optimized.
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Performance Tweaks applied %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Finished Performance Tweaks --- /f >> "%ghost-logfile%" 2>&1
     if "%mode%"=="menu" goto performance
@@ -1063,7 +1063,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Disabling %roxo%Virtualization%reset% and %roxo%Mitigations%reset%...
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Disabling Mitigations --- /f >> "%ghost-logfile%" 2>&1
 
     echo      %purple%[ %roxo%-%purple% ]%white% Checking Virtualization...
@@ -1097,9 +1097,9 @@ goto menu
     echo      %purple%[ %roxo%-%purple% ]%white% Core Isolation disabled.
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Virtualization and Mitigations disabled %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Mitigations Disabled --- /f >> "%ghost-logfile%" 2>&1
     if "%mode%"=="menu" goto performance
@@ -1170,7 +1170,7 @@ goto menu
     echo.
     echo.
     echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo.
     goto network
 
@@ -1181,7 +1181,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Applying %roxo%Network%white% Tweaks...
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Applying Network Tweaks --- /f >> "%ghost-logfile%" 2>&1
 
     reg query "HKLM\SYSTEM\GhostOptimizer" /v "IPStackReset" >nul 2>&1
@@ -1347,9 +1347,9 @@ goto menu
     echo      %purple%[ %roxo%-%purple% ]%white% Teredo disabled.
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Network Tweaks applied %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Finished Network Tweaks --- /f >> "%ghost-logfile%" 2>&1
     if "%mode%"=="menu" goto network
@@ -1362,11 +1362,11 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Applying %roxo%DNS%white% Tweaks...
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Applying Network Tweaks --- /f >> "%ghost-logfile%" 2>&1
 
     echo      %purple%[ %roxo%-%purple% ]%white% Starting DNS setup...
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
 
     set "dns_label=Ghost Optimizer DNS"
     set "dns_ipv4_1=45.90.28.0"
@@ -1407,9 +1407,9 @@ goto menu
     echo      %purple%[ %roxo%-%purple% ]%white% DoH IPV6 mapping enabled.
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% DNS Tweaks applied %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Finished DNS Tweaks --- /f >> "%ghost-logfile%" 2>&1
     if "%mode%"=="menu" goto network
@@ -1529,7 +1529,7 @@ goto menu
     echo.
     echo.
     echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo.
     goto nvidia
 
@@ -1540,7 +1540,7 @@ goto menu
     echo.
     echo   %verde%[ %green%•%verde% ]%reset% Applying %green%NVIDIA%reset% Tweaks...
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Applying NVIDIA Tweaks --- /f >> "%ghost-logfile%" 2>&1
 
     :: Detect NVIDIA GPU subkey
@@ -1642,9 +1642,9 @@ goto menu
     echo      %verde%[ %green%-%verde% ]%reset% Driver Telemetry disabled.
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %verde%[ %green%•%verde% ]%reset% NVIDIA Tweaks applied %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- NVIDIA Tweaks applied --- /f >> "%ghost-logfile%" 2>&1
     goto nvidia
@@ -1656,7 +1656,7 @@ goto menu
     echo.
     echo   %verde%[ %green%•%verde% ]%reset% Applying %green%NVIDIA Profile%reset%...
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Applying NVIDIA Profile --- /f >> "%ghost-logfile%" 2>&1
 
     echo      %purple%[ %roxo%-%purple% ]%white% Checking Github repository...
@@ -1664,7 +1664,7 @@ goto menu
     timeout /t 2 /nobreak >nul
 
     echo      %verde%[ %green%-%verde% ]%reset% Checking %green%Profile Inspector%reset% executable...
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
 
     if not exist "C:\Ghost Optimizer\NVIDIA\nvidiaProfileInspector.zip" (
         echo      %verde%[ %green%-%verde% ]%reset% Downloading %green%Profile Inspector%reset% package...
@@ -1674,7 +1674,7 @@ goto menu
         )
     ) else (
         echo      %verde%[ %green%-%verde% ]%reset% %green%Profile Inspector%reset% already downloaded.
-        timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+        timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     )
 
     if not exist "C:\Ghost Optimizer\NVIDIA\NvidiaProfileInspector" (
@@ -1693,10 +1693,10 @@ goto menu
     if errorlevel 1 (
         echo   %red%[ • ]%reset% Failed to download NVIDIA profile.
     )
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
 
     echo      %verde%[ %green%-%verde% ]%reset% Applying %green%Ghost Performance%reset% profile...
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     if exist "C:\Ghost Optimizer\NVIDIA\nvidiaProfileInspector.exe" (
         start "" /wait "C:\Ghost Optimizer\NVIDIA\nvidiaProfileInspector.exe" "C:\Ghost Optimizer\NVIDIA\GO2-NVIDIA.nip" /f >> "%ghost-logfile%" 2>&1
         echo.
@@ -1707,9 +1707,9 @@ goto menu
     )
 
     echo.
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %verde%[ %green%•%verde% ]%reset% NVIDIA profile applied %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- NVIDIA Profile applied --- /f >> "%ghost-logfile%" 2>&1
     goto nvidia
@@ -1778,7 +1778,7 @@ goto menu
     echo.
     echo.
     echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo.
     goto latency
 
@@ -1789,7 +1789,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Applying %roxo%Latency%white% ^& %roxo%Input-Lag%white% Tweaks...
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Applying Latency and Input-Lag Tweaks --- /f >> "%ghost-logfile%" 2>&1
 
     reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"   /v "SystemResponsiveness" /t REG_DWORD /d 10 /f >> "%ghost-logfile%" 2>&1
@@ -1878,9 +1878,9 @@ goto menu
     echo   %yellow%[ • ]%reset% Ghost Optimizer or High Performance power plan is recommended.
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Latency ^& Input-Lag Tweaks applied %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Finished Latency and Input-Lag Tweaks --- /f >> "%ghost-logfile%" 2>&1
     if "%mode%"=="menu" goto menu
@@ -1951,7 +1951,7 @@ goto menu
     echo.
     echo.
     echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo.
     goto kbm
 
@@ -1962,7 +1962,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Applying %roxo%Mouse %white%^& %roxo%Keyboard%white% Tweaks... 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Applying KBM Tweaks --- /f >> "%ghost-logfile%" 2>&1
 
     reg add "HKEY_CURRENT_USER\Control Panel\Mouse"       /v "MouseSpeed" /t REG_SZ /d 0 /f >> "%ghost-logfile%" 2>&1
@@ -1973,14 +1973,14 @@ goto menu
     reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad" /v "EnablePrecision" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Trackpad Precision optimized.
 
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
 
     :: im not sure if that actually helps in something
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\mouclass\Parameters" /v "MouseDataQueueSize" /t REG_DWORD /d 64 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\kbdclass\Parameters" /v "KeyboardDataQueueSize" /t REG_DWORD /d 64 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Data Queue Size optimized.
 
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
 
     reg add "HKCU\Control Panel\Mouse"                           /v "DoubleClickSpeed" /t REG_SZ /d 300 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Click Speed optimized.
@@ -1991,7 +1991,7 @@ goto menu
     reg add "HKCU\Control Panel\Keyboard"                        /v "KeyboardSpeed" /t REG_SZ /d 31 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Key Speed optimized.
 
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
 
     reg add "HKCU\Control Panel\Accessibility\StickyKeys"        /v "Flags" /t REG_SZ /d 506 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Sticky Keys disabled.
@@ -2006,9 +2006,9 @@ goto menu
     echo   %yellow%[ • ]%reset% Set the highest polling rate value avaliable for your mouse/keyboard.
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Mouse ^& Keyboard Tweaks applied %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- KBM Tweaks Applied --- /f >> "%ghost-logfile%" 2>&1
     if "%mode%"=="menu" goto menu
@@ -2079,7 +2079,7 @@ goto menu
     echo.
     echo.
     echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo.
     goto clean
 
@@ -2090,7 +2090,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Fast%white% Clean... 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Starting Ghost Optimizer Clean --- /f >> "%ghost-logfile%" 2>&1
 
     echo      %purple%[ %roxo%-%purple% ]%white% Cleaning Temporary files...
@@ -2135,9 +2135,9 @@ goto menu
     )
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% System cleaned %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Finished Ghost Optimizer Clean --- /f >> "%ghost-logfile%" 2>&1
     goto clean
@@ -2149,17 +2149,17 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Windows%white% Clean... 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Starting Windows Clean --- /f >> "%ghost-logfile%" 2>&1
 
     echo      %purple%[ %roxo%-%purple% ]%white% Click on Temporary Files.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     start ms-settings:storagesense /f >> "%ghost-logfile%" 2>&1
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% System cleaned %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Finished Windows Clean --- /f >> "%ghost-logfile%" 2>&1
     goto clean
@@ -2229,7 +2229,7 @@ goto menu
     echo.
     echo.
     echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo.
     goto telemetry
 
@@ -2240,7 +2240,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Telemetry%white% ^& %roxo%Logging%white% blocking...
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Starting Telemetry Blocking --- /f >> "%ghost-logfile%" 2>&1
 
     reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
@@ -2327,9 +2327,9 @@ goto menu
     echo      %purple%[ %roxo%-%purple% ]%white% Existing telemetry logs cleared.
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Telemetry ^& Logging disabled %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Finished Telemetry and Logging --- /f >> "%ghost-logfile%" 2>&1
     if "%mode%"=="menu" goto telemetry
@@ -2342,7 +2342,7 @@ goto menu
     echo.
     echo      %purple%[ %roxo%-%purple% ]%white% Apllying %highlight%OOSU10+%reset% Profile...
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Applying OOSU10+ Profile --- /f >> "%ghost-logfile%" 2>&1
 
     echo      %purple%[ %roxo%-%purple% ]%white% Checking Github repository...
@@ -2350,7 +2350,7 @@ goto menu
     timeout /t 2 /nobreak >nul
 
     echo      %purple%[ %roxo%-%purple% ]%white% Checking %highlight%OOSU10%reset% executable...
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     if not exist "C:\Ghost Optimizer\OOSU10\OOSU10.exe" (
         echo      %purple%[ %roxo%-%purple% ]%white% Downloading %highlight%OOSU10%reset% executable...
         chcp 437 >> null 2>&1
@@ -2362,7 +2362,7 @@ goto menu
     ) 
     else (
         echo      %purple%[ %roxo%-%purple% ]%white% %highlight%OOSU10%reset% already downloaded.
-        timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+        timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     )
 
     echo      %purple%[ %roxo%-%purple% ]%white% Importing %highlight%OOSU10%reset% Profile...
@@ -2371,10 +2371,10 @@ goto menu
         echo   %red%[ • ]%reset% Failed to download OOSU10 profile.
     )
 
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
 
     echo      %purple%[ %roxo%-%purple% ]%white% Applying %highlight%OOSU10%reset% Profile...
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     if exist "C:\Ghost Optimizer\OOSU10\OOSU10.exe" (
         start "" /wait /quiet "C:\Ghost Optimizer\OOSU10\OOSU10.exe" "C:\Ghost Optimizer\OOSU10\Ghost-OOSU10.cfg" /f >> "%ghost-logfile%" 2>&1
         echo --- OOSU10 profile applied --- /f >> "%ghost-logfile%" 2>&1
@@ -2408,9 +2408,9 @@ goto menu
     echo   %purple%[ %roxo%•%purple% ]%white% Existing telemetry logs cleared.
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% OOSU10+ profile applied %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- OOSU10 Profile applied --- /f >> "%ghost-logfile%" 2>&1
     goto telemetry
@@ -2480,7 +2480,7 @@ goto menu
     echo.
     echo.
     echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo.
     goto services
 
@@ -2491,7 +2491,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Disabling %roxo%Unnecessary Services%white%...
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Disabling Unnecessary Services --- /f >> "%ghost-logfile%" 2>&1
 
     ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\SysMain"                                     /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
@@ -2625,9 +2625,9 @@ goto menu
     echo      %purple%[ %roxo%-%purple% ]%white% AMD services disabled.
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Unnecessary Services disabled %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Unnecessary Services Disabled --- /f >> "%ghost-logfile%" 2>&1
     if "%mode%"=="menu" goto services
@@ -2640,7 +2640,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Reverting %roxo%Unnecessary Services%white%...
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Disabling Unnecessary Services --- /f >> "%ghost-logfile%" 2>&1
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\TapiSrv"                                       /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
@@ -2763,9 +2763,9 @@ goto menu
     echo      %purple%[ %roxo%-%purple% ]%white% AMD services enabled.
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Services restored %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Services Re-enabled --- /f >> "%ghost-logfile%" 2>&1
     goto services
@@ -2835,7 +2835,7 @@ goto menu
     echo.
     echo.
     echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo.
     goto powerplan
 
@@ -2846,7 +2846,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Applying %highlight%Ghost%reset% Power Plan... 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Applying Power Plan --- /f >> "%ghost-logfile%" 2>&1
 
     echo      %purple%[ %roxo%-%purple% ]%white% Checking Github repository...
@@ -2900,9 +2900,9 @@ goto menu
     chcp 65001 >> null 2>&1
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Ghost power plan applied %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Power Plan applied --- /f >> "%ghost-logfile%" 2>&1
     if "%mode%"=="menu" goto powerplan
@@ -2982,7 +2982,7 @@ goto menu
     echo.
     echo.
     echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo.
     goto health
 
@@ -2993,18 +2993,18 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Fast%white% Integrity ^& Health Fix... 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Starting Fast Health Fix --- /f >> "%ghost-logfile%" 2>&1
 
     echo      %purple%[ %roxo%-%purple% ]%white% Checking Windows Image Health...
     DISM /Online /Cleanup-Image /CheckHealth
     echo.
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
 
     echo      %purple%[ %roxo%-%purple% ]%white% Scanning Windows Image Health...
     DISM /Online /Cleanup-Image /ScanHealth
     echo.
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
 
     echo      %purple%[ %roxo%-%purple% ]%white% Restoring Windows Image Health...
     DISM /Online /Cleanup-Image /RestoreHealth
@@ -3012,7 +3012,7 @@ goto menu
     echo      %purple%[ %roxo%-%purple% ]%white% Windows Image Health restored.
     echo.
 
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
 
     echo      %purple%[ %roxo%-%purple% ]%white% Repairing System Integrity...
     sfc /scannow
@@ -3020,7 +3020,7 @@ goto menu
     echo      %purple%[ %roxo%-%purple% ]%white% System Integrity repaired.
     echo.
 
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
 
 
     echo      %purple%[ %roxo%-%purple% ]%white% Repairing Microsoft Store...
@@ -3030,9 +3030,9 @@ goto menu
     echo.
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Integrity ^& Health fixes applied %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
 
     echo --- Finished Fast Health Fix --- /f >> "%ghost-logfile%" 2>&1
@@ -3045,7 +3045,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Full%white% Integrity ^& Health Fix (it may take a while)... 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Starting Full Health Fix --- /f >> "%ghost-logfile%" 2>&1
 
     echo      %purple%[ %roxo%-%purple% ]%white% Checking Windows Image Health...
@@ -3106,7 +3106,7 @@ goto menu
 
     echo      %purple%[ %roxo%-%purple% ]%white% Reverting Pending Actions...
     dism /online /cleanup-image /revertpendingactions
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Pending Actions reverted.
     echo.
 
@@ -3117,9 +3117,9 @@ goto menu
     echo   %yellow%[ • ]%reset% Files will be repaired in the next boot.
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Integrity ^& Health fixes applied %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Finished Full Health Fix --- /f >> "%ghost-logfile%" 2>&1
     goto health
@@ -3131,7 +3131,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Wi-fi ^& Bluetooth%white% Fix... 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Starting Wifi Bluetooth Fix --- /f >> "%ghost-logfile%" 2>&1
 
     netsh winsock reset /f >> "%ghost-logfile%" 2>&1
@@ -3195,7 +3195,7 @@ goto menu
     echo.
     timeout /t 4 /nobreak /f >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Wi-fi ^& Bluetooth fixed %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Finished Wifi Bluetooth Fix --- /f >> "%ghost-logfile%" 2>&1
     goto health
@@ -3207,7 +3207,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Xbox App/Bar%white% Fix... 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Starting Xbox Fix --- /f >> "%ghost-logfile%" 2>&1
 
     chcp 437 >> null 2>&1
@@ -3256,7 +3256,7 @@ goto menu
     echo.
     timeout /t 4 /nobreak /f >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Xbox App ^& Game Bar fixed %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Finished Xbox Fix --- /f >> "%ghost-logfile%" 2>&1
     goto health
@@ -3268,7 +3268,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Hibernation%white% Fix... 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Starting Hiber Fix --- /f >> "%ghost-logfile%" 2>&1
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "HiberBootEnabled"                         /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
@@ -3291,7 +3291,7 @@ goto menu
     echo.
     timeout /t 4 /nobreak /f >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Hibernation fixed %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Finished Hiber Fix --- /f >> "%ghost-logfile%" 2>&1
     goto health
@@ -3303,7 +3303,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Windows Update%white% Fix... 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Starting Windows Update Fix --- /f >> "%ghost-logfile%" 2>&1
 
     echo      %purple%[ %roxo%-%purple% ]%white% Stopping Updater services...
@@ -3336,7 +3336,7 @@ goto menu
     echo.
     timeout /t 4 /nobreak /f >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Windows Update fixed %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Finished Windows Update Fix --- /f >> "%ghost-logfile%" 2>&1
     goto health
@@ -3348,7 +3348,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Mitigations%white% Fix... 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Starting Mitigations Fix --- /f >> "%ghost-logfile%" 2>&1
 
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v "EnableVirtualizationBasedSecurity"  /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
@@ -3391,7 +3391,7 @@ goto menu
     echo.
     timeout /t 4 /nobreak /f >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Windows Update fixed %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Finished Mitigations Fix --- /f >> "%ghost-logfile%" 2>&1
     goto health
@@ -3461,7 +3461,7 @@ goto menu
     echo.
     echo.
     echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo.
     goto debloat
 
@@ -3472,7 +3472,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Disabling %roxo%Bloatware%white% Auto Start ^& Features... 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Uninstalling Bloatware Apps --- /f >> "%ghost-logfile%" 2>&1
 
     reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "OneDrive" >nul 2>&1
@@ -3694,7 +3694,7 @@ goto menu
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableConsumerFeatures" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Apps Reinstalation disabled.
 
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
 
     cls
     echo.
@@ -3852,9 +3852,9 @@ goto menu
     echo      %purple%[ %roxo%-%purple% ]%white% Widgets uninstalled.
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Bloatware apps uninstalled %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Finished Debloat --- /f >> "%ghost-logfile%" 2>&1
     goto debloat
@@ -3866,7 +3866,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Reverting %roxo%Bloatware%white% Features... 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Reverting Bloatware Apps --- /f >> "%ghost-logfile%" 2>&1
 
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"      /v "SoftLandingEnabled" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
@@ -3952,7 +3952,7 @@ goto menu
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings"  /v "DownloadMode" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Delivery Optimization enabled.
 
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
 
     cls
     echo.
@@ -3981,9 +3981,9 @@ goto menu
     echo.
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Bloatware apps reverted %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
 
     echo --- Reverted Debloat --- /f >> "%ghost-logfile%" 2>&1
@@ -4044,6 +4044,7 @@ goto menu
     echo.
     echo                                   %purple%[ %roxo%%underline%5%reset% %purple%] %white%Show hidden files           %purple%[ %roxo%%underline%6%reset% %purple%] %white%Classic context menu
     echo.
+    echo                                   %purple%[ %roxo%%underline%7%reset% %purple%] %white%Disable sysmain
     echo.
     echo.
     echo                                                     %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
@@ -4056,13 +4057,14 @@ goto menu
     if "%answer%"=="4" call :clearlogsapply
     if "%answer%"=="5" call :hiddenfilesapply
     if "%answer%"=="6" call :classicmenuapply
+    if "%answer%"=="7" call :disablesysmain
     if "%answer%"=="b" goto menu
     if "%answer%"=="B" goto menu
 
     echo.
     echo.
     echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo.
     goto other
 
@@ -4073,7 +4075,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Bypassing %roxo%TPM 2.0%white% Check... 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
 
     reg add "HKLM\SYSTEM\Setup\LabConfig" /v "BypassTPMCheck" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% TPM Bypass enabled.
@@ -4085,9 +4087,9 @@ goto menu
     echo      %purple%[ %roxo%-%purple% ]%white% Memory bypass enabled.
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% TPM 2.0 bypassed %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     goto other
 
@@ -4098,7 +4100,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Enabling %roxo%God Mode%white%...
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
 
     if not exist "%userprofile%\Desktop\God Mode (Ghost Optimizer)\GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}" (
         mkdir "%userprofile%\Desktop\God Mode (Ghost Optimizer)\GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}"
@@ -4111,9 +4113,9 @@ goto menu
     echo   %yellow%[ • ]%reset% Check your desktop for a new folder.
     echo.
 
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% God mode enabled %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     goto other
 
@@ -4124,15 +4126,15 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Enabling %roxo%Show files extensions%white%... 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
 
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt"             /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% File extensions visible.
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Show file extensions enabled %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     goto other
 
@@ -4143,7 +4145,7 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Clearing %roxo%Event Logs%white%... 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
 
     echo      %purple%[ %roxo%-%purple% ]%white% Cleaning Windows logs...
     for /F "tokens=*" %%G in ('wevtutil.exe el') do (
@@ -4158,9 +4160,9 @@ goto menu
     )
     
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Event Logs cleaned %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     goto other
 
@@ -4171,15 +4173,37 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Enabling %roxo%Show hidden files%white%... 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
 
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Hidden"                  /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Hidden Files visible.
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Show hidden file enabled %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    title Ghost Optimizer %version% %reboot%
+    goto other
+
+goto menu
+
+    :disablesysmain
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Disabling %roxo%Symain%white%... 
+    echo.
+    timeout /t 3 /nobreak >> "%ghost-logfile%" 2>&1
+
+    sc stop "SysMain" >> "%ghost-logfile%" 2>&1
+    echo      %purple%[ %roxo%-%purple% ]%white% Sysmain stopped.
+
+    sc config "SysMain" start=disabled >> "%ghost-logfile%" 2>&1
+    echo      %purple%[ %roxo%-%purple% ]%white% Sysmain disabled.
+
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Sysmain disabled %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     goto other
 
@@ -4190,15 +4214,15 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Enabling %roxo%Classic%white% context menu... 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
 
     reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32"             /f /ve /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Classic context menu enabled.
 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Classic context menu enabled %green%successfully%white%.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     goto other
 
@@ -4270,7 +4294,7 @@ goto menu
     echo.
     echo.
     echo %red%                                                     Invalid Input.%reset%
-    timeout /t 1 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
     echo.
     goto reboot
 
@@ -4282,9 +4306,9 @@ goto menu
     echo   %purple%[ %roxo%•%purple% ]%white% %roxo%Rebooting%white% your system in %roxo%5%white% seconds... 
     title Ghost Optimizer %version%  %rebooting%
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     shutdown /r /t 5 /f >> "%ghost-logfile%" 2>&1
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     goto menu
 
 goto menu
@@ -4295,9 +4319,9 @@ goto menu
     echo   %purple%[ %roxo%•%purple% ]%white% %roxo%Shutting down%white% your system in %roxo%5%white% seconds... 
     title Ghost Optimizer %version%  %shuttingdown%
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 3 /nobreak >> "%ghost-logfile%" 2>&1
     shutdown /s /t 5 /f >> "%ghost-logfile%" 2>&1
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     goto menu
 
 goto menu
@@ -4308,9 +4332,9 @@ goto menu
     echo   %purple%[ %roxo%•%purple% ]%white% %roxo%Rebooting%white% your system... 
     title Ghost Optimizer %version%  %rebooting%
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 3 /nobreak >> "%ghost-logfile%" 2>&1
     shutdown /r /t 0 /f >> "%ghost-logfile%" 2>&1
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     goto menu
 
 goto menu
@@ -4320,9 +4344,9 @@ goto menu
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% %roxo%Cancelling%white% system Reboot/Shutdown... 
     echo.
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     shutdown /a /f >> "%ghost-logfile%" 2>&1
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     goto menu
 
 goto menu
@@ -4362,7 +4386,7 @@ goto menu
         echo !textGradient!!esc![0m
     )
 
-    timeout /t 2 /nobreak /f >> "%ghost-logfile%" 2>&1
+    timeout /t 3 /nobreak >> "%ghost-logfile%" 2>&1
     start "" "%~f0"
     exit
 

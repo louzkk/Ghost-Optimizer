@@ -3,7 +3,7 @@
 # 👻 Ghost Optimizer
 **Minimal, Private and Optimized Windows**
 
-[![Version](https://img.shields.io/badge/Version-5.2.2-indigo?style=for-the-badge&logo=Ghostty&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer/releases)
+[![Version](https://img.shields.io/badge/Version-5.2.3-indigo?style=for-the-badge&logo=Ghostty&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer/releases)
 [![License](https://img.shields.io/badge/License-MIT-indigo?style=for-the-badge)](LICENSE)
 [![Discord](https://img.shields.io/badge/Discord-indigo?style=for-the-badge&logo=Discord&logoColor=white)](https://discord.gg/fBsChke59R)
 [![Download](https://img.shields.io/badge/Download-indigo?style=for-the-badge&logo=Github&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer#quick-install-powershell-admin)
