@@ -17,6 +17,8 @@
 It applies system registry and policy modifications: General and Performance tweaks targeting scheduler behavior and resource allocation, Network optimizations to improve throughput and reduce overhead, Latency and Input-lag adjustments via interrupt handling and timer resolution tuning, and reducing Telemetry, Advertising, Bloatware and AI.
 All modifications are reversible via restore point option.
 
+---
+
 ## 🚀 Download
 
 ### Requirements
@@ -45,7 +47,9 @@ This script modifies the Windows Registry and applications. **Use at your own ri
 
 ## 📄 License
 Released under the [MIT License](LICENSE). Free for modification and distribution with proper attribution.
-  
+
+---
+
 <div align="center">
 Maintained by: <a href="https://github.com/louzkk">louzkk 🇧🇷</a>
 </div>
