@@ -1558,7 +1558,7 @@ goto menu
     )
 
     if not defined NVIDIA_SUBKEY (
-        echo   %red%[ • ]%reset% NVIDIA subkey not found. Skipping driver registry tweaks.
+    echo      %red%[ - ]%white% NVIDIA subkey not found. Skipping driver registry tweaks.
         echo --- NVIDIA subkey not found --- /f >> "%ghost-logfile%" 2>&1
         goto :nvidiaregskip
     )
@@ -1670,7 +1670,7 @@ goto menu
         echo      %verde%[ %green%-%verde% ]%reset% Downloading %green%Profile Inspector%reset% package...
         curl -g -k -L -# -o "C:\Ghost Optimizer\NVIDIA\nvidiaProfileInspector.zip" "https://github.com/Orbmu2k/nvidiaProfileInspector/releases/download/2.4.0.27/nvidiaProfileInspector.zip" /f >> "%ghost-logfile%" 2>&1
         if errorlevel 1 (
-            echo   %red%[ • ]%reset% Failed to download NVIDIA Profile Inspector.
+        echo      %red%[ - ]%white% Failed to download NVIDIA Profile Inspector.
         )
     ) else (
         echo      %verde%[ %green%-%verde% ]%reset% %green%Profile Inspector%reset% already downloaded.
@@ -1684,14 +1684,14 @@ goto menu
         chcp 65001 >> null 2>&1
         del /q "C:\Ghost Optimizer\NVIDIA\nvidiaProfileInspector.zip" >nul 2>&1
         if not exist "C:\Ghost Optimizer\NVIDIA\nvidiaProfileInspector.exe" (
-            echo   %red%[ • ]%reset% Extraction failed, executable not found.
+        echo      %red%[ - ]%white% Extraction failed, executable not found.
         )
     )
 
     echo      %verde%[ %green%-%verde% ]%reset% Importing %green%Ghost Performance%reset% profile...
     curl -g -k -L -# -o "C:\Ghost Optimizer\NVIDIA\GO2-NVIDIA.nip" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/GO2-NVIDIA.nip" /f >> "%ghost-logfile%" 2>&1
     if errorlevel 1 (
-        echo   %red%[ • ]%reset% Failed to download NVIDIA profile.
+    echo      %red%[ - ]%white% Failed to download NVIDIA profile.
     )
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
 
@@ -1703,7 +1703,7 @@ goto menu
         echo      %verde%[ %green%-%verde% ]%reset% Profile Inspector Tweaks Applied %green%successfully%white%.
         echo --- NVIDIA Profile applied --- /f >> "%ghost-logfile%" 2>&1
     ) else (
-        echo   %red%[ • ]%reset% NVIDIA Profile Inspector executable not found.
+    echo      %red%[ - ]%white% NVIDIA Profile Inspector executable not found.
     )
 
     echo.
@@ -2340,7 +2340,7 @@ goto menu
    :oosu10
     cls
     echo.
-    echo      %purple%[ %roxo%-%purple% ]%white% Apllying %highlight%OOSU10+%reset% Profile...
+    echo   %purple%[ %roxo%•%purple% ]%white% Apllying %highlight%OOSU10++%reset% Profile...
     echo.
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Applying OOSU10+ Profile --- /f >> "%ghost-logfile%" 2>&1
@@ -2349,38 +2349,41 @@ goto menu
 
     timeout /t 2 /nobreak >nul
 
-    echo      %purple%[ %roxo%-%purple% ]%white% Checking %highlight%OOSU10%reset% executable...
+    echo      %purple%[ %roxo%-%purple% ]%white% Checking %highlight%OOSU10++%reset% executable...
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     if not exist "C:\Ghost Optimizer\OOSU10\OOSU10.exe" (
-        echo      %purple%[ %roxo%-%purple% ]%white% Downloading %highlight%OOSU10%reset% executable...
+        echo      %purple%[ %roxo%-%purple% ]%white% Downloading %highlight%OOSU10++%reset% executable...
         chcp 437 >> null 2>&1
-        powershell -Command "Invoke-WebRequest 'https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe' -OutFile 'C:\Ghost Optimizer\OOSU10\OOSU10.exe'" /f >> "%ghost-logfile%" 2>&1
+        powershell -Command "Invoke-WebRequest 'https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe' -OutFile 'C:\Ghost Optimizer\OOSU10\OOSU10.exe'" >> "%ghost-logfile%" 2>&1
         chcp 65001 >> null 2>&1
         if not exist "C:\Ghost Optimizer\OOSU10\OOSU10.exe" (
-            echo   %red%[ • ]%reset% Failed to download OOSU10 executable.
+        echo      %red%[ - ]%white% Failed to download OOSU10 executable.
         )
-    ) 
-    else (
-        echo      %purple%[ %roxo%-%purple% ]%white% %highlight%OOSU10%reset% already downloaded.
+    ) else (
+        echo      %purple%[ %roxo%-%purple% ]%white% %highlight%OOSU10++%reset% already downloaded.
         timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     )
 
-    echo      %purple%[ %roxo%-%purple% ]%white% Importing %highlight%OOSU10%reset% Profile...
-    curl -g -k -L -# -o "C:\Ghost Optimizer\OOSU10\Ghost-OOSU10.cfg" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/Ghost-OOSU10.cfg" /f >> "%ghost-logfile%" 2>&1
+    echo      %purple%[ %roxo%-%purple% ]%white% Importing %highlight%OOSU10++%reset% Profile...
+    curl -g -k -L -# -o "C:\Ghost Optimizer\OOSU10\Ghost-OOSU10.cfg" "https://github.com/louzkk/Ghost-Optimizer/raw/main/bin/Ghost-OOSU10.cfg" >> "%ghost-logfile%" 2>&1
     if errorlevel 1 (
-        echo   %red%[ • ]%reset% Failed to download OOSU10 profile.
+    echo      %red%[ - ]%white% Failed to download OOSU10 profile.
     )
 
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
 
-    echo      %purple%[ %roxo%-%purple% ]%white% Applying %highlight%OOSU10%reset% Profile...
+    echo      %purple%[ %roxo%-%purple% ]%white% Applying %highlight%OOSU10++%reset% Profile...
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    
     if exist "C:\Ghost Optimizer\OOSU10\OOSU10.exe" (
-        start "" /wait /quiet "C:\Ghost Optimizer\OOSU10\OOSU10.exe" "C:\Ghost Optimizer\OOSU10\Ghost-OOSU10.cfg" /f >> "%ghost-logfile%" 2>&1
-        echo --- OOSU10 profile applied --- /f >> "%ghost-logfile%" 2>&1
+        start "" /wait /quiet "C:\Ghost Optimizer\OOSU10\OOSU10.exe" "C:\Ghost Optimizer\OOSU10\Ghost-OOSU10.cfg" >> "%ghost-logfile%" 2>&1
+        echo --- OOSU10 profile applied --- >> "%ghost-logfile%" 2>&1
     ) else (
-        echo   %red%[ • ]%reset% OOSU10 executable not found.
+        echo      %red%[ - ]%white% OOSU10 executable not found.
     )
+
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Applying %highlight%OOSU10++%reset% Tweaks...
     echo.
 
     :: OOSU simulated outputs
@@ -2389,23 +2392,20 @@ goto menu
     echo      %purple%[ %roxo%-%purple% ]%white% Error reporting disabled.
     echo      %purple%[ %roxo%-%purple% ]%white% Experience feedback disabled.
     echo      %purple%[ %roxo%-%purple% ]%white% Privacy optimized.
-    echo      %purple%[ %roxo%-%purple% ]%white% Geolocation disabled.
     echo      %purple%[ %roxo%-%purple% ]%white% Data collection disabled.
     echo      %purple%[ %roxo%-%purple% ]%white% Telemetry services disabled.
     echo      %purple%[ %roxo%-%purple% ]%white% Handwriting and typing recognition disabled.
-    echo      %purple%[ %roxo%-%purple% ]%white% Biometric and inventory collection disabled.
-    echo      %purple%[ %roxo%-%purple% ]%white% Background Apps execution disabled.
     echo      %purple%[ %roxo%-%purple% ]%white% Microsoft Edge tracking and AI disabled.
     echo      %purple%[ %roxo%-%purple% ]%white% Windows Copilot and AI Recall removed.
-    echo      %purple%[ %roxo%-%purple% ]%white% Windows Spotlight and Lock Screen Ads disabled.
-    echo      %purple%[ %roxo%-%purple% ]%white% OneDrive backup integration and access disabled.
-    echo      %purple%[ %roxo%-%purple% ]%white% Windows Update Peer-to-Peer delivery disabled.
-    echo      %purple%[ %roxo%-%purple% ]%white% Microsoft Defender SpyNet telemetry disabled.
-    echo      %purple%[ %roxo%-%purple% ]%white% Taskbar Meet Now and News widgets removed.
-    echo      %purple%[ %roxo%-%purple% ]%white% Remote Assistance and Mobile Link disabled.
+    echo      %purple%[ %roxo%-%purple% ]%white% Spotlight and Lock Screen Ads disabled.
+    echo      %purple%[ %roxo%-%purple% ]%white% OneDrive disabled.
+    echo      %purple%[ %roxo%-%purple% ]%white% Windows Update P2P disabled.
+    echo      %purple%[ %roxo%-%purple% ]%white% Microsoft Defender telemetry disabled.
+    echo      %purple%[ %roxo%-%purple% ]%white% Meet Now, News and Widgets removed.
+    echo      %purple%[ %roxo%-%purple% ]%white% Remote Assistance disabled.
 
     del /f /q %ProgramData%\Microsoft\Diagnosis\DownloadedSettings\* /f >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Existing telemetry logs cleared.
+    echo      %purple%[ %roxo%-%purple% ]%white% Existing telemetry logs cleared.
 
     echo.
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
