@@ -368,6 +368,7 @@ cd /d "%~dp0"
     echo                                                        %purple%[ %roxo%%underline%13%reset% %purple%]%white% Other
     echo.
     set /p answer="%white% >:%roxo%"
+    echo.
 
     if "%answer%"=="1" goto general
     if "%answer%"=="2" goto performance
@@ -4047,7 +4048,7 @@ goto menu
     echo.
     echo                                   %purple%[ %roxo%%underline%5%reset% %purple%] %white%Show hidden files           %purple%[ %roxo%%underline%6%reset% %purple%] %white%Classic context menu
     echo.
-    echo                                   %purple%[ %roxo%%underline%7%reset% %purple%] %white%Disable SysMain %cinza%<-- Can fix high HDD usage
+    echo                                   %purple%[ %roxo%%underline%7%reset% %purple%] %white%Disable SysMain %cinza%^<-- Can fix high HDD usage%reset%
     echo.
     echo.
     echo                                                     %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
@@ -4235,12 +4236,12 @@ goto menu
     cls
     echo.
     echo.
-    set "lines[0]=                                         ██████╗ ███████╗██████╗  ██████╗  ██████╗ ████████╗     "
-    set "lines[1]=                                         ██╔══██╗██╔════╝██╔══██╗██╔═══██╗██╔═══██╗╚══██╔══╝     "
-    set "lines[2]=                                         ██████╔╝█████╗  ██████╔╝██║   ██║██║   ██║   ██║        "
-    set "lines[3]=                                         ██╔══██╗██╔══╝  ██╔══██╗██║   ██║██║   ██║   ██║        "
-    set "lines[4]=                                         ██║  ██║███████╗██████╔╝╚██████╔╝╚██████╔╝   ██║   "
-    set "lines[5]=                                         ╚═╝  ╚═╝╚══════╝╚═════╝  ╚═════╝  ╚═════╝    ╚═╝   "
+    set "lines[0]=                                        ██████╗ ███████╗██████╗  ██████╗  ██████╗ ████████╗     "
+    set "lines[1]=                                        ██╔══██╗██╔════╝██╔══██╗██╔═══██╗██╔═══██╗╚══██╔══╝     "
+    set "lines[2]=                                        ██████╔╝█████╗  ██████╔╝██║   ██║██║   ██║   ██║        "
+    set "lines[3]=                                        ██╔══██╗██╔══╝  ██╔══██╗██║   ██║██║   ██║   ██║        "
+    set "lines[4]=                                        ██║  ██║███████╗██████╔╝╚██████╔╝╚██████╔╝   ██║        "
+    set "lines[5]=                                        ╚═╝  ╚═╝╚══════╝╚═════╝  ╚═════╝  ╚═════╝    ╚═╝        "
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -4254,7 +4255,7 @@ goto menu
     )
 
     echo.
-    set "lines[0]=                          Restart Windows to apply the tweaks. Your system will be rebooted in 10 or 0 seconds."
+    set "lines[0]=                       Restart Windows to apply the tweaks. Your system will be rebooted in 10 or 0 seconds."
 
     set "text=!lines[0]!"
     set "textGradient="
@@ -4278,12 +4279,12 @@ goto menu
     echo !lineGradient!!esc![0m
 
     echo.
-    echo                                       %purple%[ %roxo%%underline%1%reset% %purple%]%white% Reboot System                %purple%[ %roxo%%underline%2%reset% %purple%]%white% Shutdown System
+    echo                                      %purple%[ %roxo%%underline%1%reset% %purple%]%white% Reboot System                %purple%[ %roxo%%underline%2%reset% %purple%]%white% Shutdown System
     echo.                 
-    echo                                       %purple%[ %roxo%%underline%3%reset% %purple%]%white% Quick Reboot                 %purple%[ %roxo%%underline%4%reset% %purple%]%white% Cancel Reboot
+    echo                                      %purple%[ %roxo%%underline%3%reset% %purple%]%white% Quick Reboot                 %purple%[ %roxo%%underline%4%reset% %purple%]%white% Cancel Reboot
     echo.
     echo.
-    echo                                                        %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
+    echo                                                     %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
     echo.
     set /p answer="%reset% >:%roxo%"
 
