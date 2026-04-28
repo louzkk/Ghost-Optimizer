@@ -1,4 +1,4 @@
-:: Ghost Optimizer 5.3.6
+:: Ghost Optimizer 5.3.7
 :: https://github.com/louzkk/Ghost-Optimizer
 
 @echo off
@@ -20,7 +20,7 @@
     (for /f %%a in ('echo prompt $E^| cmd') do set "esc=%%a")
     chcp 65001 >nul 2>&1
 
-    set "version=5.3.6"
+    set "version=5.3.7"
     set "script=Ghost Optimizer"
     set "reboot= (Reboot required)" 
     set "rebooting=Rebooting"
@@ -372,7 +372,6 @@
     echo                                                        %purple%[ %roxo%%underline%13%reset% %purple%]%white% Other
     echo.
     set /p answer="%white% >:%roxo%"
-    echo.
 
     if "%answer%"=="1" goto general
     if "%answer%"=="2" goto performance
@@ -2896,7 +2895,7 @@ goto menu
         goto powerplan
     )
 
-    powercfg /setactive !GUID! /f >> "%ghost-logfile%" 2>&1
+    powercfg /setactive !GUID! >> "%ghost-logfile%" 2>&1
     if errorlevel 1 (
         echo   %red%[ %orange%• %red%]%white% Failed to set %highlight%Ghost%reset% power plan active.
         timeout /t 3 >nul
