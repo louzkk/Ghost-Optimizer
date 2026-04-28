@@ -3865,7 +3865,8 @@ goto menu
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Finished Debloat --- >> "%ghost-logfile%" 2>&1
-    goto debloat
+    if "%mode%"=="menu" goto menu
+    exit /b
 
 goto menu
 
