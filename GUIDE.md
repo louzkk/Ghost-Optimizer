@@ -17,7 +17,7 @@ Some tweaks may become obsolete or have a negative impact on the system after so
 - Windows Update: Make sure your system is fully updated, as ongoing updates may undo some tweaks.
 - Reboot system: Restart your PC to fix general issues.
 - Corrupted script: Delete the script and download it again.
-- Try using [Powershell](https://github.com/louzkk/Ghost-Optimizer#quick-install-powershell-admin) method.
+- Try using [Powershell](https://github.com/louzkk/Ghost-Optimizer#-download) method.
 
 ## What NextDNS (Ghost Optimizer DNS) does?
 - Can speed up your connection
