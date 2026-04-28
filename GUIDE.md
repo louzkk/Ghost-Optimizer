@@ -2,7 +2,7 @@
 This guide provides detailed information about Ghost Optimizer, explaining what it does, how to use it safely, and how each tweak affects your system.
 
 # Why optimize Windows?
-Windows is an OS made for any system and any type of user (many layers of compatibildiade and conservative adjustments), it comes full of Ads, Bloatware (Preinstalled Apps), AI, data collection, and known issues.
+Windows is an OS made for any system and any type of user (many layers of compatibility and conservative adjustments), it comes full of intrusive Ads, Bloatware (Preinstalled Apps), AI features, data collection, and known issues.
 Ghost Optimizer tweaks your system for something cleaner, private and lighter.
 
 # Troubleshooting & Notes
@@ -19,8 +19,8 @@ Some tweaks may become obsolete or have a negative impact on the system after so
 - Corrupted script: Delete the script and download it again.
 - Try using [Powershell](https://github.com/louzkk/Ghost-Optimizer#-download) method.
 
-## What NextDNS (Ghost Optimizer DNS) does?
-- Can speed up your connection
+## What Ghost Optimizer DNS (NextDNS) does?
+- Can speed up your connection.
 - Encrypted, no logs and no data collection.
 - Blocks malware and phishing domains.
 - NextDNS Ads/Trackers block, Adguard filters and OISD.
