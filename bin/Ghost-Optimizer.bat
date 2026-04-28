@@ -1,4 +1,4 @@
-:: Ghost Optimizer 5.3.4
+:: Ghost Optimizer 5.3.5
 :: https://github.com/louzkk/Ghost-Optimizer
 
 @echo off
@@ -20,7 +20,7 @@
     (for /f %%a in ('echo prompt $E^| cmd') do set "esc=%%a")
     chcp 65001 >nul 2>&1
 
-    set "version=5.3.2"
+    set "version=5.3.5"
     set "script=Ghost Optimizer"
     set "reboot= (Reboot required)" 
     set "rebooting=Rebooting"
@@ -509,7 +509,7 @@ goto menu
     echo.
     timeout /t 3 /nobreak >> "%ghost-logfile%" 2>&1
 
-    set mode=none
+    set mode=auto
     call:generalapply
     call:performanceapply
     call:disablemitigations
@@ -2421,7 +2421,8 @@ goto menu
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- OOSU10 Profile applied --- /f >> "%ghost-logfile%" 2>&1
-    goto telemetry
+    if "%mode%"=="menu" goto telemetry
+    exit /b
 
 goto menu
 
@@ -2776,7 +2777,8 @@ goto menu
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Services Re-enabled --- /f >> "%ghost-logfile%" 2>&1
-    goto services
+    if "%mode%"=="menu" goto telemetry
+    exit /b
 
 goto menu
 
