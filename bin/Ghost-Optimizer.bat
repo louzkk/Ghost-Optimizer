@@ -17,7 +17,7 @@ cd /d "%~dp0"
     (for /f %%a in ('echo prompt $E^| cmd') do set "esc=%%a")
     chcp 65001 >nul 2>&1
 
-    set "version=5.3.1"
+    set "version=5.3.2"
     set "script=Ghost Optimizer"
     set "reboot= (Reboot required)" 
     set "rebooting=Rebooting"
@@ -2292,7 +2292,7 @@ goto menu
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"          /v "Start_TrackProgs"               /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata"            /v "PreventDeviceMetadataFromNetwork" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge"                                     /v "PersonalizationReportingEnabled" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    echo      %purple%[ %roxo%-%purple% ]%white% Privacy optimized.
+    echo      %purple%[ %roxo%-%purple% ]%white% Privacy policies configured.
 
     ::reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableLocation"                /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     ::reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableLocationScripting"       /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
@@ -4047,7 +4047,7 @@ goto menu
     echo.
     echo                                   %purple%[ %roxo%%underline%5%reset% %purple%] %white%Show hidden files           %purple%[ %roxo%%underline%6%reset% %purple%] %white%Classic context menu
     echo.
-    echo                                   %purple%[ %roxo%%underline%7%reset% %purple%] %white%Disable sysmain
+    echo                                   %purple%[ %roxo%%underline%7%reset% %purple%] %white%Disable SysMain %cinza%<-- Can fix high HDD usage
     echo.
     echo.
     echo                                                     %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
@@ -4190,28 +4190,6 @@ goto menu
 
 goto menu
 
-    :disablesysmain
-    cls
-    echo.
-    echo   %purple%[ %roxo%•%purple% ]%white% Disabling %roxo%Symain%white%... 
-    echo.
-    timeout /t 3 /nobreak >> "%ghost-logfile%" 2>&1
-
-    sc stop "SysMain" >> "%ghost-logfile%" 2>&1
-    echo      %purple%[ %roxo%-%purple% ]%white% Sysmain stopped.
-
-    sc config "SysMain" start=disabled >> "%ghost-logfile%" 2>&1
-    echo      %purple%[ %roxo%-%purple% ]%white% Sysmain disabled.
-
-    echo.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    echo   %purple%[ %roxo%•%purple% ]%white% Sysmain disabled %green%successfully%white%.
-    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
-    title Ghost Optimizer %version% %reboot%
-    goto other
-
-goto menu
-
     :classicmenuapply
     cls
     echo.
@@ -4231,16 +4209,38 @@ goto menu
 
 goto menu
 
+    :disablesysmain
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Disabling %roxo%SysMain%white%... 
+    echo.
+    timeout /t 3 /nobreak >> "%ghost-logfile%" 2>&1
+
+    sc stop "SysMain" >> "%ghost-logfile%" 2>&1
+    echo      %purple%[ %roxo%-%purple% ]%white% Sysmain stopped.
+
+    sc config "SysMain" start=disabled >> "%ghost-logfile%" 2>&1
+    echo      %purple%[ %roxo%-%purple% ]%white% Sysmain disabled.
+
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% SysMain disabled %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    title Ghost Optimizer %version% %reboot%
+    goto other
+
+goto menu
+
     :reboot
     cls
     echo.
     echo.
-    set "lines[0]=                                          ██████╗ ███████╗██████╗  ██████╗  ██████╗ ████████╗     "
-    set "lines[1]=                                          ██╔══██╗██╔════╝██╔══██╗██╔═══██╗██╔═══██╗╚══██╔══╝     "
-    set "lines[2]=                                          ██████╔╝█████╗  ██████╔╝██║   ██║██║   ██║   ██║        "
-    set "lines[3]=                                          ██╔══██╗██╔══╝  ██╔══██╗██║   ██║██║   ██║   ██║        "
-    set "lines[4]=                                          ██║  ██║███████╗██████╔╝╚██████╔╝╚██████╔╝   ██║   "
-    set "lines[5]=                                          ╚═╝  ╚═╝╚══════╝╚═════╝  ╚═════╝  ╚═════╝    ╚═╝   "
+    set "lines[0]=                                         ██████╗ ███████╗██████╗  ██████╗  ██████╗ ████████╗     "
+    set "lines[1]=                                         ██╔══██╗██╔════╝██╔══██╗██╔═══██╗██╔═══██╗╚══██╔══╝     "
+    set "lines[2]=                                         ██████╔╝█████╗  ██████╔╝██║   ██║██║   ██║   ██║        "
+    set "lines[3]=                                         ██╔══██╗██╔══╝  ██╔══██╗██║   ██║██║   ██║   ██║        "
+    set "lines[4]=                                         ██║  ██║███████╗██████╔╝╚██████╔╝╚██████╔╝   ██║   "
+    set "lines[5]=                                         ╚═╝  ╚═╝╚══════╝╚═════╝  ╚═════╝  ╚═════╝    ╚═╝   "
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -4254,33 +4254,33 @@ goto menu
     )
 
     echo.
-    set "lines[0]=                           Restart Windows to apply the tweaks. Your system will be rebooted in 10 or 0 seconds."
+    set "lines[0]=                          Restart Windows to apply the tweaks. Your system will be rebooted in 10 or 0 seconds."
 
     set "text=!lines[0]!"
     set "textGradient="
-    for /L %%j in (0,1,129) do (
+    for /L %%j in (0,1,130) do (
         set "char=!text:~%%j,1!"
         if "!char!"=="" set "char= "
         set "textGradient=!textGradient!!esc[%%j]!!char!"
     )
     echo !textGradient!!esc![0m
 
-    echo.
     set "lineGradient="
-    set /a "BeforeSpace=(134 - 108) / 2"
+    set /a "BeforeSpace=(136 - 122) / 2"
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    for /L %%j in (0,1,108) do (
+    for /L %%j in (0,1,110) do (
         set /a "colorR=colorBaseR + (variationR * %%j / 108)"
         set /a "colorG=colorBaseG + (variationG * %%j / 108)"
         set /a "colorB=colorBaseB + (variationB * %%j / 108)"
         set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
     )
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m     
+    echo !lineGradient!!esc![0m
+
     echo.
     echo                                       %purple%[ %roxo%%underline%1%reset% %purple%]%white% Reboot System                %purple%[ %roxo%%underline%2%reset% %purple%]%white% Shutdown System
     echo.                 
-    echo                                       %purple%[ %roxo%%underline%3%reset% %purple%]%white% Quick Reboot                %purple%[ %roxo%%underline%4%reset% %purple%]%white% Cancel Reboot
+    echo                                       %purple%[ %roxo%%underline%3%reset% %purple%]%white% Quick Reboot                 %purple%[ %roxo%%underline%4%reset% %purple%]%white% Cancel Reboot
     echo.
     echo.
     echo                                                        %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
