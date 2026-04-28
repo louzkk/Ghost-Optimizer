@@ -1051,7 +1051,8 @@ goto menu
     if /i "%answer%"=="Y" (
         goto disablemitigationsapply
     ) else if /i "%answer%"=="N" (
-        goto performance
+        if "%mode%"=="menu" goto performance
+        exit /b
     ) else (
         echo.
         echo.
