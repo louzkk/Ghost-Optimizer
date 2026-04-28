@@ -1,5 +1,8 @@
+:: Ghost Optimizer 5.3.4
+:: https://github.com/louzkk/Ghost-Optimizer
+
 @echo off
-cd /d "%~dp0"
+:: cd /d "%~dp0"
 
     fltmc >nul 2>&1
     if %errorlevel%==0 (
@@ -311,8 +314,9 @@ cd /d "%~dp0"
         )
         set Winver=(Windows %OS%)
 
-        timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
+        timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
         title Ghost Optimizer %version%  %winver%
+        goto menu
 
     :menu
     cls
@@ -558,7 +562,7 @@ goto menu
     )
 
     echo.
-    set "lines[0]=                     Revert all Tweaks/Fixes using the restore point that you created (or should have)."
+    set "lines[0]=                      Revert all Tweaks/Fixes using the restore point that you created (or should have)."
 
     set "text=!lines[0]!"
     set "textGradient="
@@ -585,7 +589,7 @@ goto menu
     echo                                                 %purple%[ %roxo%%underline%1%reset% %purple%]%white% Apply Restore Point
     echo.                 
     echo.
-    echo                                                    %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
+    echo                                                     %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
     echo.
     set /p answer="%reset% >:%roxo%"
 
@@ -4048,7 +4052,7 @@ goto menu
     echo.
     echo                                   %purple%[ %roxo%%underline%5%reset% %purple%] %white%Show hidden files           %purple%[ %roxo%%underline%6%reset% %purple%] %white%Classic context menu
     echo.
-    echo                                   %purple%[ %roxo%%underline%7%reset% %purple%] %white%Disable SysMain %cinza%^<-- Can fix high HDD usage%reset%
+    echo                                   %purple%[ %roxo%%underline%7%reset% %purple%] %white%Disable SysMain    %cinza%^<-- Can fix high HDD usage%reset%
     echo.
     echo.
     echo                                                     %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
@@ -4233,6 +4237,7 @@ goto menu
 goto menu
 
     :reboot
+
     cls
     echo.
     echo.
@@ -4278,10 +4283,11 @@ goto menu
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
     echo !lineGradient!!esc![0m
 
+
     echo.
-    echo                                      %purple%[ %roxo%%underline%1%reset% %purple%]%white% Reboot System                %purple%[ %roxo%%underline%2%reset% %purple%]%white% Shutdown System
+    echo                                     %purple%[ %roxo%%underline%1%reset% %purple%]%white% Reboot System                %purple%[ %roxo%%underline%2%reset% %purple%]%white% Shutdown System
     echo.                 
-    echo                                      %purple%[ %roxo%%underline%3%reset% %purple%]%white% Quick Reboot                 %purple%[ %roxo%%underline%4%reset% %purple%]%white% Cancel Reboot
+    echo                                     %purple%[ %roxo%%underline%3%reset% %purple%]%white% Quick Reboot                 %purple%[ %roxo%%underline%4%reset% %purple%]%white% Cancel Reboot
     echo.
     echo.
     echo                                                     %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
