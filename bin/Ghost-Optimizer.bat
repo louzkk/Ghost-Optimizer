@@ -1,8 +1,8 @@
-:: Ghost Optimizer 5.3.7
+:: Ghost Optimizer 5.3.8
 :: https://github.com/louzkk/Ghost-Optimizer
+:: cd /d "%~dp0"
 
 @echo off
-:: cd /d "%~dp0"
 
     fltmc >nul 2>&1
     if %errorlevel%==0 (
@@ -20,7 +20,7 @@
     (for /f %%a in ('echo prompt $E^| cmd') do set "esc=%%a")
     chcp 65001 >nul 2>&1
 
-    set "version=5.3.7"
+    set "version=5.3.8"
     set "script=Ghost Optimizer"
     set "reboot= (Reboot required)" 
     set "rebooting=Rebooting"
@@ -1225,7 +1225,7 @@ goto menu
     netsh int tcp set global ecncapability=enabled   /f >> "%ghost-logfile%" 2>&1
     netsh int tcp set global autotuninglevel=enabled /f >> "%ghost-logfile%" 2>&1
     netsh int tcp set heuristics disabled            /f >> "%ghost-logfile%" 2>&1
-    echo      %purple%[ %roxo%-%purple% ]%white% TCP global parameters optimized.
+    echo      %purple%[ %roxo%-%purple% ]%white% TCP Global optimized.
 
     netsh int tcp set global rss=enabled  /f >> "%ghost-logfile%" 2>&1
     netsh int tcp set global rsc=disabled /f >> "%ghost-logfile%" 2>&1
@@ -1573,7 +1573,6 @@ goto menu
     echo      %verde%[ %green%-%verde% ]%reset% NVIDIA subkey: %NVIDIA_SUBKEY%
     echo --- NVIDIA subkey: %NVIDIA_SUBKEY% --- >> "%ghost-logfile%" 2>&1
 
-    :: Latency Tolerance
     reg add "%GPU_CLASS%\!NVIDIA_SUBKEY!" /v "D3PCLatency"                          /t REG_DWORD /d 1  /f >> "%ghost-logfile%" 2>&1
     reg add "%GPU_CLASS%\!NVIDIA_SUBKEY!" /v "F1TransitionLatency"                  /t REG_DWORD /d 1  /f >> "%ghost-logfile%" 2>&1
     reg add "%GPU_CLASS%\!NVIDIA_SUBKEY!" /v "LOWLATENCY"                           /t REG_DWORD /d 1  /f >> "%ghost-logfile%" 2>&1
@@ -1595,37 +1594,29 @@ goto menu
     reg add "%GPU_CLASS%\!NVIDIA_SUBKEY!" /v "vrrDeflickerMaxUs"                    /t REG_DWORD /d 1  /f >> "%ghost-logfile%" 2>&1
     echo      %verde%[ %green%-%verde% ]%reset% Latency Tolerance optimized.
 
-    :: DirectX Event Tracking
     reg add "%GPU_CLASS%\!NVIDIA_SUBKEY!" /v "TrackResetEngine"                     /t REG_DWORD /d 0  /f >> "%ghost-logfile%" 2>&1
     echo      %verde%[ %green%-%verde% ]%reset% Event Tracking disabled.
 
-    :: Dedicated Video Memory
     reg add "%GPU_CLASS%\!NVIDIA_SUBKEY!" /v "RmCacheLoc"                           /t REG_DWORD /d 0  /f >> "%ghost-logfile%" 2>&1
     echo      %verde%[ %green%-%verde% ]%reset% RM Cache optimized.
 
-    :: Redraw Acceleration
     reg add "%GPU_CLASS%\!NVIDIA_SUBKEY!" /v "Acceleration.Level"                   /t REG_DWORD /d 0  /f >> "%ghost-logfile%" 2>&1
     echo      %verde%[ %green%-%verde% ]%reset% Driver Acceleration optimized.
 
-    :: Filters
     reg add "%GPU_CLASS%\!NVIDIA_SUBKEY!" /v "NVDeviceSupportKFilter"               /t REG_DWORD /d 0  /f >> "%ghost-logfile%" 2>&1
     echo      %verde%[ %green%-%verde% ]%reset% Overlay Filter disabled.
 
-    :: Contiguous Memory Allocation
     reg add "%GPU_CLASS%\!NVIDIA_SUBKEY!" /v "PreferSystemMemoryContiguous"         /t REG_DWORD /d 1  /f >> "%ghost-logfile%" 2>&1
     echo      %verde%[ %green%-%verde% ]%reset% Contiguous Memory Allocation optimized.
 
     :nvidiaregskip
 
-    :: Power Saving
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\Global\NVTweak" /v "DisplayPowerSaving"      /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     echo      %verde%[ %green%-%verde% ]%reset% Power Saving disabled.
 
-    :: Write Combining
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "DisableWriteCombining"                  /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     echo      %verde%[ %green%-%verde% ]%reset% Write Combining disabled.
 
-    :: DPCs
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm"                /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\NVAPI"          /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\Global\NVTweak" /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
@@ -1633,7 +1624,6 @@ goto menu
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power"    /v "RmGpsPsEnablePerCpuCoreDpc" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     echo      %verde%[ %green%-%verde% ]%reset% Core DPC enabled.
 
-    :: Driver Telemetry
     reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "NvBackend" /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SOFTWARE\NVIDIA Corporation\NvControlPanel2\Client" /v "OptInOrOutPreference" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID66610"                   /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
@@ -2390,8 +2380,6 @@ goto menu
     )
 
     echo.
-    echo   %purple%[ %roxo%•%purple% ]%white% Applying %highlight%OOSU10++%reset% Tweaks...
-    echo.
 
     :: OOSU simulated outputs
     echo      %purple%[ %roxo%-%purple% ]%white% Activity upload disabled.
@@ -2501,9 +2489,6 @@ goto menu
     echo.
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Disabling Unnecessary Services --- >> "%ghost-logfile%" 2>&1
-
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\SysMain"                                     /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    ::echo      %purple%[ %roxo%-%purple% ]%white% SysMain disabled.
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\SensorDataService"                             /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\SensrSvc"                                      /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
@@ -3706,7 +3691,7 @@ goto menu
 
     cls
     echo.
-    echo      %purple%[ %roxo%-%purple% ]%white% Uninstalling %roxo%Bloatware%white% Apps... 
+    echo   %purple%[ %roxo%•%purple% ]%white% Uninstalling %roxo%Bloatware%white% Apps... 
     echo.
 
     chcp 437 >nul 2>&1
@@ -4004,12 +3989,12 @@ goto menu
     cls
     echo.
     echo.
-    set "lines[0]=                                           ██████╗ ████████╗██╗  ██╗███████╗██████╗           "
-    set "lines[1]=                                          ██╔═══██╗╚══██╔══╝██║  ██║██╔════╝██╔══██╗          "
-    set "lines[2]=                                          ██║   ██║   ██║   ███████║█████╗  ██████╔╝          "
-    set "lines[3]=                                          ██║   ██║   ██║   ██╔══██║██╔══╝  ██╔══██╗          "
-    set "lines[4]=                                          ╚██████╔╝   ██║   ██║  ██║███████╗██║  ██║          "
-    set "lines[5]=                                           ╚═════╝    ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝          "
+    set "lines[0]=                                          ██████╗ ████████╗██╗  ██╗███████╗██████╗           "
+    set "lines[1]=                                         ██╔═══██╗╚══██╔══╝██║  ██║██╔════╝██╔══██╗          "
+    set "lines[2]=                                         ██║   ██║   ██║   ███████║█████╗  ██████╔╝          "
+    set "lines[3]=                                         ██║   ██║   ██║   ██╔══██║██╔══╝  ██╔══██╗          "
+    set "lines[4]=                                         ╚██████╔╝   ██║   ██║  ██║███████╗██║  ██║          "
+    set "lines[5]=                                          ╚═════╝    ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝          "
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -4023,7 +4008,7 @@ goto menu
     )
 
     echo.
-    set "lines[0]=                                  A variety of system tweaks, fixes, bypasses and utilities."
+    set "lines[0]=                                 A variety of system tweaks, fixes, bypasses and utilities."
 
     set "text=!lines[0]!"
     set "textGradient="
@@ -4406,10 +4391,10 @@ goto menu
     :rebootquestion
     cls
     echo.
-    echo   %purple%[ %roxo%•%purple% ]%white% Reboot now to apply changes?" %reset%(%green%Y%reset%/%red%N%reset%%reset%)%reset%
+    echo   %purple%[ %roxo%•%purple% ]%white% Reboot now to apply changes? %reset%(%green%Y%reset%/%red%N%reset%%reset%)%reset%
     echo.
     echo   %purple%About:%reset% A system reboot is required for all changes to take effect.
-    echo   Skipping this step will leave your system in a partial state until you restart manually.
+    echo   Skipping this step will leave your system in a partial optimization until you restart.
     echo.
 
     set /p answer="%reset% >:%roxo%"
