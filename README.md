@@ -23,7 +23,7 @@ Every optimization in this script has been individually tested and included for 
 ## 🚀 Download
 
 1. Download [Git 2.54](https://github.com/git-for-windows/git/releases/download/v2.54.0.windows.1/Git-2.54.0-64-bit.exe)
-2. Check: "Use Windows' Default console window" on install
+2. Check: "*Use Windows' Default console window*" on install
 3. Open Powershell as Administrator
 4. Copy and paste the command below:
 
