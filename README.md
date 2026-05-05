@@ -12,6 +12,8 @@
 
 </div>
 
+---
+
 **Ghost Optimizer** is an open source advanced batch script that improves **performance**, **latency**, **network** and **privacy**, while removing **bloatware** and **AI** features.
 
 It applies registry and policy modifications across four areas: performance, targeting scheduler behavior and resource allocation; network, reducing overhead and improving throughput; latency and input lag, via interrupt handling and timer resolution tuning; and telemetry, advertising, bloatware, and AI features. All modifications are reversible through the restore point option.
