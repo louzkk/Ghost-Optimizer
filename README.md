@@ -3,10 +3,10 @@
 # 👻 Ghost Optimizer
 **Minimal, Private and Optimized Windows**
 
-[![Version](https://img.shields.io/badge/Version-5.3.8-indigo?style=for-the-badge&logo=Ghostty&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer/releases)
-[![License](https://img.shields.io/badge/License-MIT-indigo?style=for-the-badge)](LICENSE)
-[![Discord](https://img.shields.io/badge/Discord-indigo?style=for-the-badge&logo=Discord&logoColor=white)](https://discord.gg/QJPdw2UrVt)
-[![Download](https://img.shields.io/badge/Download-indigo?style=for-the-badge&logo=Github&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer#-download)
+[![Version](https://img.shields.io/badge/Version-5.3.8-black?style=for-the-badge&logo=Ghostty&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer/releases)
+[![License](https://img.shields.io/badge/License-MIT-black?style=for-the-badge)](LICENSE)
+[![Discord](https://img.shields.io/badge/Discord-black?style=for-the-badge&logo=Discord&logoColor=white)](https://discord.gg/QJPdw2UrVt)
+[![Download](https://img.shields.io/badge/Download-black?style=for-the-badge&logo=Github&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer#-download)
 
 ![Banner](images/Ghost-BANNER-denoised-4x.png)
 
