@@ -1,4 +1,4 @@
-:: Ghost Optimizer 5.3.8
+:: Ghost Optimizer 5.3.9
 :: https://github.com/louzkk/Ghost-Optimizer
 :: cd /d "%~dp0"
 
@@ -20,7 +20,7 @@
     (for /f %%a in ('echo prompt $E^| cmd') do set "esc=%%a")
     chcp 65001 >nul 2>&1
 
-    set "version=5.3.8"
+    set "version=5.3.9"
     set "script=Ghost Optimizer"
     set "reboot= (Reboot required)" 
     set "rebooting=Rebooting"
@@ -3103,8 +3103,11 @@ goto menu
     echo      %purple%[ %roxo%-%purple% ]%white% Pending Actions reverted.
     echo.
 
+    echo      %purple%[ %roxo%-%purple% ]%white% Recovery environment repair...
+    reagentc /enable
+
     echo      %purple%[ %roxo%-%purple% ]%white% Scheduling system file repair...
-    echo chkdsk C: /f /r
+    chkdsk C: /f /r
 
     echo.
     echo   %yellow%[ • ]%reset% Files will be repaired in the next boot.
