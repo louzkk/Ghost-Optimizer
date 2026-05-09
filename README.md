@@ -3,14 +3,16 @@
 # 👻 Ghost Optimizer
 **Minimal, Private and Optimized Windows**
 
-[![Version](https://img.shields.io/badge/Version-5.3.9-indigo?style=for-the-badge&logo=Ghostty&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer/releases)
-[![License](https://img.shields.io/badge/License-MIT-indigo?style=for-the-badge)](LICENSE)
-[![Discord](https://img.shields.io/badge/Discord-indigo?style=for-the-badge&logo=Discord&logoColor=white)](https://discord.gg/QJPdw2UrVt)
-[![Download](https://img.shields.io/badge/Download-indigo?style=for-the-badge&logo=Github&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer#-download)
+[![Version](https://img.shields.io/badge/Version-5.3.8-black?style=for-the-badge&logo=Ghostty&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer/releases)
+[![License](https://img.shields.io/badge/License-MIT-black?style=for-the-badge)](LICENSE)
+[![Discord](https://img.shields.io/badge/Discord-black?style=for-the-badge&logo=Discord&logoColor=white)](https://discord.gg/QJPdw2UrVt)
+[![Download](https://img.shields.io/badge/Download-black?style=for-the-badge&logo=Github&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer#-download)
 
 ![Banner](images/Ghost-BANNER-denoised-4x.png)
 
 </div>
+
+---
 
 **Ghost Optimizer** is an open source advanced batch script that improves **performance**, **latency**, **network** and **privacy**, while removing **bloatware** and **AI** features.
 
@@ -23,7 +25,7 @@ Every optimization in this script has been individually tested and included for 
 ## 🚀 Download
 
 1. Download [Git 2.54](https://github.com/git-for-windows/git/releases/download/v2.54.0.windows.1/Git-2.54.0-64-bit.exe)
-2. Check: "Use Windows' Default console window" on install
+2. Check: "*Use Windows' Default console window*" on install
 3. Open Powershell as Administrator
 4. Copy and paste the command below:
 
