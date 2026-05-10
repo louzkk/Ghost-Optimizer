@@ -20,6 +20,8 @@ It applies registry and policy modifications across four areas: performance, tar
 
 Every optimization in this script has been individually tested and included for a specific reason. If you don't understand what a command does, do not run it. Blindly executing random tweaks you found online is how you break things.
 
+> **Note:** Ghost Optimizer is not affiliated with or based on Ghost Spectre or any other existing Windows ISO or script.
+
 ---
 
 ## 🚀 Download
