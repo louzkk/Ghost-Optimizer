@@ -20,7 +20,7 @@ Every optimization in this script has been individually tested and included for 
 ## 🚀 Launch
 Open Powershell as Administrator
 ```
-irm https://raw.githubusercontent.com/louzkk/Ghost-Optimizer/launch.ps1 | iex
+irm https://raw.githubusercontent.com/louzkk/Ghost-Optimizer/main/launch.ps1 | iex
 ```
 
 ## 🔨 Installation
