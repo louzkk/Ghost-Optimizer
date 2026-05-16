@@ -356,7 +356,7 @@
     echo !lineGradient!!esc![0m
 
     echo.
-    echo                                   %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply all%yellow%*%reset%                          %purple%[ %roxo%%underline%R%reset% %purple%]%white% Revert all 
+    echo                                   %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply all%orange%*%reset%                          %purple%[ %roxo%%underline%R%reset% %purple%]%white% Revert all 
     echo.
     echo.
     echo               %purple%[ %roxo%%underline%1%reset% %purple%]%white% General Tweaks               %purple%[ %roxo%%underline%2%reset% %purple%]%white% Performance Tweaks              %purple%[ %roxo%%underline%3%reset% %purple%]%white% Network Tweaks
