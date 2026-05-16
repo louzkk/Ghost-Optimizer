@@ -2950,7 +2950,7 @@ goto menu
     echo.
     echo                                  %purple%[ %roxo%%underline%1%reset% %purple%] %white%Fast Integrity Fix            %purple%[ %roxo%%underline%2%reset% %purple%] %white%Full Integrity Fix
     echo.                 
-    echo                                  %purple%[ %roxo%%underline%3%reset% %purple%] %white%Printer ^& Bluetooth Fix         %purple%[ %roxo%%underline%4%reset% %purple%] %white%Xbox ^& Game Bar Fix
+    echo                                  %purple%[ %roxo%%underline%3%reset% %purple%] %white%Printer ^& Bluetooth Fix       %purple%[ %roxo%%underline%4%reset% %purple%] %white%Xbox ^& Game Bar Fix
     echo.
     echo                                  %purple%[ %roxo%%underline%5%reset% %purple%] %white%Windows Update Fix            %purple%[ %roxo%%underline%6%reset% %purple%] %white%Hibernation Fix
     echo.
