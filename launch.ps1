@@ -4,7 +4,12 @@
 Set-ExecutionPolicy Unrestricted -Scope Process -Force -ErrorAction SilentlyContinue
 
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command `"irm 'https://raw.githubusercontent.com/louzkk/Ghost-Optimizer/main/launch.ps1' | iex`"" -Verb RunAs
+    $arguments = @(
+        "-NoProfile",
+        "-ExecutionPolicy", "Bypass",
+        "-Command", "irm 'https://raw.githubusercontent.com/louzkk/Ghost-Optimizer/main/launch.ps1' | iex"
+    )
+    Start-Process powershell.exe -ArgumentList $arguments -Verb RunAs -ErrorAction SilentlyContinue
     exit
 }
 
