@@ -2,6 +2,7 @@
 :: https://github.com/louzkk/Ghost-Optimizer
 
 @echo off
+color 07
 
     fltmc >nul 2>&1
     if %errorlevel%==0 (
