@@ -5,7 +5,7 @@
 
 [![Version](https://img.shields.io/badge/Version-5.4-indigo?style=for-the-badge)](https://github.com/louzkk/Ghost-Optimizer/releases)
 [![Downloads](https://img.shields.io/github/downloads/louzkk/Ghost-Optimizer/total?style=for-the-badge&color=indigo)](https://github.com/louzkk/Ghost-Optimizer/releases)
-[![Download](https://img.shields.io/badge/Download-indigo?style=for-the-badge&logo=Github&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer#-download)
+[![Download](https://img.shields.io/badge/Download-indigo?style=for-the-badge&logo=Github&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer#-launch)
 [![Discord](https://img.shields.io/badge/Discord-indigo?style=for-the-badge&logo=Discord&logoColor=white)](https://discord.gg/QJPdw2UrVt)
 
 ![Banner](images/Ghost-BANNER-denoised-4x.png)
