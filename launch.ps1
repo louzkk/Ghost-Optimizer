@@ -94,7 +94,7 @@ Write-Host ""
 
 try {
     Set-Location "$inner\bin"
-    Start-Process cmd.exe -ArgumentList "/c `"$bat`"" -Wait
+    & ".\Ghost-Optimizer.bat"
 } finally {
     Remove-Item $zipPath -Force          -ErrorAction SilentlyContinue
     Remove-Item $dir     -Recurse -Force -ErrorAction SilentlyContinue
