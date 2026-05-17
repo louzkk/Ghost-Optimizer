@@ -2097,12 +2097,13 @@ goto menu
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Starting Ghost Optimizer Clean --- >> "%ghost-logfile%" 2>&1
 
-    echo      %purple%[ %roxo%+%purple% ]%white% Cleaning Temporary files...
-    rd /s /q "%windir%\Temp" >> "%ghost-logfile%" 2>&1
-    md "%windir%\Temp" >> "%ghost-logfile%" 2>&1
-    rd /s /q "%LocalAppData%\Temp" >> "%ghost-logfile%" 2>&1
-    md "%LocalAppData%\Temp" >> "%ghost-logfile%" 2>&1
-    echo      %purple%[ %roxo%+%purple% ]%white% Temporary files cleaned.
+    :: Cant clean temp files since ghost optimizer running there xd
+    ::echo      %purple%[ %roxo%+%purple% ]%white% Cleaning Temporary files...
+    ::rd /s /q "%windir%\Temp" >> "%ghost-logfile%" 2>&1
+    ::md "%windir%\Temp" >> "%ghost-logfile%" 2>&1
+    ::rd /s /q "%LocalAppData%\Temp" >> "%ghost-logfile%" 2>&1
+    ::md "%LocalAppData%\Temp" >> "%ghost-logfile%" 2>&1
+    ::echo      %purple%[ %roxo%+%purple% ]%white% Temporary files cleaned.
 
     echo      %purple%[ %roxo%+%purple% ]%white% Cleaning Prefetch files...
     rd /s /q "%windir%\Prefetch" >> "%ghost-logfile%" 2>&1
