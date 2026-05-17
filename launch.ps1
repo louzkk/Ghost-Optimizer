@@ -1,4 +1,4 @@
-﻿# Ghost Optimizer
+﻿# Ghost Optimizer 5.4
 # https://github.com/louzkk/Ghost-Optimizer
 
 Set-ExecutionPolicy Unrestricted -Scope Process -Force -ErrorAction SilentlyContinue
@@ -91,16 +91,12 @@ Get-ChildItem "$inner\bin" -Filter "*.bat" | ForEach-Object {
     [System.IO.File]::WriteAllBytes($_.FullName, $crlf.ToArray())
 }
 
+$content = [System.IO.File]::ReadAllText($bat, [System.Text.Encoding]::UTF8)
+$content = $content -replace '\[0m', '[0;40m'
+[System.IO.File]::WriteAllText($bat, $content, [System.Text.Encoding]::UTF8)
+
 Write-Host "      [ • ] Launching Ghost Optimizer..." -ForegroundColor White
 Write-Host ""
-
-$vbs  = "$env:TEMP\go-launch.vbs"
-$line1 = 'Set WshShell = CreateObject("WScript.Shell")'
-$line2 = "WshShell.Run ""cmd.exe /c """"$bat"""""", 1, True"
-"$line1`r`n$line2" | Set-Content $vbs -Encoding ASCII
-
-Set-ItemProperty -Path "HKCU:\Console" -Name "ColorTable00" -Value 0x00000000 -Force
-Set-ItemProperty -Path "HKCU:\Console" -Name "ScreenColors" -Value 0x0F -Force
 
 try {
     Set-Location "$inner\bin"

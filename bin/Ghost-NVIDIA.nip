@@ -2,7 +2,7 @@
 <ArrayOfProfile>
   <Profile>
     <ProfileName>Ghost Optimizer NVIDIA</ProfileName>
-    <Executeables />
+    <Executables />
     <Settings>
       <ProfileSetting>
         <SettingNameInfo> </SettingNameInfo>
