@@ -951,7 +951,7 @@ goto menu
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"           /v "HwSchMode"           /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler" /v "EnableReclaim"       /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler" /v "EnableExplicitVidMm" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    echo      %purple%[ %roxo%+%purple% ]%white% Hardware GPU Scheduling optimized.
+    echo      %purple%[ %roxo%+%purple% ]%white% GPU Scheduling optimized.
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "TdrDelay"            /t REG_DWORD /d 10 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "TdrDdiDelay"         /t REG_DWORD /d 10 /f >> "%ghost-logfile%" 2>&1
@@ -1195,9 +1195,14 @@ goto menu
 
     reg query "HKLM\SYSTEM\GhostOptimizer" /v "IPStackReset" >nul 2>&1
     if errorlevel 1 (
-        netsh int ip reset /f >> "%ghost-logfile%" 2>&1
+        netsh int ip reset >> "%ghost-logfile%" 2>&1
+        netsh winsock reset >> "%ghost-logfile%" 2>&1
+        netsh int ip reset >> "%ghost-logfile%" 2>&1
+        ipconfig /release >> "%ghost-logfile%" 2>&1
+        ipconfig /renew >> "%ghost-logfile%" 2>&1
+        ipconfig /flushdns >> "%ghost-logfile%" 2>&1
         if errorlevel 1 (
-            echo   %red%[ + ]%white% IP Stack reset failed.
+            echo      %red%[ + ]%white% IP Stack reset failed.
         ) else (
             reg add "HKLM\SYSTEM\GhostOptimizer" /v "IPStackReset" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
         )
@@ -2093,33 +2098,33 @@ goto menu
     echo --- Starting Ghost Optimizer Clean --- >> "%ghost-logfile%" 2>&1
 
     echo      %purple%[ %roxo%+%purple% ]%white% Cleaning Temporary files...
-    rd /s /q "%windir%\Temp" /f >> "%ghost-logfile%" 2>&1
-    md "%windir%\Temp" /f >> "%ghost-logfile%" 2>&1
-    rd /s /q "%LocalAppData%\Temp" /f >> "%ghost-logfile%" 2>&1
-    md "%LocalAppData%\Temp" /f >> "%ghost-logfile%" 2>&1
+    rd /s /q "%windir%\Temp" >> "%ghost-logfile%" 2>&1
+    md "%windir%\Temp" >> "%ghost-logfile%" 2>&1
+    rd /s /q "%LocalAppData%\Temp" >> "%ghost-logfile%" 2>&1
+    md "%LocalAppData%\Temp" >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Temporary files cleaned.
 
     echo      %purple%[ %roxo%+%purple% ]%white% Cleaning Prefetch files...
-    rd /s /q "%windir%\Prefetch" /f >> "%ghost-logfile%" 2>&1
-    md "%windir%\Prefetch" /f >> "%ghost-logfile%" 2>&1
+    rd /s /q "%windir%\Prefetch" >> "%ghost-logfile%" 2>&1
+    md "%windir%\Prefetch" >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Prefetch files cleaned.
 
     echo      %purple%[ %roxo%+%purple% ]%white% Cleaning Recycle bin...
-    rd /s /q "%systemdrive%\$Recycle.Bin" /f >> "%ghost-logfile%" 2>&1
+    rd /s /q "%systemdrive%\$Recycle.Bin" >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Recycle Bin cleaned.
 
     echo      %purple%[ %roxo%+%purple% ]%white% Cleaning thumbnails...
-    del /f /q "%LocalAppData%\Microsoft\Windows\Explorer\thumbcache_*.db" /f >> "%ghost-logfile%" 2>&1
+    del /f /q "%LocalAppData%\Microsoft\Windows\Explorer\thumbcache_*.db" >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Thumbnail cache cleaned.
 
     echo      %purple%[ %roxo%+%purple% ]%white% Cleaning system logs...
-    del /f /q "%SystemRoot%\Logs\CBS\CBS.log" /f >> "%ghost-logfile%" 2>&1
-    del /f /q "%SystemRoot%\Logs\DISM\DISM.log" /f >> "%ghost-logfile%" 2>&1
+    del /f /q "%SystemRoot%\Logs\CBS\CBS.log" >> "%ghost-logfile%" 2>&1
+    del /f /q "%SystemRoot%\Logs\DISM\DISM.log" >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% System logs cleared.
 
     echo      %purple%[ %roxo%+%purple% ]%white% Cleaning script logs..
     if exist "C:\Ghost Optimizer\Logs" (
-        del /f /q "C:\Ghost Optimizer\Logs\*.*" /f >> "%ghost-logfile%" 2>&1
+        del /f /q "C:\Ghost Optimizer\Logs\*.*" >> "%ghost-logfile%" 2>&1
         echo      %purple%[ %roxo%+%purple% ]%white% Ghost logs cleared.
     ) else (
         echo      %purple%[ %roxo%+%purple% ]%white% Logs folder not found.
@@ -2127,7 +2132,7 @@ goto menu
 
     echo      %purple%[ %roxo%+%purple% ]%white% Cleaning script cache...
     if exist "C:\Ghost Optimizer" (
-        del /f /q "C:\Ghost Optimizer\*.*" /f >> "%ghost-logfile%" 2>&1
+        del /f /q "C:\Ghost Optimizer\*.*" >> "%ghost-logfile%" 2>&1
         echo      %purple%[ %roxo%+%purple% ]%white% Ghost cache cleared.
     ) else (
         echo      %purple%[ %roxo%+%purple% ]%white% Cache folder not found.
