@@ -28,14 +28,14 @@ $Host.UI.RawUI.ForegroundColor = 'Gray'
 Clear-Host
 Write-Host ""
 Write-Host ""
-Write-Host "                    ██╗      █████╗ ██╗   ██╗███╗   ██╗ ██████╗██╗  ██╗██╗███╗   ██╗ ██████╗                      " -ForegroundColor Blue
-Write-Host "                    ██║     ██╔══██╗██║   ██║████╗  ██║██╔════╝██║  ██║██║████╗  ██║██╔════╝                      " -ForegroundColor Blue
-Write-Host "                    ██║     ███████║██║   ██║██╔██╗ ██║██║     ███████║██║██╔██╗ ██║██║  ███╗                     " -ForegroundColor Blue
-Write-Host "                    ██║     ██╔══██║██║   ██║██║╚██╗██║██║     ██╔══██║██║██║╚██╗██║██║   ██║                     " -ForegroundColor Blue
-Write-Host "                    ███████╗██║  ██║╚██████╔╝██║ ╚████║╚██████╗██║  ██║██║██║ ╚████║╚██████╔╝ ██╗██╗██╗           " -ForegroundColor Blue
-Write-Host "                    ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝  ╚═╝╚═╝╚═╝           " -ForegroundColor Blue
+Write-Host "                    ██╗      █████╗ ██╗   ██╗███╗   ██╗ ██████╗██╗  ██╗██╗███╗   ██╗ ██████╗                      " -ForegroundColor DarkMagenta
+Write-Host "                    ██║     ██╔══██╗██║   ██║████╗  ██║██╔════╝██║  ██║██║████╗  ██║██╔════╝                      " -ForegroundColor DarkMagenta
+Write-Host "                    ██║     ███████║██║   ██║██╔██╗ ██║██║     ███████║██║██╔██╗ ██║██║  ███╗                     " -ForegroundColor DarkMagenta
+Write-Host "                    ██║     ██╔══██║██║   ██║██║╚██╗██║██║     ██╔══██║██║██║╚██╗██║██║   ██║                     " -ForegroundColor DarkMagenta
+Write-Host "                    ███████╗██║  ██║╚██████╔╝██║ ╚████║╚██████╗██║  ██║██║██║ ╚████║╚██████╔╝ ██╗██╗██╗           " -ForegroundColor DarkMagenta
+Write-Host "                    ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝  ╚═╝╚═╝╚═╝           " -ForegroundColor DarkMagenta
 Write-Host ""
-Write-Host "     ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────" -ForegroundColor Blue
+Write-Host "     ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────" -ForegroundColor DarkMagenta
 Write-Host ""
 
 $zipUrl  = "https://github.com/louzkk/Ghost-Optimizer/archive/refs/heads/main.zip"
