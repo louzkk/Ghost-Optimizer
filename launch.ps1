@@ -1,11 +1,10 @@
-﻿# Ghost Optimizer 5.4
+﻿# Ghost Optimizer
 # https://github.com/louzkk/Ghost-Optimizer
 
 Set-ExecutionPolicy Unrestricted -Scope Process -Force -ErrorAction SilentlyContinue
 
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    Write-Host "      [ • ] Requesting administrator privileges..." -ForegroundColor White
-    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -command `"irm 'https://raw.githubusercontent.com/louzkk/Ghost-Optimizer/main/launch.ps1' | iex`"" -Verb RunAs
+    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command `"irm 'https://raw.githubusercontent.com/louzkk/Ghost-Optimizer/main/launch.ps1' | iex`"" -Verb RunAs
     exit
 }
 
@@ -19,6 +18,8 @@ if ($build -lt 19044) {
     exit 1
 }
 
+$Host.UI.RawUI.BackgroundColor = 'Black'
+$Host.UI.RawUI.ForegroundColor = 'Gray'
 Clear-Host
 Write-Host ""
 Write-Host ""
@@ -77,20 +78,29 @@ if (-not (Test-Path $bat)) {
     exit 1
 }
 
-Unblock-File -Path $bat -ErrorAction SilentlyContinue
-
-$bytes = [System.IO.File]::ReadAllBytes($bat)
-$crlf  = [System.Collections.Generic.List[byte]]::new()
-for ($i = 0; $i -lt $bytes.Length; $i++) {
-    if ($bytes[$i] -eq 10 -and ($i -eq 0 -or $bytes[$i - 1] -ne 13)) {
-        $crlf.Add(13)
+Get-ChildItem "$inner\bin" -Filter "*.bat" | ForEach-Object {
+    Unblock-File -Path $_.FullName -ErrorAction SilentlyContinue
+    $bytes = [System.IO.File]::ReadAllBytes($_.FullName)
+    $crlf  = [System.Collections.Generic.List[byte]]::new()
+    for ($i = 0; $i -lt $bytes.Length; $i++) {
+        if ($bytes[$i] -eq 10 -and ($i -eq 0 -or $bytes[$i - 1] -ne 13)) {
+            $crlf.Add(13)
+        }
+        $crlf.Add($bytes[$i])
     }
-    $crlf.Add($bytes[$i])
+    [System.IO.File]::WriteAllBytes($_.FullName, $crlf.ToArray())
 }
-[System.IO.File]::WriteAllBytes($bat, $crlf.ToArray())
 
 Write-Host "      [ • ] Launching Ghost Optimizer..." -ForegroundColor White
 Write-Host ""
+
+$vbs  = "$env:TEMP\go-launch.vbs"
+$line1 = 'Set WshShell = CreateObject("WScript.Shell")'
+$line2 = "WshShell.Run ""cmd.exe /c """"$bat"""""", 1, True"
+"$line1`r`n$line2" | Set-Content $vbs -Encoding ASCII
+
+Set-ItemProperty -Path "HKCU:\Console" -Name "ColorTable00" -Value 0x00000000 -Force
+Set-ItemProperty -Path "HKCU:\Console" -Name "ScreenColors" -Value 0x0F -Force
 
 try {
     Set-Location "$inner\bin"
@@ -99,6 +109,3 @@ try {
     Remove-Item $zipPath -Force          -ErrorAction SilentlyContinue
     Remove-Item $dir     -Recurse -Force -ErrorAction SilentlyContinue
 }
-
-Remove-Item $zipPath -Force          -ErrorAction SilentlyContinue
-Remove-Item $dir     -Recurse -Force -ErrorAction SilentlyContinue

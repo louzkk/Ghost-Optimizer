@@ -18,6 +18,7 @@ color 0F
     reg add "HKCU\CONSOLE" /v "VirtualTerminalLevel" /t REG_DWORD /d 1 /f >nul 2>&1
     for /f "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1) do rem"') do (set "DEL=%%a" & set "COL=%%b")
     (for /f %%a in ('echo prompt $E^| cmd') do set "esc=%%a")
+    echo !esc![40m
     chcp 65001 >nul 2>&1
 
     set "version=5.4"
