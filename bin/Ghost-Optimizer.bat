@@ -126,7 +126,7 @@ color 0F
             if "!char!" == "" set "char= "
             set "textGradient=!textGradient!!red_esc[%%j]!!char!"
         )
-        echo !textGradient!!esc![0m
+        echo !textGradient!!esc![0;40m
     )
 
     pause >nul 2>&1 
@@ -151,7 +151,7 @@ color 0F
             if "!char!"=="" set "char= "
             set "textGradient=!textGradient!!esc[%%j]!!char!"
         )
-        echo !textGradient!!esc![0m
+        echo !textGradient!!esc![0;40m
     )
 
     set "lineGradient="
@@ -164,7 +164,7 @@ color 0F
         set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
     )
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m
+    echo !lineGradient!!esc![0;40m
 
     echo.
     echo                            %roxo%Ghost Optimizer%reset% is an open source advanced batch script that improves
@@ -263,7 +263,7 @@ color 0F
             if "!char!" == "" set "char= "
             set "textGradient=!textGradient!!esc[%%j]!!char!"
         )
-        echo !textGradient!!esc![0m
+        echo !textGradient!!esc![0;40m
     )
 
         if exist "C:\Ghost Optimizer" (
@@ -339,7 +339,7 @@ color 0F
             if "!char!"=="" set "char= "
             set "textGradient=!textGradient!!esc[%%j]!!char!"
         )
-        echo !textGradient!!esc![0m
+        echo !textGradient!!esc![0;40m
     )
 
     echo.
@@ -356,7 +356,7 @@ color 0F
         set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
     )
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m
+    echo !lineGradient!!esc![0;40m
 
     echo.
     echo                                   %purple%[ %roxo%%underline%A%reset% %purple%]%white% Apply all%orange%*%reset%                          %purple%[ %roxo%%underline%R%reset% %purple%]%white% Revert all 
@@ -454,7 +454,7 @@ goto menu
             if "!char!"=="" set "char= "
             set "textGradient=!textGradient!!esc[%%j]!!char!"
         )
-        echo !textGradient!!esc![0m
+        echo !textGradient!!esc![0;40m
     )
 
     echo.
@@ -467,7 +467,7 @@ goto menu
         if "!char!"=="" set "char= "
         set "textGradient=!textGradient!!esc[%%j]!!char!"
     )
-    echo !textGradient!!esc![0m
+    echo !textGradient!!esc![0;40m
 
     set "lineGradient="
     set /a "BeforeSpace=(136 - 122) / 2"
@@ -479,7 +479,7 @@ goto menu
         set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
     )
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m
+    echo !lineGradient!!esc![0;40m
 
     echo.
     echo                                                  %purple%[ %roxo%%underline%1%reset% %purple%]%white% Apply all Tweaks
@@ -559,7 +559,7 @@ goto menu
             if "!char!"=="" set "char= "
             set "textGradient=!textGradient!!esc[%%j]!!char!"
         )
-        echo !textGradient!!esc![0m
+        echo !textGradient!!esc![0;40m
     )
 
     echo.
@@ -572,7 +572,7 @@ goto menu
         if "!char!"=="" set "char= "
         set "textGradient=!textGradient!!esc[%%j]!!char!"
     )
-    echo !textGradient!!esc![0m
+    echo !textGradient!!esc![0;40m
 
     set "lineGradient="
     set /a "BeforeSpace=(136 - 122) / 2"
@@ -584,7 +584,7 @@ goto menu
         set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
     )
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m
+    echo !lineGradient!!esc![0;40m
 
     echo.
     echo                                                 %purple%[ %roxo%%underline%1%reset% %purple%]%white% Apply Restore Point
@@ -659,7 +659,7 @@ goto menu
             if "!char!"=="" set "char= "
             set "textGradient=!textGradient!!esc[%%j]!!char!"
         )
-        echo !textGradient!!esc![0m
+        echo !textGradient!!esc![0;40m
     )
 
     echo.
@@ -671,7 +671,7 @@ goto menu
         if "!char!"=="" set "char= "
         set "textGradient=!textGradient!!esc[%%j]!!char!"
     )
-    echo !textGradient!!esc![0m
+    echo !textGradient!!esc![0;40m
 
     set "lineGradient="
     set /a "BeforeSpace=(136 - 122) / 2"
@@ -683,7 +683,7 @@ goto menu
         set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
     )
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m
+    echo !lineGradient!!esc![0;40m
 
     echo.
     echo                                               %purple%[ %roxo%%underline%1%reset% %purple%]%white% Apply General Tweaks
@@ -858,7 +858,7 @@ goto menu
             if "!char!"=="" set "char= "
             set "textGradient=!textGradient!!esc[%%j]!!char!"
         )
-        echo !textGradient!!esc![0m
+        echo !textGradient!!esc![0;40m
     )
 
     echo.
@@ -871,7 +871,7 @@ goto menu
         if "!char!"=="" set "char= "
         set "textGradient=!textGradient!!esc[%%j]!!char!"
     )
-    echo !textGradient!!esc![0m
+    echo !textGradient!!esc![0;40m
 
     set "lineGradient="
     set /a "BeforeSpace=(136 - 122) / 2"
@@ -883,7 +883,7 @@ goto menu
         set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
     )
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m
+    echo !lineGradient!!esc![0;40m
 
     echo.
     echo                         %purple%[ %roxo%%underline%1%reset% %purple%]%white% Apply Performance Tweaks                %purple%[ %roxo%%underline%2%reset% %purple%]%white% Disable Virtualization
@@ -1136,7 +1136,7 @@ goto menu
             if "!char!"=="" set "char= "
             set "textGradient=!textGradient!!esc[%%j]!!char!"
         )
-        echo !textGradient!!esc![0m
+        echo !textGradient!!esc![0;40m
     )
 
     echo.
@@ -1149,7 +1149,7 @@ goto menu
         if "!char!"=="" set "char= "
         set "textGradient=!textGradient!!esc[%%j]!!char!"
     )
-    echo !textGradient!!esc![0m
+    echo !textGradient!!esc![0;40m
 
     set "lineGradient="
     set /a "BeforeSpace=(136 - 122) / 2"
@@ -1161,7 +1161,7 @@ goto menu
         set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
     )
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m
+    echo !lineGradient!!esc![0;40m
 
     echo.
     echo                               %purple%[ %roxo%%underline%1%reset% %purple%]%white% Apply Network Tweaks                %purple%[ %roxo%%underline%2%reset% %purple%]%white% Apply DNS Tweaks
@@ -1456,7 +1456,7 @@ goto menu
             if "!char!"=="" set "char= "
             set "textGradient=!textGradient!!esc[%%j]!!char!"
         )
-        echo !textGradient!!esc![0m
+        echo !textGradient!!esc![0;40m
     )
 
     echo.
@@ -1469,7 +1469,7 @@ goto menu
         if "!char!"=="" set "char= "
         set "textGradient=!textGradient!!esc[%%j]!!char!"
     )
-    echo !textGradient!!esc![0m
+    echo !textGradient!!esc![0;40m
 
     echo.
     set "lineGradient="
@@ -1483,7 +1483,7 @@ goto menu
     )
 
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m     
+    echo !lineGradient!!esc![0;40m     
 
         set /a "mid=80"
     for /L %%j in (0,1,129) do (
@@ -1735,7 +1735,7 @@ goto menu
             if "!char!"=="" set "char= "
             set "textGradient=!textGradient!!esc[%%j]!!char!"
         )
-        echo !textGradient!!esc![0m
+        echo !textGradient!!esc![0;40m
     )
 
     echo.
@@ -1748,7 +1748,7 @@ goto menu
         if "!char!"=="" set "char= "
         set "textGradient=!textGradient!!esc[%%j]!!char!"
     )
-    echo !textGradient!!esc![0m
+    echo !textGradient!!esc![0;40m
 
     set "lineGradient="
     set /a "BeforeSpace=(136 - 122) / 2"
@@ -1760,7 +1760,7 @@ goto menu
         set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
     )
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m
+    echo !lineGradient!!esc![0;40m
 
     echo.
     echo                                           %purple%[ %roxo%%underline%1%reset% %purple%]%white% Apply Latency ^& Input-Lag Tweaks
@@ -1908,7 +1908,7 @@ goto menu
             if "!char!"=="" set "char= "
             set "textGradient=!textGradient!!esc[%%j]!!char!"
         )
-        echo !textGradient!!esc![0m
+        echo !textGradient!!esc![0;40m
     )
 
     echo.
@@ -1921,7 +1921,7 @@ goto menu
         if "!char!"=="" set "char= "
         set "textGradient=!textGradient!!esc[%%j]!!char!"
     )
-    echo !textGradient!!esc![0m
+    echo !textGradient!!esc![0;40m
 
     set "lineGradient="
     set /a "BeforeSpace=(136 - 122) / 2"
@@ -1933,7 +1933,7 @@ goto menu
         set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
     )
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m
+    echo !lineGradient!!esc![0;40m
 
     echo.
     echo                                           %purple%[ %roxo%%underline%1%reset% %purple%]%white% Apply Mouse ^& Keyboard Tweaks
@@ -2035,7 +2035,7 @@ goto menu
             if "!char!"=="" set "char= "
             set "textGradient=!textGradient!!esc[%%j]!!char!"
         )
-        echo !textGradient!!esc![0m
+        echo !textGradient!!esc![0;40m
     )
 
     echo.
@@ -2048,7 +2048,7 @@ goto menu
         if "!char!"=="" set "char= "
         set "textGradient=!textGradient!!esc[%%j]!!char!"
     )
-    echo !textGradient!!esc![0m
+    echo !textGradient!!esc![0;40m
 
     set "lineGradient="
     set /a "BeforeSpace=(136 - 122) / 2"
@@ -2060,7 +2060,7 @@ goto menu
         set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
     )
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m
+    echo !lineGradient!!esc![0;40m
 
     echo.
     echo                         %purple%[ %roxo%%underline%1%reset% %purple%]%white% Start Fast Clean-up                %purple%[ %roxo%%underline%2%reset% %purple%]%white% Start Windows Clean-up
@@ -2185,7 +2185,7 @@ goto menu
             if "!char!"=="" set "char= "
             set "textGradient=!textGradient!!esc[%%j]!!char!"
         )
-        echo !textGradient!!esc![0m
+        echo !textGradient!!esc![0;40m
     )
 
     echo.
@@ -2198,7 +2198,7 @@ goto menu
         if "!char!"=="" set "char= "
         set "textGradient=!textGradient!!esc[%%j]!!char!"
     )
-    echo !textGradient!!esc![0m
+    echo !textGradient!!esc![0;40m
 
     set "lineGradient="
     set /a "BeforeSpace=(136 - 122) / 2"
@@ -2210,7 +2210,7 @@ goto menu
         set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
     )
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m
+    echo !lineGradient!!esc![0;40m
 
     echo.
     echo                          %purple%[ %roxo%%underline%1%reset% %purple%]%white% Stop Telemetry ^& Logging                %purple%[ %roxo%%underline%2%reset% %purple%]%white% Apply OOSU10+ Profile
@@ -2435,7 +2435,7 @@ goto menu
             if "!char!"=="" set "char= "
             set "textGradient=!textGradient!!esc[%%j]!!char!"
         )
-        echo !textGradient!!esc![0m
+        echo !textGradient!!esc![0;40m
     )
 
     echo.
@@ -2448,7 +2448,7 @@ goto menu
         if "!char!"=="" set "char= "
         set "textGradient=!textGradient!!esc[%%j]!!char!"
     )
-    echo !textGradient!!esc![0m
+    echo !textGradient!!esc![0;40m
 
     set "lineGradient="
     set /a "BeforeSpace=(136 - 122) / 2"
@@ -2460,7 +2460,7 @@ goto menu
         set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
     )
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m
+    echo !lineGradient!!esc![0;40m
 
     echo.
     echo                      %purple%[ %roxo%%underline%1%reset% %purple%]%white% Disable Unnecessary Services                %purple%[ %roxo%%underline%2%reset% %purple%]%white% Revert Unecessary Services
@@ -2788,7 +2788,7 @@ goto menu
             if "!char!"=="" set "char= "
             set "textGradient=!textGradient!!esc[%%j]!!char!"
         )
-        echo !textGradient!!esc![0m
+        echo !textGradient!!esc![0;40m
     )
 
     echo.
@@ -2801,7 +2801,7 @@ goto menu
         if "!char!"=="" set "char= "
         set "textGradient=!textGradient!!esc[%%j]!!char!"
     )
-    echo !textGradient!!esc![0m
+    echo !textGradient!!esc![0;40m
 
     set "lineGradient="
     set /a "BeforeSpace=(136 - 122) / 2"
@@ -2813,7 +2813,7 @@ goto menu
         set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
     )
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m
+    echo !lineGradient!!esc![0;40m
 
     echo.
     echo                        %purple%[ %roxo%%underline%1%reset% %purple%]%white% Apply Ghost Power Plan                %purple%[ %roxo%%underline%2%reset% %purple%]%white% Apply Default Power Plan
@@ -2923,7 +2923,7 @@ goto menu
             if "!char!"=="" set "char= "
             set "textGradient=!textGradient!!esc[%%j]!!char!"
         )
-        echo !textGradient!!esc![0m
+        echo !textGradient!!esc![0;40m
     )
 
     echo.
@@ -2936,7 +2936,7 @@ goto menu
         if "!char!"=="" set "char= "
         set "textGradient=!textGradient!!esc[%%j]!!char!"
     )
-    echo !textGradient!!esc![0m
+    echo !textGradient!!esc![0;40m
 
     set "lineGradient="
     set /a "BeforeSpace=(136 - 122) / 2"
@@ -2948,7 +2948,7 @@ goto menu
         set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
     )
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m
+    echo !lineGradient!!esc![0;40m
 
     echo.
     echo                                  %purple%[ %roxo%%underline%1%reset% %purple%] %white%Fast Integrity Fix            %purple%[ %roxo%%underline%2%reset% %purple%] %white%Full Integrity Fix
@@ -3420,7 +3420,7 @@ goto menu
             if "!char!"=="" set "char= "
             set "textGradient=!textGradient!!esc[%%j]!!char!"
         )
-        echo !textGradient!!esc![0m
+        echo !textGradient!!esc![0;40m
     )
 
     echo.
@@ -3433,7 +3433,7 @@ goto menu
         if "!char!"=="" set "char= "
         set "textGradient=!textGradient!!esc[%%j]!!char!"
     )
-    echo !textGradient!!esc![0m
+    echo !textGradient!!esc![0;40m
 
     set "lineGradient="
     set /a "BeforeSpace=(136 - 122) / 2"
@@ -3445,7 +3445,7 @@ goto menu
         set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
     )
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m
+    echo !lineGradient!!esc![0;40m
 
     echo.
     echo                        %purple%[ %roxo%%underline%1%reset% %purple%]%white% Uninstall Bloatware Apps                %purple%[ %roxo%%underline%2%reset% %purple%]%white% Reinstall Bloatware Apps
@@ -4013,7 +4013,7 @@ goto menu
             if "!char!"=="" set "char= "
             set "textGradient=!textGradient!!esc[%%j]!!char!"
         )
-        echo !textGradient!!esc![0m
+        echo !textGradient!!esc![0;40m
     )
 
     echo.
@@ -4026,7 +4026,7 @@ goto menu
         if "!char!"=="" set "char= "
         set "textGradient=!textGradient!!esc[%%j]!!char!"
     )
-    echo !textGradient!!esc![0m
+    echo !textGradient!!esc![0;40m
 
     set "lineGradient="
     set /a "BeforeSpace=(136 - 122) / 2"
@@ -4038,7 +4038,7 @@ goto menu
         set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
     )
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m
+    echo !lineGradient!!esc![0;40m
 
     echo.
     echo                                   %purple%[ %roxo%%underline%1%reset% %purple%] %white%TPM 2.0 Bypass              %purple%[ %roxo%%underline%2%reset% %purple%] %white%Enable God Mode
@@ -4251,7 +4251,7 @@ goto menu
             if "!char!"=="" set "char= "
             set "textGradient=!textGradient!!esc[%%j]!!char!"
         )
-        echo !textGradient!!esc![0m
+        echo !textGradient!!esc![0;40m
     )
 
     echo.
@@ -4264,7 +4264,7 @@ goto menu
         if "!char!"=="" set "char= "
         set "textGradient=!textGradient!!esc[%%j]!!char!"
     )
-    echo !textGradient!!esc![0m
+    echo !textGradient!!esc![0;40m
 
     set "lineGradient="
     set /a "BeforeSpace=(136 - 122) / 2"
@@ -4276,7 +4276,7 @@ goto menu
         set "lineGradient=!lineGradient!!esc![38;2;!colorR!;!colorG!;!colorB!m─"
     )
     for /L %%k in (1,1,!BeforeSpace!) do set "lineGradient=!lineGradient! "
-    echo !lineGradient!!esc![0m
+    echo !lineGradient!!esc![0;40m
 
 
     echo.
@@ -4388,7 +4388,7 @@ goto menu
             if "!char!" == "" set "char= "
             set "textGradient=!textGradient!!esc[%%j]!!char!"
         )
-        echo !textGradient!!esc![0m
+        echo !textGradient!!esc![0;40m
     )
 
     timeout /t 3 /nobreak >> "%ghost-logfile%" 2>&1
