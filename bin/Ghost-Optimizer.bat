@@ -1197,7 +1197,7 @@ goto menu
     if errorlevel 1 (
         netsh int ip reset /f >> "%ghost-logfile%" 2>&1
         if errorlevel 1 (
-            echo   %red%[ • ]%white% IP Stack reset failed.
+            echo   %red%[ + ]%white% IP Stack reset failed.
         ) else (
             reg add "HKLM\SYSTEM\GhostOptimizer" /v "IPStackReset" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
         )
@@ -2385,18 +2385,18 @@ goto menu
 
     :: OOSU simulated outputs
     echo      %purple%[ %roxo%+%purple% ]%white% Activity upload disabled.
+    echo      %purple%[ %roxo%+%purple% ]%white% Data collection disabled.
     echo      %purple%[ %roxo%+%purple% ]%white% Advertising ID disabled.
     echo      %purple%[ %roxo%+%purple% ]%white% Error reporting disabled.
     echo      %purple%[ %roxo%+%purple% ]%white% Experience feedback disabled.
-    echo      %purple%[ %roxo%+%purple% ]%white% Privacy optimized.
-    echo      %purple%[ %roxo%+%purple% ]%white% Data collection disabled.
-    echo      %purple%[ %roxo%+%purple% ]%white% Telemetry services disabled.
-    echo      %purple%[ %roxo%+%purple% ]%white% Handwriting and typing recognition disabled.
-    echo      %purple%[ %roxo%+%purple% ]%white% Microsoft Edge tracking and AI disabled.
-    echo      %purple%[ %roxo%+%purple% ]%white% Windows Copilot and AI Recall removed.
+    echo      %purple%[ %roxo%+%purple% ]%white% Services Suggestions disabled.
+    echo      %purple%[ %roxo%+%purple% ]%white% Acess to Account data disabled.
+    echo      %purple%[ %roxo%+%purple% ]%white% Account synchronization disabled.
+    echo      %purple%[ %roxo%+%purple% ]%white% Typing recognition disabled.
+    echo      %purple%[ %roxo%+%purple% ]%white% Microsoft Edge tracking disabled.
     echo      %purple%[ %roxo%+%purple% ]%white% Spotlight and Lock Screen Ads disabled.
-    echo      %purple%[ %roxo%+%purple% ]%white% OneDrive disabled.
-    echo      %purple%[ %roxo%+%purple% ]%white% Windows Update P2P disabled.
+    echo      %purple%[ %roxo%+%purple% ]%white% Cortana and Copilot AI disabled.
+    echo      %purple%[ %roxo%+%purple% ]%white% OneDrive synchronization disabled.
     echo      %purple%[ %roxo%+%purple% ]%white% Microsoft Defender telemetry disabled.
     echo      %purple%[ %roxo%+%purple% ]%white% Meet Now, News and Widgets removed.
     echo      %purple%[ %roxo%+%purple% ]%white% Remote Assistance disabled.
