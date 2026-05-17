@@ -2521,9 +2521,9 @@ goto menu
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search"                              /v "DisableWebSearch" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Cortana disabled.
 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TapiSrv"                                      /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\PhoneSvc"                                      /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo      %purple%[ %roxo%+%purple% ]%white% Phone Services disabled.
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\TapiSrv"                                      /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\PhoneSvc"                                      /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    ::echo      %purple%[ %roxo%+%purple% ]%white% Phone Services disabled.
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\WpcMonSvc"                                     /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\SEMgrSvc"                                      /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
