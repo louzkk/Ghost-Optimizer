@@ -41,8 +41,8 @@ color 0F
     set nvidia=[38;5;51m
     set blue=[97;44m
     set msi=[30;47m
-    set reset=[0m
-    set white=[0m
+    set reset=[0;40m
+    set white=[0;40m
     set underline=[4m
     set cinza=[38;5;8m
     set highlight=[97;48;5;93m
