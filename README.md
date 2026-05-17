@@ -24,9 +24,9 @@ irm https://raw.githubusercontent.com/louzkk/Ghost-Optimizer/main/launch.ps1 | i
 ```
 
 ## 🔨 Installation
-1. Download the latest [Release](https://github.com/louzkk/Ghost-Optimizer/releases/latest)    
-2. Run **launch.ps1** as administrator   
-3. Follow the script instructions    
+1. Go to [Releases](https://github.com/louzkk/Ghost-Optimizer/releases/latest)    
+2. Open ``How.To.Install.txt`   
+3. Follow the instructions    
 
 ## 🔍 Notes
 > [!IMPORTANT]
