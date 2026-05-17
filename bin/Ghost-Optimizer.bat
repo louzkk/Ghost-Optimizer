@@ -2249,8 +2249,8 @@ goto menu
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System"       /v "UploadUserActivities"           /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Activity upload disabled.
 
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"          /v "DisabledByGroupPolicy"  /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent"             /v "DisableSoftLanding"     /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"         /v "DisabledByGroupPolicy"  /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent"            /v "DisableSoftLanding"     /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AdvertisingInfo"   /v "Enabled"                 /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo"   /v "Enabled"                 /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%-%purple% ]%white% Advertising ID disabled.
@@ -3488,14 +3488,35 @@ goto menu
     if not errorlevel 1 (
         reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Lghub" /t REG_SZ /d "" /f >> "%ghost-logfile%" 2>&1
         reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "Lghub" /t REG_BINARY /d 030000000000000000000000 /f >> "%ghost-logfile%" 2>&1
-        echo      %purple%[ %roxo%-%purple% ]%white% LgHub disabled.
+        echo      %purple%[ %roxo%-%purple% ]%white% Logitech Hub disabled.
     )
 
     reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "RazerSynapse" >nul 2>&1
     if not errorlevel 1 (
         reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "RazerSynapse" /t REG_SZ /d "" /f >> "%ghost-logfile%" 2>&1
         reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "RazerSynapse" /t REG_BINARY /d 030000000000000000000000 /f >> "%ghost-logfile%" 2>&1
-        echo      %purple%[ %roxo%-%purple% ]%white% RazerSynapse disabled.
+        echo      %purple%[ %roxo%-%purple% ]%white% Razer Synapse disabled.
+    )
+
+    reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Razer Central" >nul 2>&1
+    if not errorlevel 1 (
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Razer Central" /t REG_SZ /d "" /f >> "%ghost-logfile%" 2>&1
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "Razer Central" /t REG_BINARY /d 030000000000000000000000 /f >> "%ghost-logfile%" 2>&1
+        echo      %purple%[ %roxo%-%purple% ]%white% Razer Central disabled.
+    )
+
+    reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Razer Cortex" >nul 2>&1
+    if not errorlevel 1 (
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Razer Cortex" /t REG_SZ /d "" /f >> "%ghost-logfile%" 2>&1
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "Razer Cortex" /t REG_BINARY /d 030000000000000000000000 /f >> "%ghost-logfile%" 2>&1
+        echo      %purple%[ %roxo%-%purple% ]%white% Razer Cortex disabled.
+    )
+
+    reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Razer Game Booster" >nul 2>&1
+    if not errorlevel 1 (
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Razer Game Booster" /t REG_SZ /d "" /f >> "%ghost-logfile%" 2>&1
+        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "Razer Game Booster" /t REG_BINARY /d 030000000000000000000000 /f >> "%ghost-logfile%" 2>&1
+        echo      %purple%[ %roxo%-%purple% ]%white% Razer Game Booster disabled.
     )
 
     reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "iCUE" >nul 2>&1
@@ -3568,34 +3589,6 @@ goto menu
     if not errorlevel 1 (
         reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "EADM" /t REG_SZ /d "" /f >> "%ghost-logfile%" 2>&1
         echo      %purple%[ %roxo%-%purple% ]%white% EA App disabled.
-    )
-
-    reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Razer Synapse" >nul 2>&1
-    if not errorlevel 1 (
-        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Razer Synapse" /t REG_SZ /d "" /f >> "%ghost-logfile%" 2>&1
-        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "Razer Synapse" /t REG_BINARY /d 030000000000000000000000 /f >> "%ghost-logfile%" 2>&1
-        echo      %purple%[ %roxo%-%purple% ]%white% Razer Synapse disabled.
-    )
-
-    reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Razer Central" >nul 2>&1
-    if not errorlevel 1 (
-        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Razer Central" /t REG_SZ /d "" /f >> "%ghost-logfile%" 2>&1
-        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "Razer Central" /t REG_BINARY /d 030000000000000000000000 /f >> "%ghost-logfile%" 2>&1
-        echo      %purple%[ %roxo%-%purple% ]%white% Razer Central disabled.
-    )
-
-    reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Razer Cortex" >nul 2>&1
-    if not errorlevel 1 (
-        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Razer Cortex" /t REG_SZ /d "" /f >> "%ghost-logfile%" 2>&1
-        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "Razer Cortex" /t REG_BINARY /d 030000000000000000000000 /f >> "%ghost-logfile%" 2>&1
-        echo      %purple%[ %roxo%-%purple% ]%white% Razer Cortex disabled.
-    )
-
-    reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Razer Game Booster" >nul 2>&1
-    if not errorlevel 1 (
-        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Razer Game Booster" /t REG_SZ /d "" /f >> "%ghost-logfile%" 2>&1
-        reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "Razer Game Booster" /t REG_BINARY /d 030000000000000000000000 /f >> "%ghost-logfile%" 2>&1
-        echo      %purple%[ %roxo%-%purple% ]%white% Razer Game Booster disabled.
     )
 
     reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "MSI Center" >nul 2>&1
@@ -3723,7 +3716,7 @@ goto menu
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *BingWeather* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *News* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     chcp 65001 >nul
-    echo      %purple%[ %roxo%-%purple% ]%white% Bing Apps uninstalled.
+    echo      %purple%[ %roxo%-%purple% ]%white% Bing uninstalled.
 
     ::chcp 437 >nul 2>&1
     ::powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *WindowsPhone* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
@@ -3745,7 +3738,7 @@ goto menu
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *MicrosoftOfficeHub* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     chcp 65001 >nul
-    echo      %purple%[ %roxo%-%purple% ]%white% Office Hub uninstalled.
+    echo      %purple%[ %roxo%-%purple% ]%white% Office uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *OneNote* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
