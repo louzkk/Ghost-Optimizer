@@ -15,7 +15,7 @@
 **Ghost Optimizer** is an open source advanced batch script that improves **performance**, **latency**, **network** and **privacy**, while removing **bloatware** and **AI** features.   
 
 This includes registry modifications and system policies targeting performance and network behavior, removal of Microsoft's telemetry, tracking, pre-installed apps, AI, and   unnecessary background services, cleanup of temporary and log files, and repairs to system health and integrity.  
-Every optimization in this script has been individually tested and included for a specific reason. If you don't understand what a command does, do not run it.   
+Every optimization in this script has been individually tested and included for a specific reason.  
 
 ## 🚀 Launch
 Open Powershell as Administrator
