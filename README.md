@@ -16,7 +16,7 @@
 
 This includes registry modifications and system policies targeting performance and network behavior, removal of Microsoft's telemetry, tracking, pre-installed apps, AI, and   unnecessary background services, cleanup of temporary and log files, and repairs to system health and integrity.  
 
-This script applies a custom power plan along with optimized profiles for NVIDIA, OOSU10++, and NextDNS, which you can review directly in the code.
+This script applies a custom power plan along with optimized profiles for NVIDIA, OOSU10++, and Quad9 DNS, which you can review directly in the code.
 
 Every optimization in this script has been individually tested and included for a specific reason. If you don't understand what a command does, do not run it.   
 

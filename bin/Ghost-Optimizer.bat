@@ -138,11 +138,11 @@ color 0F
     echo.
     echo.
     set "lines[0]=                               ██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗  "
-    set "lines[1]=                               ██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝"
+    set "lines[1]=                               ██║    ██║██╔╝╝╝╝╝██║     ██╔╝╝╝╝╝██╔╝╝╝██╗████╗ ████║██╔╝╝╝╝╝"
     set "lines[2]=                               ██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗"
-    set "lines[3]=                               ██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝"
-    set "lines[4]=                               ╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗"
-    set "lines[5]=                                ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝"
+    set "lines[3]=                               ██║███╗██║██╔╝╝╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔╝╝╝"
+    set "lines[4]=                               ╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚╝╝ ██║███████╗"
+    set "lines[5]=                                ╚╝╝╝╚╝╝╝ ╚╝╝╝╝╝╝╝╚╝╝╝╝╝╝╝ ╚╝╝╝╝╝╝ ╚╝╝╝╝╝╝ ╚╝╝     ╚╝╝╚╝╝╝╝╝╝╝"
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -333,11 +333,11 @@ color 0F
     echo.
     echo.
     set "lines[0]=     ██████╗ ██╗  ██╗ ██████╗ ███████╗████████╗      ██████╗ ██████╗ ████████╗██╗███╗   ███╗██╗███████╗███████╗██████╗"
-    set "lines[1]=    ██╔════╝ ██║  ██║██╔═══██╗██╔════╝╚══██╔══╝     ██╔═══██╗██╔══██╗╚══██╔══╝██║████╗ ████║██║╚══███╔╝██╔════╝██╔══██╗"
+    set "lines[1]=    ██╔╝╝╝╝╝ ██║  ██║██╔╝╝╝██╗██╔╝╝╝╝╝╚╝╝██╔╝╝╝     ██╔╝╝╝██╗██╔╝╝██╗╚╝╝██╔╝╝╝██║████╗ ████║██║╚╝╝███╔╝██╔╝╝╝╝╝██╔╝╝██╗"
     set "lines[2]=    ██║ ███╗ ███████║██║   ██║███████╗   ██║        ██║   ██║██████╔╝   ██║   ██║██╔████╔██║██║  ███╔╝ █████╗  ██████╔╝"
-    set "lines[3]=    ██║  ██║ ██╔══██║██║   ██║╚════██║   ██║        ██║   ██║██╔═══╝    ██║   ██║██║╚██╔╝██║██║ ███╔╝  ██╔══╝  ██╔══██╗"
-    set "lines[4]=    ╚██████║ ██║  ██║╚██████╔╝███████║   ██║        ╚██████╔╝██║        ██║   ██║██║ ╚═╝ ██║██║███████╗███████╗██║  ██║"
-    set "lines[5]=     ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝         ╚═════╝ ╚═╝        ╚═╝   ╚═╝╚═╝     ╚═╝╚═╝╚══════╝╚══════╝╚═╝  ╚═╝"
+    set "lines[3]=    ██║  ██║ ██╔╝╝██║██║   ██║╚╝╝╝╝██║   ██║        ██║   ██║██╔╝╝╝╝    ██║   ██║██║╚██╔╝██║██║ ███╔╝  ██╔╝╝╝  ██╔╝╝██╗"
+    set "lines[4]=    ╚██████║ ██║  ██║╚██████╔╝███████║   ██║        ╚██████╔╝██║        ██║   ██║██║ ╚╝╝ ██║██║███████╗███████╗██║  ██║"
+    set "lines[5]=     ╚╝╝╝╝╝╝ ╚╝╝  ╚╝╝ ╚╝╝╝╝╝╝ ╚╝╝╝╝╝╝╝   ╚╝╝         ╚╝╝╝╝╝╝ ╚╝╝        ╚╝╝   ╚╝╝╚╝╝     ╚╝╝╚╝╝╚╝╝╝╝╝╝╝╚╝╝╝╝╝╝╝╚╝╝  ╚╝╝"
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -448,11 +448,11 @@ goto menu
     echo.
     echo.
     set "lines[0]=                               █████╗ ██████╗ ██████╗ ██╗  ██╗   ██╗     █████╗ ██╗     ██╗          "
-    set "lines[1]=                              ██╔══██╗██╔══██╗██╔══██╗██║  ╚██╗ ██╔╝    ██╔══██╗██║     ██║          "
+    set "lines[1]=                              ██╔╝╝██╗██╔╝╝██╗██╔╝╝██╗██║  ╚██╗ ██╔╝    ██╔╝╝██╗██║     ██║          "
     set "lines[2]=                              ███████║██████╔╝██████╔╝██║   ╚████╔╝     ███████║██║     ██║          "
-    set "lines[3]=                              ██╔══██║██╔═══╝ ██╔═══╝ ██║    ╚██╔╝      ██╔══██║██║     ██║          "
+    set "lines[3]=                              ██╔╝╝██║██╔╝╝╝╝ ██╔╝╝╝╝ ██║    ╚██╔╝      ██╔╝╝██║██║     ██║          "
     set "lines[4]=                              ██║  ██║██║     ██║     ███████╗██║       ██║  ██║███████╗███████╗     "
-    set "lines[5]=                              ╚═╝  ╚═╝╚═╝     ╚═╝     ╚══════╝╚═╝       ╚═╝  ╚═╝╚══════╝╚══════╝     "
+    set "lines[5]=                              ╚╝╝  ╚╝╝╚╝╝     ╚╝╝     ╚╝╝╝╝╝╝╝╚╝╝       ╚╝╝  ╚╝╝╚╝╝╝╝╝╝╝╚╝╝╝╝╝╝╝     "
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -553,11 +553,11 @@ goto menu
     echo.
     echo.
     set "lines[0]=                        ██████╗ ███████╗██╗   ██╗███████╗██████╗ ████████╗     █████╗ ██╗     ██╗               "
-    set "lines[1]=                        ██╔══██╗██╔════╝██║   ██║██╔════╝██╔══██╗╚══██╔══╝    ██╔══██╗██║     ██║               "
+    set "lines[1]=                        ██╔╝╝██╗██╔╝╝╝╝╝██║   ██║██╔╝╝╝╝╝██╔╝╝██╗╚╝╝██╔╝╝╝    ██╔╝╝██╗██║     ██║               "
     set "lines[2]=                        ██████╔╝█████╗  ██║   ██║█████╗  ██████╔╝   ██║       ███████║██║     ██║               "
-    set "lines[3]=                        ██╔══██╗██╔══╝  ╚██╗ ██╔╝██╔══╝  ██╔══██╗   ██║       ██╔══██║██║     ██║               "
+    set "lines[3]=                        ██╔╝╝██╗██╔╝╝╝  ╚██╗ ██╔╝██╔╝╝╝  ██╔╝╝██╗   ██║       ██╔╝╝██║██║     ██║               "
     set "lines[4]=                        ██║  ██║███████╗ ╚████╔╝ ███████╗██║  ██║   ██║       ██║  ██║███████╗███████╗          "
-    set "lines[5]=                        ╚═╝  ╚═╝╚══════╝  ╚═══╝  ╚══════╝╚═╝  ╚═╝   ╚═╝       ╚═╝  ╚═╝╚══════╝╚══════╝          "
+    set "lines[5]=                        ╚╝╝  ╚╝╝╚╝╝╝╝╝╝╝  ╚╝╝╝╝  ╚╝╝╝╝╝╝╝╚╝╝  ╚╝╝   ╚╝╝       ╚╝╝  ╚╝╝╚╝╝╝╝╝╝╝╚╝╝╝╝╝╝╝          "
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -653,11 +653,11 @@ goto menu
     echo.
     echo.
     set "lines[0]=                                   ██████╗ ███████╗███╗   ██╗███████╗██████╗  █████╗ ██╗     "
-    set "lines[1]=                                  ██╔════╝ ██╔════╝████╗  ██║██╔════╝██╔══██╗██╔══██╗██║     "
+    set "lines[1]=                                  ██╔╝╝╝╝╝ ██╔╝╝╝╝╝████╗  ██║██╔╝╝╝╝╝██╔╝╝██╗██╔╝╝██╗██║     "
     set "lines[2]=                                  ██║  ███╗█████╗  ██╔██╗ ██║█████╗  ██████╔╝███████║██║     "
-    set "lines[3]=                                  ██║   ██║██╔══╝  ██║╚██╗██║██╔══╝  ██╔══██╗██╔══██║██║     "
+    set "lines[3]=                                  ██║   ██║██╔╝╝╝  ██║╚██╗██║██╔╝╝╝  ██╔╝╝██╗██╔╝╝██║██║     "
     set "lines[4]=                                  ╚██████╔╝███████╗██║ ╚████║███████╗██║  ██║██║  ██║███████╗"
-    set "lines[5]=                                   ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝"
+    set "lines[5]=                                   ╚╝╝╝╝╝╝ ╚╝╝╝╝╝╝╝╚╝╝  ╚╝╝╝╝╚╝╝╝╝╝╝╝╚╝╝  ╚╝╝╚╝╝  ╚╝╝╚╝╝╝╝╝╝╝"
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -881,11 +881,11 @@ goto menu
     echo.
     echo.
     set "lines[0]=               ██████╗ ███████╗██████╗ ███████╗ ██████╗ ██████╗ ███╗   ███╗ █████╗ ███╗   ██╗ ██████╗███████╗"
-    set "lines[1]=               ██╔══██╗██╔════╝██╔══██╗██╔════╝██╔═══██╗██╔══██╗████╗ ████║██╔══██╗████╗  ██║██╔════╝██╔════╝"
+    set "lines[1]=               ██╔╝╝██╗██╔╝╝╝╝╝██╔╝╝██╗██╔╝╝╝╝╝██╔╝╝╝██╗██╔╝╝██╗████╗ ████║██╔╝╝██╗████╗  ██║██╔╝╝╝╝╝██╔╝╝╝╝╝"
     set "lines[2]=               ██████╔╝█████╗  ██████╔╝█████╗  ██║   ██║██████╔╝██╔████╔██║███████║██╔██╗ ██║██║     █████╗  "
-    set "lines[3]=               ██╔═══╝ ██╔══╝  ██╔══██╗██╔══╝  ██║   ██║██╔══██╗██║╚██╔╝██║██╔══██║██║╚██╗██║██║     ██╔══╝  "
-    set "lines[4]=               ██║     ███████╗██║  ██║██║     ╚██████╔╝██║  ██║██║ ╚═╝ ██║██║  ██║██║ ╚████║╚██████╗███████╗"
-    set "lines[5]=               ╚═╝     ╚══════╝╚═╝  ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝╚══════╝"
+    set "lines[3]=               ██╔╝╝╝╝ ██╔╝╝╝  ██╔╝╝██╗██╔╝╝╝  ██║   ██║██╔╝╝██╗██║╚██╔╝██║██╔╝╝██║██║╚██╗██║██║     ██╔╝╝╝  "
+    set "lines[4]=               ██║     ███████╗██║  ██║██║     ╚██████╔╝██║  ██║██║ ╚╝╝ ██║██║  ██║██║ ╚████║╚██████╗███████╗"
+    set "lines[5]=               ╚╝╝     ╚╝╝╝╝╝╝╝╚╝╝  ╚╝╝╚╝╝      ╚╝╝╝╝╝╝ ╚╝╝  ╚╝╝╚╝╝     ╚╝╝╚╝╝  ╚╝╝╚╝╝  ╚╝╝╝╝ ╚╝╝╝╝╝╝╚╝╝╝╝╝╝╝"
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -1159,11 +1159,11 @@ goto menu
     echo.
     echo.
     set "lines[0]=                               ███╗   ██╗███████╗████████╗██╗    ██╗ ██████╗ ██████╗ ██╗  ██╗"
-    set "lines[1]=                               ████╗  ██║██╔════╝╚══██╔══╝██║    ██║██╔═══██╗██╔══██╗██║ ██╔╝"
+    set "lines[1]=                               ████╗  ██║██╔╝╝╝╝╝╚╝╝██╔╝╝╝██║    ██║██╔╝╝╝██╗██╔╝╝██╗██║ ██╔╝"
     set "lines[2]=                               ██╔██╗ ██║█████╗     ██║   ██║ █╗ ██║██║   ██║██████╔╝█████╔╝ "
-    set "lines[3]=                               ██║╚██╗██║██╔══╝     ██║   ██║███╗██║██║   ██║██╔══██╗██╔═██╗ "
+    set "lines[3]=                               ██║╚██╗██║██╔╝╝╝     ██║   ██║███╗██║██║   ██║██╔╝╝██╗██╔╝██╗ "
     set "lines[4]=                               ██║ ╚████║███████╗   ██║   ╚███╔███╔╝╚██████╔╝██║  ██║██║  ██╗"
-    set "lines[5]=                               ╚═╝  ╚═══╝╚══════╝   ╚═╝    ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝"
+    set "lines[5]=                               ╚╝╝  ╚╝╝╝╝╚╝╝╝╝╝╝╝   ╚╝╝    ╚╝╝╝╚╝╝╝  ╚╝╝╝╝╝╝ ╚╝╝  ╚╝╝╚╝╝  ╚╝╝"
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -1418,39 +1418,38 @@ goto menu
     echo      %purple%[ %roxo%+%purple% ]%white% Starting DNS setup...
     timeout /t 1 /nobreak >> "%ghost-logfile%" 2>&1
 
-    set "dns_label=Ghost Optimizer DNS"
-    set "dns_ipv4_1=45.90.28.0"
-    set "dns_ipv4_2=45.90.30.0"
-    set "dns_ipv6_1=2a07:a8c0::d3:8baf"
-    set "dns_ipv6_2=2a07:a8c1::d3:8baf"
-    set "dns_doh_1=https://dns.nextdns.io/d38baf"
-    set "dns_doh_2=https://dns.nextdns.io/d38baf"
+    set "dns_label=Quad9 DNS"
+    set "dns_ipv4_1=9.9.9.9"
+    set "dns_ipv4_2=149.112.112.112"
+    set "dns_ipv6_1=2620:fe::fe"
+    set "dns_ipv6_2=2620:fe::9"
+    set "dns_doh_1=https://dns.quad9.net/dns-query"
+    set "dns_doh_2=https://dns.quad9.net/dns-query"
 
     chcp 437 >nul 2>&1
     powershell -NoProfile -command "try { Add-DnsClientDohServerAddress -ServerAddress '%dns_ipv4_1%' -DohTemplate '%dns_doh_1%' -AllowFallbackToUdp $False -AutoUpgrade $True } catch { Set-DnsClientDohServerAddress -ServerAddress '%dns_ipv4_1%' -DohTemplate '%dns_doh_1%' -AllowFallbackToUdp $False -AutoUpgrade $True }" >> "%ghost-logfile%" 2>&1
     powershell -NoProfile -command "try { Add-DnsClientDohServerAddress -ServerAddress '%dns_ipv4_2%' -DohTemplate '%dns_doh_2%' -AllowFallbackToUdp $False -AutoUpgrade $True } catch { Set-DnsClientDohServerAddress -ServerAddress '%dns_ipv4_2%' -DohTemplate '%dns_doh_2%' -AllowFallbackToUdp $False -AutoUpgrade $True }" >> "%ghost-logfile%" 2>&1
-
     powershell -NoProfile -command "$interfaces = (Get-NetAdapter -Physical | Where-Object {$_.Status -eq 'Up'}).InterfaceIndex; foreach ($index in $interfaces) { Set-DnsClientServerAddress -InterfaceIndex $index -ServerAddresses ('%dns_ipv4_1%', '%dns_ipv4_2%'); Set-DnsClientServerAddress -InterfaceIndex $index -ServerAddresses ('%dns_ipv6_1%', '%dns_ipv6_2%') -AddressFamily IPv6 }" >> "%ghost-logfile%" 2>&1
-
     chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% DNS set to %roxo%%dns_label%%white%.
 
     ipconfig /flushdns >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% DNS cache cleaned.
 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "CacheHashTableBucketSize" /t REG_DWORD /d 384   /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "CacheHashTableSize"       /t REG_DWORD /d 384   /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "MaxCacheEntryTtlLimit"    /t REG_DWORD /d 86400 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "MaxCacheTtl"              /t REG_DWORD /d 86400 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "CacheHashTableBucketSize" /t REG_DWORD /d 384 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "CacheHashTableSize" /t REG_DWORD /d 384 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "MaxCacheEntryTtlLimit" /t REG_DWORD /d 86400 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "MaxCacheTtl" /t REG_DWORD /d 86400 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% DNS cache optimized.
 
-    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient" /v "DoHPolicy"       /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
-    echo      %purple%[ %roxo%+%purple% ]%white% DNS DoH bypass disabled.
-    
-    chcp 437 >nul 2>&1 
+    reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient" /v "DoHPolicy" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
+    echo      %purple%[ %roxo%+%purple% ]%white% DNS DoH policy enforced.
+
+    chcp 437 >nul 2>&1
+    powershell -NoProfile -command "try { Add-DnsClientDohServerAddress -ServerAddress '%dns_ipv6_1%' -DohTemplate '%dns_doh_1%' -AllowFallbackToUdp $False -AutoUpgrade $True } catch { Set-DnsClientDohServerAddress -ServerAddress '%dns_ipv6_1%' -DohTemplate '%dns_doh_1%' -AllowFallbackToUdp $False -AutoUpgrade $True }" >> "%ghost-logfile%" 2>&1
     powershell -NoProfile -command "try { Add-DnsClientDohServerAddress -ServerAddress '%dns_ipv6_2%' -DohTemplate '%dns_doh_2%' -AllowFallbackToUdp $False -AutoUpgrade $True } catch { Set-DnsClientDohServerAddress -ServerAddress '%dns_ipv6_2%' -DohTemplate '%dns_doh_2%' -AllowFallbackToUdp $False -AutoUpgrade $True }" >> "%ghost-logfile%" 2>&1
     chcp 65001 >nul 2>&1
-    echo      %purple%[ %roxo%+%purple% ]%white% DoH IPV6 mapping enabled.
+    echo      %purple%[ %roxo%+%purple% ]%white% DoH IPv6 mapping enabled.
 
     echo.
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
@@ -1479,11 +1478,11 @@ goto menu
         set "esc[%%j]=!esc![38;2;!colorR!;!colorG!;!colorB!m"
     )    
     set "lines[0]=                                         ███╗   ██╗██╗   ██╗██╗██████╗ ██╗ █████╗ "
-    set "lines[1]=                                         ████╗  ██║██║   ██║██║██╔══██╗██║██╔══██╗"
+    set "lines[1]=                                         ████╗  ██║██║   ██║██║██╔╝╝██╗██║██╔╝╝██╗"
     set "lines[2]=                                         ██╔██╗ ██║██║   ██║██║██║  ██║██║███████║"
-    set "lines[3]=                                         ██║╚██╗██║╚██╗ ██╔╝██║██║  ██║██║██╔══██║"
+    set "lines[3]=                                         ██║╚██╗██║╚██╗ ██╔╝██║██║  ██║██║██╔╝╝██║"
     set "lines[4]=                                         ██║ ╚████║ ╚████╔╝ ██║██████╔╝██║██║  ██║"
-    set "lines[5]=                                         ╚═╝  ╚═══╝  ╚═══╝  ╚═╝╚═════╝ ╚═╝╚═╝  ╚═╝"
+    set "lines[5]=                                         ╚╝╝  ╚╝╝╝╝  ╚╝╝╝╝  ╚╝╝╚╝╝╝╝╝╝ ╚╝╝╚╝╝  ╚╝╝"
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -1764,11 +1763,11 @@ goto menu
     echo.
     echo.
     set "lines[0]=                                 ██╗      █████╗ ████████╗███████╗███╗   ██╗ ██████╗██╗   ██╗"
-    set "lines[1]=                                 ██║     ██╔══██╗╚══██╔══╝██╔════╝████╗  ██║██╔════╝╚██╗ ██╔╝"
+    set "lines[1]=                                 ██║     ██╔╝╝██╗╚╝╝██╔╝╝╝██╔╝╝╝╝╝████╗  ██║██╔╝╝╝╝╝╚██╗ ██╔╝"
     set "lines[2]=                                 ██║     ███████║   ██║   █████╗  ██╔██╗ ██║██║      ╚████╔╝ "
-    set "lines[3]=                                 ██║     ██╔══██║   ██║   ██╔══╝  ██║╚██╗██║██║       ╚██╔╝  "
+    set "lines[3]=                                 ██║     ██╔╝╝██║   ██║   ██╔╝╝╝  ██║╚██╗██║██║       ╚██╔╝  "
     set "lines[4]=                                 ███████╗██║  ██║   ██║   ███████╗██║ ╚████║╚██████╗   ██║   "
-    set "lines[5]=                                 ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝ ╚═════╝   ╚═╝   "
+    set "lines[5]=                                 ╚╝╝╝╝╝╝╝╚╝╝  ╚╝╝   ╚╝╝   ╚╝╝╝╝╝╝╝╚╝╝  ╚╝╝╝╝ ╚╝╝╝╝╝╝   ╚╝╝   "
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -1966,11 +1965,11 @@ goto menu
     echo.
     echo.
     set "lines[0]=                                                ██╗  ██╗██████╗ ███╗   ███╗"
-    set "lines[1]=                                                ██║ ██╔╝██╔══██╗████╗ ████║"
+    set "lines[1]=                                                ██║ ██╔╝██╔╝╝██╗████╗ ████║"
     set "lines[2]=                                                █████╔╝ ██████╔╝██╔████╔██║"
-    set "lines[3]=                                                ██╔═██╗ ██╔══██╗██║╚██╔╝██║"
-    set "lines[4]=                                                ██║  ██╗██████╔╝██║ ╚═╝ ██║"
-    set "lines[5]=                                                ╚═╝  ╚═╝╚═════╝ ╚═╝     ╚═╝"
+    set "lines[3]=                                                ██╔╝██╗ ██╔╝╝██╗██║╚██╔╝██║"
+    set "lines[4]=                                                ██║  ██╗██████╔╝██║ ╚╝╝ ██║"
+    set "lines[5]=                                                ╚╝╝  ╚╝╝╚╝╝╝╝╝╝ ╚╝╝     ╚╝╝"
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -2093,11 +2092,11 @@ goto menu
     echo.
     echo.
     set "lines[0]=                                        ██████╗██╗     ███████╗ █████╗ ███╗   ██╗ "
-    set "lines[1]=                                       ██╔════╝██║     ██╔════╝██╔══██╗████╗  ██║"
+    set "lines[1]=                                       ██╔╝╝╝╝╝██║     ██╔╝╝╝╝╝██╔╝╝██╗████╗  ██║"
     set "lines[2]=                                       ██║     ██║     █████╗  ███████║██╔██╗ ██║"
-    set "lines[3]=                                       ██║     ██║     ██╔══╝  ██╔══██║██║╚██╗██║"
+    set "lines[3]=                                       ██║     ██║     ██╔╝╝╝  ██╔╝╝██║██║╚██╗██║"
     set "lines[4]=                                       ╚██████╗███████╗███████╗██║  ██║██║ ╚████║"
-    set "lines[5]=                                        ╚═════╝╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝"
+    set "lines[5]=                                        ╚╝╝╝╝╝╝╚╝╝╝╝╝╝╝╚╝╝╝╝╝╝╝╚╝╝  ╚╝╝╚╝╝  ╚╝╝╝╝"
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -2244,11 +2243,11 @@ goto menu
     echo.
     echo.
     set "lines[0]=                        ████████╗███████╗██╗     ███████╗███╗   ███╗███████╗████████╗██████╗ ██╗   ██╗"
-    set "lines[1]=                        ╚══██╔══╝██╔════╝██║     ██╔════╝████╗ ████║██╔════╝╚══██╔══╝██╔══██╗╚██╗ ██╔╝"
+    set "lines[1]=                        ╚╝╝██╔╝╝╝██╔╝╝╝╝╝██║     ██╔╝╝╝╝╝████╗ ████║██╔╝╝╝╝╝╚╝╝██╔╝╝╝██╔╝╝██╗╚██╗ ██╔╝"
     set "lines[2]=                           ██║   █████╗  ██║     █████╗  ██╔████╔██║█████╗     ██║   ██████╔╝ ╚████╔╝ "
-    set "lines[3]=                           ██║   ██╔══╝  ██║     ██╔══╝  ██║╚██╔╝██║██╔══╝     ██║   ██╔══██╗  ╚██╔╝   "
-    set "lines[4]=                           ██║   ███████╗███████╗███████╗██║ ╚═╝ ██║███████╗   ██║   ██║  ██║   ██║   "
-    set "lines[5]=                           ╚═╝   ╚══════╝╚══════╝╚══════╝╚═╝     ╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   "
+    set "lines[3]=                           ██║   ██╔╝╝╝  ██║     ██╔╝╝╝  ██║╚██╔╝██║██╔╝╝╝     ██║   ██╔╝╝██╗  ╚██╔╝   "
+    set "lines[4]=                           ██║   ███████╗███████╗███████╗██║ ╚╝╝ ██║███████╗   ██║   ██║  ██║   ██║   "
+    set "lines[5]=                           ╚╝╝   ╚╝╝╝╝╝╝╝╚╝╝╝╝╝╝╝╚╝╝╝╝╝╝╝╚╝╝     ╚╝╝╚╝╝╝╝╝╝╝   ╚╝╝   ╚╝╝  ╚╝╝   ╚╝╝   "
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -2495,11 +2494,11 @@ goto menu
     echo.
     echo.
     set "lines[0]=                                ███████╗███████╗██████╗ ██╗   ██╗██╗ ██████╗███████╗███████╗ "
-    set "lines[1]=                                ██╔════╝██╔════╝██╔══██╗██║   ██║██║██╔════╝██╔════╝██╔════╝"
+    set "lines[1]=                                ██╔╝╝╝╝╝██╔╝╝╝╝╝██╔╝╝██╗██║   ██║██║██╔╝╝╝╝╝██╔╝╝╝╝╝██╔╝╝╝╝╝"
     set "lines[2]=                                ███████╗█████╗  ██████╔╝██║   ██║██║██║     █████╗  ███████╗"
-    set "lines[3]=                                ╚════██║██╔══╝  ██╔══██╗╚██╗ ██╔╝██║██║     ██╔══╝  ╚════██║"
+    set "lines[3]=                                ╚╝╝╝╝██║██╔╝╝╝  ██╔╝╝██╗╚██╗ ██╔╝██║██║     ██╔╝╝╝  ╚╝╝╝╝██║"
     set "lines[4]=                                ███████║███████╗██║  ██║ ╚████╔╝ ██║╚██████╗███████╗███████║"
-    set "lines[5]=                                ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝ ╚═════╝╚══════╝╚══════╝"
+    set "lines[5]=                                ╚╝╝╝╝╝╝╝╚╝╝╝╝╝╝╝╚╝╝  ╚╝╝  ╚╝╝╝╝  ╚╝╝ ╚╝╝╝╝╝╝╚╝╝╝╝╝╝╝╚╝╝╝╝╝╝╝"
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -2848,11 +2847,11 @@ goto menu
     echo.
     echo.
     set "lines[0]=                      ██████╗  ██████╗ ██╗    ██╗███████╗██████╗     ██████╗ ██╗      █████╗ ███╗   ██╗"
-    set "lines[1]=                      ██╔══██╗██╔═══██╗██║    ██║██╔════╝██╔══██╗    ██╔══██╗██║     ██╔══██╗████╗  ██║"
+    set "lines[1]=                      ██╔╝╝██╗██╔╝╝╝██╗██║    ██║██╔╝╝╝╝╝██╔╝╝██╗    ██╔╝╝██╗██║     ██╔╝╝██╗████╗  ██║"
     set "lines[2]=                      ██████╔╝██║   ██║██║ █╗ ██║█████╗  ██████╔╝    ██████╔╝██║     ███████║██╔██╗ ██║"
-    set "lines[3]=                      ██╔═══╝ ██║   ██║██║███╗██║██╔══╝  ██╔══██╗    ██╔═══╝ ██║     ██╔══██║██║╚██╗██║"
+    set "lines[3]=                      ██╔╝╝╝╝ ██║   ██║██║███╗██║██╔╝╝╝  ██╔╝╝██╗    ██╔╝╝╝╝ ██║     ██╔╝╝██║██║╚██╗██║"
     set "lines[4]=                      ██║     ╚██████╔╝╚███╔███╔╝███████╗██║  ██║    ██║     ███████╗██║  ██║██║ ╚████║"
-    set "lines[5]=                      ╚═╝      ╚═════╝  ╚══╝╚══╝ ╚══════╝╚═╝  ╚═╝    ╚═╝     ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝"
+    set "lines[5]=                      ╚╝╝      ╚╝╝╝╝╝╝  ╚╝╝╝╚╝╝╝ ╚╝╝╝╝╝╝╝╚╝╝  ╚╝╝    ╚╝╝     ╚╝╝╝╝╝╝╝╚╝╝  ╚╝╝╚╝╝  ╚╝╝╝╝"
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -2983,11 +2982,11 @@ goto menu
     echo.
     echo.
     set "lines[0]=                             ██╗███╗   ██╗████████╗███████╗ ██████╗ ██████╗ ██╗████████╗██╗   ██╗ "
-    set "lines[1]=                             ██║████╗  ██║╚══██╔══╝██╔════╝██╔════╝ ██╔══██╗██║╚══██╔══╝╚██╗ ██╔╝"
+    set "lines[1]=                             ██║████╗  ██║╚╝╝██╔╝╝╝██╔╝╝╝╝╝██╔╝╝╝╝╝ ██╔╝╝██╗██║╚╝╝██╔╝╝╝╚██╗ ██╔╝"
     set "lines[2]=                             ██║██╔██╗ ██║   ██║   █████╗  ██║  ███╗██████╔╝██║   ██║    ╚████╔╝ "
-    set "lines[3]=                             ██║██║╚██╗██║   ██║   ██╔══╝  ██║   ██║██╔══██╗██║   ██║     ╚██╔╝  "
+    set "lines[3]=                             ██║██║╚██╗██║   ██║   ██╔╝╝╝  ██║   ██║██╔╝╝██╗██║   ██║     ╚██╔╝  "
     set "lines[4]=                             ██║██║ ╚████║   ██║   ███████╗╚██████╔╝██║  ██║██║   ██║      ██║   "
-    set "lines[5]=                             ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝   ╚═╝      ╚═╝   "
+    set "lines[5]=                             ╚╝╝╚╝╝  ╚╝╝╝╝   ╚╝╝   ╚╝╝╝╝╝╝╝ ╚╝╝╝╝╝╝ ╚╝╝  ╚╝╝╚╝╝   ╚╝╝      ╚╝╝   "
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -3544,11 +3543,11 @@ goto menu
     echo.
     echo.
     set "lines[0]=                                 ██████╗ ███████╗██████╗ ██╗      ██████╗  █████╗ ████████╗ "
-    set "lines[1]=                                 ██╔══██╗██╔════╝██╔══██╗██║     ██╔═══██╗██╔══██╗╚══██╔══╝"
+    set "lines[1]=                                 ██╔╝╝██╗██╔╝╝╝╝╝██╔╝╝██╗██║     ██╔╝╝╝██╗██╔╝╝██╗╚╝╝██╔╝╝╝"
     set "lines[2]=                                 ██║  ██║█████╗  ██████╔╝██║     ██║   ██║███████║   ██║   "
-    set "lines[3]=                                 ██║  ██║██╔══╝  ██╔══██╗██║     ██║   ██║██╔══██║   ██║   "
+    set "lines[3]=                                 ██║  ██║██╔╝╝╝  ██╔╝╝██╗██║     ██║   ██║██╔╝╝██║   ██║   "
     set "lines[4]=                                 ██████╔╝███████╗██████╔╝███████╗╚██████╔╝██║  ██║   ██║   "
-    set "lines[5]=                                  ╚═════╝ ╚══════╝╚═════╝ ╚══════╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   "
+    set "lines[5]=                                  ╚╝╝╝╝╝╝ ╚╝╝╝╝╝╝╝╚╝╝╝╝╝╝ ╚╝╝╝╝╝╝╝ ╚╝╝╝╝╝╝ ╚╝╝  ╚╝╝   ╚╝╝   "
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -4130,11 +4129,11 @@ goto menu
     echo.
     echo.
     set "lines[0]=                                          ██████╗ ████████╗██╗  ██╗███████╗██████╗           "
-    set "lines[1]=                                         ██╔═══██╗╚══██╔══╝██║  ██║██╔════╝██╔══██╗          "
+    set "lines[1]=                                         ██╔╝╝╝██╗╚╝╝██╔╝╝╝██║  ██║██╔╝╝╝╝╝██╔╝╝██╗          "
     set "lines[2]=                                         ██║   ██║   ██║   ███████║█████╗  ██████╔╝          "
-    set "lines[3]=                                         ██║   ██║   ██║   ██╔══██║██╔══╝  ██╔══██╗          "
+    set "lines[3]=                                         ██║   ██║   ██║   ██╔╝╝██║██╔╝╝╝  ██╔╝╝██╗          "
     set "lines[4]=                                         ╚██████╔╝   ██║   ██║  ██║███████╗██║  ██║          "
-    set "lines[5]=                                          ╚═════╝    ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝          "
+    set "lines[5]=                                          ╚╝╝╝╝╝╝    ╚╝╝   ╚╝╝  ╚╝╝╚╝╝╝╝╝╝╝╚╝╝  ╚╝╝          "
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -4368,11 +4367,11 @@ goto menu
     echo.
     echo.
     set "lines[0]=                                        ██████╗ ███████╗██████╗  ██████╗  ██████╗ ████████╗     "
-    set "lines[1]=                                        ██╔══██╗██╔════╝██╔══██╗██╔═══██╗██╔═══██╗╚══██╔══╝     "
+    set "lines[1]=                                        ██╔╝╝██╗██╔╝╝╝╝╝██╔╝╝██╗██╔╝╝╝██╗██╔╝╝╝██╗╚╝╝██╔╝╝╝     "
     set "lines[2]=                                        ██████╔╝█████╗  ██████╔╝██║   ██║██║   ██║   ██║        "
-    set "lines[3]=                                        ██╔══██╗██╔══╝  ██╔══██╗██║   ██║██║   ██║   ██║        "
+    set "lines[3]=                                        ██╔╝╝██╗██╔╝╝╝  ██╔╝╝██╗██║   ██║██║   ██║   ██║        "
     set "lines[4]=                                        ██║  ██║███████╗██████╔╝╚██████╔╝╚██████╔╝   ██║        "
-    set "lines[5]=                                        ╚═╝  ╚═╝╚══════╝╚═════╝  ╚═════╝  ╚═════╝    ╚═╝        "
+    set "lines[5]=                                        ╚╝╝  ╚╝╝╚╝╝╝╝╝╝╝╚╝╝╝╝╝╝  ╚╝╝╝╝╝╝  ╚╝╝╝╝╝╝    ╚╝╝        "
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
