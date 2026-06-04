@@ -3386,7 +3386,6 @@ goto menu
     sc config wuauserv start= disabled >> "%ghost-logfile%" 2>&1
     sc config bits start= disabled >> "%ghost-logfile%" 2>&1
     sc config cryptsvc start= disabled >> "%ghost-logfile%" 2>&1
-    
     net stop wuauserv /y >> "%ghost-logfile%" 2>&1
     net stop bits /y >> "%ghost-logfile%" 2>&1
     net stop cryptsvc /y >> "%ghost-logfile%" 2>&1
@@ -3425,6 +3424,7 @@ goto menu
     regsvr32 /s wuwebv.dll >> "%ghost-logfile%" 2>&1
     regsvr32 /s qmgr.dll >> "%ghost-logfile%" 2>&1
     regsvr32 /s qmgrprxy.dll >> "%ghost-logfile%" 2>&1
+    echo       %purple%[ %roxo%+%purple% ]%white% Windows Update DLLs restored.
 
     timeout /t 5 /nobreak > nul
     
@@ -3462,7 +3462,7 @@ goto menu
     net start appidsvc >> "%ghost-logfile%" 2>&1
     
     echo       %purple%[ %roxo%+%purple% ]%white% Repairing System Integrity...
-    DISM /Online /Cleanup-Image /RestoreHealth >> "%ghost-logfile%" 2>&1
+    DISM /Online /Cleanup-Image /RestoreHealth
     sfc /scannow
     wsreset.exe
     powershell -ExecutionPolicy Bypass -Command "Get-AppxPackage -AllUsers Microsoft.WindowsStore | ForEach-Object {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppxManifest.xml'}" >> "%ghost-logfile%" 2>&1
@@ -3471,6 +3471,7 @@ goto menu
     echo.
     
     echo.
+    echo   %yellow%[ • ]%reset% Also, try disabling everything on OOSU10++.
     echo   %yellow%[ • ]%reset% If that doesn't solve your problem, try running Full Integrity Fix or Restore Point.
     
     echo.
