@@ -3,8 +3,8 @@
 # 👻 Ghost Optimizer
 **Minimal, Private and Optimized Windows**
 
-[![Version](https://img.shields.io/badge/Version-5.4-indigo?style=for-the-badge)](https://github.com/louzkk/Ghost-Optimizer/releases)
-[![Downloads](https://img.shields.io/github/downloads/louzkk/Ghost-Optimizer/total?style=for-the-badge&color=indigo)](https://github.com/louzkk/Ghost-Optimizer/releases)
+[![Version](https://img.shields.io/badge/Version-5.5-indigo?style=for-the-badge)](https://github.com/louzkk/Ghost-Optimizer/releases)
+[![Downloads](https://img.shields.io/endpoint?url=https://badge-api-delta.vercel.app/api/downloads&style=for-the-badge&color=indigo)](https://github.com/louzkk/Ghost-Optimizer/releases)
 [![Download](https://img.shields.io/badge/Download-indigo?style=for-the-badge&logo=Github&logoColor=white)](https://github.com/louzkk/Ghost-Optimizer#-launch)
 [![Discord](https://img.shields.io/badge/Discord-indigo?style=for-the-badge&logo=Discord&logoColor=white)](https://discord.gg/QJPdw2UrVt)
 
@@ -15,6 +15,7 @@
 **Ghost Optimizer** is an open source advanced batch script that improves **performance**, **latency**, **network** and **privacy**, while removing **bloatware** and **AI** features.   
 
 This includes registry modifications and system policies targeting performance and network behavior, removal of Microsoft's telemetry, tracking, pre-installed apps, AI, and   unnecessary background services, cleanup of temporary and log files, and repairs to system health and integrity.  
+
 Every optimization in this script has been individually tested and included for a specific reason. If you don't understand what a command does, do not run it.   
 
 ## 🚀 Launch

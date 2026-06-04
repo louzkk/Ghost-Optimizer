@@ -1,4 +1,4 @@
-:: Ghost Optimizer 5.4
+:: Ghost Optimizer 5.5
 :: https://github.com/louzkk/Ghost-Optimizer
 
 @echo off
@@ -11,7 +11,6 @@ color 0F
         set mode=block
     )
 
-    mode 124,30
     setlocal enabledelayedexpansion
     chcp 437 >nul 2>&1
     powershell "Set-ExecutionPolicy Unrestricted" >nul 2>&1
@@ -20,9 +19,9 @@ color 0F
     (for /f %%a in ('echo prompt $E^| cmd') do set "esc=%%a")
     echo !esc![40m
     cls
-    chcp 65001 >nul 2>&1
+    chcp 65001 >nul 2>&1 2>&1
 
-    set "version=5.4"
+    set "version=5.5"
     set "script=Ghost Optimizer"
     set "reboot= (Reboot required)" 
     set "rebooting=Rebooting"
@@ -91,6 +90,8 @@ color 0F
         set /a "cG=80 * %%j / %W_BLOCK%"
         set "red_esc[%%j]=!esc![38;2;!cR!;!cG!;0m"
     )
+
+    mode 124,29
 
     if "%mode%"=="block" goto block
     if "%mode%"=="pass" goto welcome
@@ -222,7 +223,7 @@ color 0F
     echo      %purple%[ %roxo%+%purple% ]%white% Creating a Restore Point...
     chcp 437 >nul 2>&1
     powershell -ExecutionPolicy Bypass -command "Checkpoint-Computer -Description 'Ghost Optimizer %version% - Restore Point' -RestorePointType 'MODIFY_SETTINGS'" >nul 2>&1
-    chcp 65001 >nul 2>&1
+    chcp 65001 >nul 2>&1 2>&1
 
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Restore Point created %green%successfully%white%.
@@ -232,7 +233,7 @@ color 0F
 
     :loading
     cls
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo !esc![?25l
     echo.
     echo.
@@ -274,6 +275,7 @@ color 0F
         if not exist "C:\Ghost Optimizer\Logs" mkdir "C:\Ghost Optimizer\Logs"
         if not exist "C:\Ghost Optimizer\NVIDIA" mkdir "C:\Ghost Optimizer\NVIDIA"
         if not exist "C:\Ghost Optimizer\OOSU10" mkdir "C:\Ghost Optimizer\OOSU10"
+        if not exist "C:\Ghost Optimizer\ViVeTool" mkdir "C:\Ghost Optimizer\ViVeTool"
         if not exist "C:\Ghost Optimizer\Powerplan" mkdir "C:\Ghost Optimizer\Powerplan"
 
         set "d=%date:/=-%"
@@ -292,21 +294,26 @@ color 0F
         ) > "%LinkFile%"
 
         chcp 437 >nul 2>&1
-
+        
         for /f "delims=" %%G in ('powershell -NoProfile -command "Get-CimInstance Win32_VideoController | Select-Object -ExpandProperty Name"') do (
             set "GPUName=%%G"
         )
-
+        
         for /f "delims=" %%A in ('powershell -NoProfile -command "Get-CimInstance Win32_Processor | Select-Object -ExpandProperty Name"') do (
             set "CPUName=%%A"
         )
-
+        
         for /f "tokens=3" %%b in ('reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v CurrentBuild ^| findstr /i "CurrentBuild"') do (
             set "BuildNumber=%%b"
         )
-
-        chcp 65001 >nul
-
+        
+        :: NOVO (arquitetura real do OS)
+        for /f "delims=" %%A in ('powershell -NoProfile -command "[System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture"') do (
+            set "ARCH=%%A"
+        )
+        
+        chcp 65001 >nul 2>&1
+        
         if defined BuildNumber (
             if !BuildNumber! GEQ 22000 (
                 set "OS=11"
@@ -314,7 +321,8 @@ color 0F
                 set "OS=10"
             )
         )
-        set Winver=(Windows %OS%)
+        
+        set "Winver=(Windows %OS%)"
 
         timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
         title Ghost Optimizer %version%  %winver%
@@ -324,12 +332,12 @@ color 0F
     cls
     echo.
     echo.
-    set "lines[0]=    ██████╗ ██╗  ██╗ ██████╗ ███████╗████████╗      ██████╗ ██████╗ ████████╗██╗███╗   ███╗██╗███████╗███████╗██████╗"
-    set "lines[1]=   ██╔════╝ ██║  ██║██╔═══██╗██╔════╝╚══██╔══╝     ██╔═══██╗██╔══██╗╚══██╔══╝██║████╗ ████║██║╚══███╔╝██╔════╝██╔══██╗"
-    set "lines[2]=   ██║ ███╗ ███████║██║   ██║███████╗   ██║        ██║   ██║██████╔╝   ██║   ██║██╔████╔██║██║  ███╔╝ █████╗  ██████╔╝"
-    set "lines[3]=   ██║  ██║ ██╔══██║██║   ██║╚════██║   ██║        ██║   ██║██╔═══╝    ██║   ██║██║╚██╔╝██║██║ ███╔╝  ██╔══╝  ██╔══██╗"
-    set "lines[4]=   ╚██████║ ██║  ██║╚██████╔╝███████║   ██║        ╚██████╔╝██║        ██║   ██║██║ ╚═╝ ██║██║███████╗███████╗██║  ██║"
-    set "lines[5]=    ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝         ╚═════╝ ╚═╝        ╚═╝   ╚═╝╚═╝     ╚═╝╚═╝╚══════╝╚══════╝╚═╝  ╚═╝"
+    set "lines[0]=     ██████╗ ██╗  ██╗ ██████╗ ███████╗████████╗      ██████╗ ██████╗ ████████╗██╗███╗   ███╗██╗███████╗███████╗██████╗"
+    set "lines[1]=    ██╔════╝ ██║  ██║██╔═══██╗██╔════╝╚══██╔══╝     ██╔═══██╗██╔══██╗╚══██╔══╝██║████╗ ████║██║╚══███╔╝██╔════╝██╔══██╗"
+    set "lines[2]=    ██║ ███╗ ███████║██║   ██║███████╗   ██║        ██║   ██║██████╔╝   ██║   ██║██╔████╔██║██║  ███╔╝ █████╗  ██████╔╝"
+    set "lines[3]=    ██║  ██║ ██╔══██║██║   ██║╚════██║   ██║        ██║   ██║██╔═══╝    ██║   ██║██║╚██╔╝██║██║ ███╔╝  ██╔══╝  ██╔══██╗"
+    set "lines[4]=    ╚██████║ ██║  ██║╚██████╔╝███████║   ██║        ╚██████╔╝██║        ██║   ██║██║ ╚═╝ ██║██║███████╗███████╗██║  ██║"
+    set "lines[5]=     ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝         ╚═════╝ ╚═╝        ╚═╝   ╚═╝╚═╝     ╚═╝╚═╝╚══════╝╚══════╝╚═╝  ╚═╝"
 
     for /L %%i in (0,1,5) do (
         set "text=!lines[%%i]!"
@@ -827,6 +835,35 @@ goto menu
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DriverSearching"            /v "SearchOrderConfig"               /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Auto driver search disabled.
 
+    chcp 437 >nul 2>&1
+
+    if not exist "C:\Ghost Optimizer\ViVeTool\ViVeTool.exe" (
+        if not exist "C:\Ghost Optimizer\ViVeTool" (
+            mkdir "C:\Ghost Optimizer\ViVeTool"
+        )
+
+    if /i "%ARCH%"=="Arm64" (
+        set "VIVETOOL_URL=https://github.com/thebookisclosed/ViVe/releases/download/v0.3.4/ViVeTool-v0.3.4-ARM64.zip"
+    ) else (
+        set "VIVETOOL_URL=https://github.com/thebookisclosed/ViVe/releases/download/v0.3.4/ViVeTool-v0.3.4-IntelAmd.zip"
+    )
+    
+    curl -L -o "C:\Ghost Optimizer\ViVeTool\ViVeTool.zip" "%VIVETOOL_URL%" >> "%ghost-logfile%" 2>&1
+    powershell -NoProfile -command "Expand-Archive -Path 'C:\Ghost Optimizer\ViVeTool\ViVeTool.zip' -DestinationPath 'C:\Ghost Optimizer\ViVeTool' -Force" >> "%ghost-logfile%" 2>&1
+    del /f /q "C:\Ghost Optimizer\ViVeTool\ViVeTool.zip" >nul 2>&1
+    )
+    
+    chcp 65001 >nul 2>&1
+    
+    if exist "C:\Ghost Optimizer\ViVeTool\ViVeTool.exe" (
+        "C:\Ghost Optimizer\ViVeTool\ViVeTool.exe" /enable /id:59956305 >> "%ghost-logfile%" 2>&1
+        "C:\Ghost Optimizer\ViVeTool\ViVeTool.exe" /enable /id:59149945 >> "%ghost-logfile%" 2>&1
+        echo      %purple%[ %roxo%+%purple% ]%white% Better Quick Settings enabled.
+    
+    ) else (
+        echo      %red%[ + ]%white% ViVeTool executable not found.
+    )
+
     echo.
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% General Tweaks applied %green%successfully%white%.
@@ -908,7 +945,7 @@ goto menu
 goto menu
 
     :performanceapply
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     cls
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Applying %roxo%Performance%white% Tweaks...
@@ -965,7 +1002,7 @@ goto menu
         reg add "HKLM\SYSTEM\CurrentControlSet\Enum\%%g\Device Parameters\Interrupt Management\MessageSignaledInterruptProperties" /v "MSISupported"   /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
         reg add "HKLM\SYSTEM\CurrentControlSet\Enum\%%g\Device Parameters\Interrupt Management\Affinity Policy"                    /v "DevicePriority" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     )
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% MSI enabled for supported GPUs.
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\PriorityControl" /v "Win32PrioritySeparation" /t REG_DWORD /d 38 /f >> "%ghost-logfile%" 2>&1
@@ -992,7 +1029,7 @@ goto menu
     reg add "HKLM\SYSTEM\CurrentControlSet\Control"                                                       /v "SvcHostSplitThresholdInKB" /t REG_DWORD /d 4096000 /f >> "%ghost-logfile%" 2>&1
     reg delete "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PagingFiles" /f >> "%ghost-logfile%" 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Enable-MMAgent -MemoryCompression" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Memory management optimized.
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling"             /v "PowerThrottlingOff"      /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
@@ -1164,7 +1201,7 @@ goto menu
     echo !lineGradient!!esc![0;40m
 
     echo.
-    echo                               %purple%[ %roxo%%underline%1%reset% %purple%]%white% Apply Network Tweaks                %purple%[ %roxo%%underline%2%reset% %purple%]%white% Apply DNS Tweaks
+    echo                              %purple%[ %roxo%%underline%1%reset% %purple%]%white% Apply Network Tweaks                %purple%[ %roxo%%underline%2%reset% %purple%]%white% Apply DNS Tweaks
     echo.                 
     echo.
     echo                                                    %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
@@ -1262,7 +1299,6 @@ goto menu
     reg delete "HKLM\SYSTEM\CurrentControlSet\Services\AFD\Parameters" /v "DisableAddressSharing"      /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Network adapter tweaks applied.
 
-
     chcp 437 >nul 2>&1
     set "NIC_CLASS=HKLM\SYSTEM\CurrentControlSet\Control\Class\{4D36E972-E325-11CE-BFC1-08002BE10318}"
     for /L %%i in (0,1,99) do (
@@ -1301,7 +1337,7 @@ goto menu
     reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Scan" /v "DisablePeriodicScan" /t REG_DWORD /d 1    /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\WlanSvc\Parameters"          /v "CoalescePackets"     /t REG_DWORD /d 0    /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"            /v "InitialRto"          /t REG_DWORD /d 2000 /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% NIC power saving disabled.
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Winsock" /v "MinSockAddrLength" /t REG_DWORD /d 16 /f >> "%ghost-logfile%" 2>&1
@@ -1332,7 +1368,7 @@ goto menu
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-NetAdapter | Where-Object {$_.PhysicalMediaType -eq 'Native 802.11'} | Set-NetAdapter -MacAddressRandomization Enabled -Confirm:`$false" /f >> "%ghost-logfile%" 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-NetAdapter | Where-Object {$_.MediaType -eq '802.3' -and $_.PhysicalMediaType -ne 'Native 802.11'} | Set-NetAdapter -MacAddressRandomization Enabled -Confirm:`$false" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% MAC randomization enabled.
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Remote Assistance" /v "fAllowToGetHelp" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
@@ -1353,7 +1389,7 @@ goto menu
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation"       /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\mrxsmb"                  /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\SMB1"                    /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% SMBv1 protocol disabled.
 
     netsh interface teredo set state disabled /f >> "%ghost-logfile%" 2>&1
@@ -1371,7 +1407,7 @@ goto menu
 
 goto menu
 
-    :dnsapply
+:dnsapply
     cls
     echo.
     echo   %purple%[ %roxo%•%purple% ]%white% Applying %roxo%DNS%white% Tweaks...
@@ -1391,19 +1427,15 @@ goto menu
     set "dns_doh_2=https://dns.nextdns.io/d38baf"
 
     chcp 437 >nul 2>&1
-    powershell -NoProfile -command "try { Add-DnsClientDohServerAddress -ServerAddress '%dns_ipv4_1%' -DohTemplate '%dns_doh_1%' -AllowFallbackToUdp $False -AutoUpgrade $True } catch { Set-DnsClientDohServerAddress -ServerAddress '%dns_ipv4_1%' -DohTemplate '%dns_doh_1%' -AllowFallbackToUdp $False -AutoUpgrade $True }" /f >> "%ghost-logfile%" 2>&1
-    powershell -NoProfile -command "try { Add-DnsClientDohServerAddress -ServerAddress '%dns_ipv4_2%' -DohTemplate '%dns_doh_2%' -AllowFallbackToUdp $False -AutoUpgrade $True } catch { Set-DnsClientDohServerAddress -ServerAddress '%dns_ipv4_2%' -DohTemplate '%dns_doh_2%' -AllowFallbackToUdp $False -AutoUpgrade $True }" /f >> "%ghost-logfile%" 2>&1
+    powershell -NoProfile -command "try { Add-DnsClientDohServerAddress -ServerAddress '%dns_ipv4_1%' -DohTemplate '%dns_doh_1%' -AllowFallbackToUdp $False -AutoUpgrade $True } catch { Set-DnsClientDohServerAddress -ServerAddress '%dns_ipv4_1%' -DohTemplate '%dns_doh_1%' -AllowFallbackToUdp $False -AutoUpgrade $True }" >> "%ghost-logfile%" 2>&1
+    powershell -NoProfile -command "try { Add-DnsClientDohServerAddress -ServerAddress '%dns_ipv4_2%' -DohTemplate '%dns_doh_2%' -AllowFallbackToUdp $False -AutoUpgrade $True } catch { Set-DnsClientDohServerAddress -ServerAddress '%dns_ipv4_2%' -DohTemplate '%dns_doh_2%' -AllowFallbackToUdp $False -AutoUpgrade $True }" >> "%ghost-logfile%" 2>&1
 
-    for /f "usebackq tokens=*" %%I in (`powershell -NoProfile -command "(Get-NetAdapter -Physical | Where-Object {$_.Status -eq 'Up'}).InterfaceIndex"`) do (
-    netsh interface ip   set dnsservers name=%%I      source=static address=%dns_ipv4_1%          validate=no /f >> "%ghost-logfile%" 2>&1
-    netsh interface ip   add dnsservers name=%%I      address=%dns_ipv4_2%            index=2     validate=no /f >> "%ghost-logfile%" 2>&1
-    netsh interface ipv6 set dnsservers interface=%%I source=static address=%dns_ipv6_1%                      /f >> "%ghost-logfile%" 2>&1
-    netsh interface ipv6 add dnsservers interface=%%I address=%dns_ipv6_2%            index=2                 /f >> "%ghost-logfile%" 2>&1
-    )
-    chcp 65001 >nul
+    powershell -NoProfile -command "$interfaces = (Get-NetAdapter -Physical | Where-Object {$_.Status -eq 'Up'}).InterfaceIndex; foreach ($index in $interfaces) { Set-DnsClientServerAddress -InterfaceIndex $index -ServerAddresses ('%dns_ipv4_1%', '%dns_ipv4_2%'); Set-DnsClientServerAddress -InterfaceIndex $index -ServerAddresses ('%dns_ipv6_1%', '%dns_ipv6_2%') -AddressFamily IPv6 }" >> "%ghost-logfile%" 2>&1
+
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% DNS set to %roxo%%dns_label%%white%.
 
-    ipconfig /flushdns /f >> "%ghost-logfile%" 2>&1
+    ipconfig /flushdns >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% DNS cache cleaned.
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "CacheHashTableBucketSize" /t REG_DWORD /d 384   /f >> "%ghost-logfile%" 2>&1
@@ -1416,8 +1448,8 @@ goto menu
     echo      %purple%[ %roxo%+%purple% ]%white% DNS DoH bypass disabled.
     
     chcp 437 >nul 2>&1 
-    powershell -NoProfile -command "Add-DnsClientDohServerAddress -ServerAddress '%dns_ipv6_2%' -DohTemplate '%dns_doh_2%' -AllowFallbackToUdp $False -AutoUpgrade $True" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    powershell -NoProfile -command "try { Add-DnsClientDohServerAddress -ServerAddress '%dns_ipv6_2%' -DohTemplate '%dns_doh_2%' -AllowFallbackToUdp $False -AutoUpgrade $True } catch { Set-DnsClientDohServerAddress -ServerAddress '%dns_ipv6_2%' -DohTemplate '%dns_doh_2%' -AllowFallbackToUdp $False -AutoUpgrade $True }" >> "%ghost-logfile%" 2>&1
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% DoH IPV6 mapping enabled.
 
     echo.
@@ -1683,10 +1715,15 @@ goto menu
 
     if not exist "C:\Ghost Optimizer\NVIDIA\NvidiaProfileInspector" (
         echo      %verde%[ %green%-%verde% ]%reset% Extracting %green%Profile Inspector%reset% package...
+
         chcp 437 >nul 2>&1
+
         powershell -NoProfile Expand-Archive 'C:\Ghost Optimizer\NVIDIA\nvidiaProfileInspector.zip' -DestinationPath 'C:\Ghost Optimizer\NVIDIA\' /f >> "%ghost-logfile%" 2>&1
-        chcp 65001 >nul
+
+        chcp 65001 >nul 2>&1
+
         del /q "C:\Ghost Optimizer\NVIDIA\nvidiaProfileInspector.zip" >nul 2>&1
+
         if not exist "C:\Ghost Optimizer\NVIDIA\nvidiaProfileInspector.exe" (
         echo      %red%[ + ]%white% Extraction failed, executable not found.
         )
@@ -1701,11 +1738,12 @@ goto menu
 
     echo      %verde%[ %green%-%verde% ]%reset% Applying %green%Ghost Performance%reset% profile...
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+
     if exist "C:\Ghost Optimizer\NVIDIA\nvidiaProfileInspector.exe" (
         start "" /wait "C:\Ghost Optimizer\NVIDIA\nvidiaProfileInspector.exe" "C:\Ghost Optimizer\NVIDIA\GO2-NVIDIA.nip" /f >> "%ghost-logfile%" 2>&1
         echo.
         echo      %verde%[ %green%-%verde% ]%reset% Profile Inspector Tweaks Applied %green%successfully%white%.
-        echo --- NVIDIA Profile applied --- >> "%ghost-logfile%" 2>&1
+
     ) else (
     echo      %red%[ + ]%white% NVIDIA Profile Inspector executable not found.
     )
@@ -1877,6 +1915,35 @@ goto menu
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\DXGKrnl"       /v "TdrDelay"                       /t REG_DWORD /d 10 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\DXGKrnl"       /v "TdrDdiDelay"                    /t REG_DWORD /d 10 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% DirectX Kernel latency optimized.
+
+    chcp 437 >nul 2>&1
+    
+    if not exist "C:\Ghost Optimizer\ViVeTool\ViVeTool.exe" (
+        if not exist "C:\Ghost Optimizer\ViVeTool" (
+            mkdir "C:\Ghost Optimizer\ViVeTool"
+        )
+
+    if /i "%ARCH%"=="Arm64" (
+        set "VIVETOOL_URL=https://github.com/thebookisclosed/ViVe/releases/download/v0.3.4/ViVeTool-v0.3.4-ARM64.zip"
+    ) else (
+        set "VIVETOOL_URL=https://github.com/thebookisclosed/ViVe/releases/download/v0.3.4/ViVeTool-v0.3.4-IntelAmd.zip"
+    )
+    
+    curl -L -o "C:\Ghost Optimizer\ViVeTool\ViVeTool.zip" "%VIVETOOL_URL%" >> "%ghost-logfile%" 2>&1
+    powershell -NoProfile -command "Expand-Archive -Path 'C:\Ghost Optimizer\ViVeTool\ViVeTool.zip' -DestinationPath 'C:\Ghost Optimizer\ViVeTool' -Force" >> "%ghost-logfile%" 2>&1
+    del /f /q "C:\Ghost Optimizer\ViVeTool\ViVeTool.zip" >nul 2>&1
+    )
+    
+    chcp 65001 >nul 2>&1
+    
+    if exist "C:\Ghost Optimizer\ViVeTool\ViVeTool.exe" (
+        "C:\Ghost Optimizer\ViVeTool\ViVeTool.exe" /enable /id:60716524 >> "%ghost-logfile%" 2>&1
+        "C:\Ghost Optimizer\ViVeTool\ViVeTool.exe" /enable /id:61391826 >> "%ghost-logfile%" 2>&1
+        echo      %purple%[ %roxo%+%purple% ]%white% Low Latency Profile enabled.
+    
+    ) else (
+        echo      %red%[ + ]%white% ViVeTool executable not found.
+    )
 
     echo.
     echo   %yellow%[ • ]%reset% Ghost Optimizer or High Performance power plan is recommended.
@@ -2195,7 +2262,7 @@ goto menu
     )
 
     echo.
-    set "lines[0]=             Disables data collection, diagnostics, and tracking, enhancing privacy and reducing resource usage."
+    set "lines[0]=       Disables data collection and tracking, enhancing privacy and reducing resource usage. (may break some features)"
 
     set "text=!lines[0]!"
     set "textGradient="
@@ -2219,7 +2286,7 @@ goto menu
     echo !lineGradient!!esc![0;40m
 
     echo.
-    echo                          %purple%[ %roxo%%underline%1%reset% %purple%]%white% Stop Telemetry ^& Logging                %purple%[ %roxo%%underline%2%reset% %purple%]%white% Apply OOSU10+ Profile
+    echo                         %purple%[ %roxo%%underline%1%reset% %purple%]%white% Stop Telemetry ^& Logging                %purple%[ %roxo%%underline%2%reset% %purple%]%white% Apply OOSU10+ Profile
     echo.
     echo.
     echo                                                     %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
@@ -2295,6 +2362,7 @@ goto menu
     reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"          /v "Start_TrackProgs"               /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata"            /v "PreventDeviceMetadataFromNetwork" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge"                                     /v "PersonalizationReportingEnabled" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Services\WbioSrvc"                           /v "Start" /t REG_DWORD /d 2 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Privacy policies configured.
 
     ::reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableLocation"                /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
@@ -2317,7 +2385,7 @@ goto menu
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\diagnosticshub.standardcollector.service"     /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\TroubleshootingSvc"                           /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\diagsvc"                                      /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\DsSvc"                                        /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\DsSvc"                                        /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\DPS"                                          /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\WdiServiceHost"                               /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\WdiSystemHost"                                /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
@@ -2360,7 +2428,7 @@ goto menu
         echo      %purple%[ %roxo%+%purple% ]%white% Downloading %highlight%OOSU10++%reset% executable...
         chcp 437 >nul 2>&1
         powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Invoke-WebRequest 'https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe' -OutFile 'C:\Ghost Optimizer\OOSU10\OOSU10.exe'" >> "%ghost-logfile%" 2>&1
-        chcp 65001 >nul
+        chcp 65001 >nul 2>&1
         if not exist "C:\Ghost Optimizer\OOSU10\OOSU10.exe" (
         echo      %red%[ + ]%white% Failed to download OOSU10 executable.
         )
@@ -2898,7 +2966,7 @@ goto menu
 
     chcp 437 >nul 2>&1
     powershell (Get-WmiObject -Namespace root/WMI -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1,100) /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
 
     echo.
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
@@ -3086,7 +3154,7 @@ goto menu
     echo.
 
     echo      %purple%[ %roxo%+%purple% ]%white% Stopping Windows Update services...
-    net stop wuauserv /f >> "%ghost-logfile%" 2>&1
+    net stop wuauserv >> "%ghost-logfile%" 2>&1
     net stop cryptSvc /f >> "%ghost-logfile%" 2>&1
     net stop bits /f >> "%ghost-logfile%" 2>&1
     net stop msiserver /f >> "%ghost-logfile%" 2>&1
@@ -3138,11 +3206,11 @@ goto menu
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Starting Printer Bluetooth Fix --- >> "%ghost-logfile%" 2>&1
 
-    netsh winsock reset /f >> "%ghost-logfile%" 2>&1
-    netsh int ip reset /f >> "%ghost-logfile%" 2>&1
-    ipconfig /release /f >> "%ghost-logfile%" 2>&1
-    ipconfig /renew /f >> "%ghost-logfile%" 2>&1
-    ipconfig /flushdns /f >> "%ghost-logfile%" 2>&1
+    netsh winsock reset >> "%ghost-logfile%" 2>&1
+    netsh int ip reset >> "%ghost-logfile%" 2>&1
+    ipconfig /release >> "%ghost-logfile%" 2>&1
+    ipconfig /renew  >> "%ghost-logfile%" 2>&1
+    ipconfig /flushdns >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Netsh and IP cleaned.
 
     sc config spooler start= auto >> "%ghost-logfile%" 2>&1
@@ -3150,12 +3218,12 @@ goto menu
     echo      %purple%[ %roxo%+%purple% ]%white% Printer/Fax enabled.
 
     chcp 437 >nul 2>&1
-    powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-Service *bth* | Restart-Service -Force -ErrorAction SilentlyContinue" /f >> "%ghost-logfile%" 2>&1
-    powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-PnpDevice -Class Bluetooth | Disable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue" /f >> "%ghost-logfile%" 2>&1
-    powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Start-Sleep -Seconds 1" /f >> "%ghost-logfile%" 2>&1
-    powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-PnpDevice -Class Bluetooth | Enable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue" /f >> "%ghost-logfile%" 2>&1
-    powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "pnputil /scan-devices" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    powershell -Command "$ProgressPreference='SilentlyContinue'; Get-Service *bth* | Restart-Service -Force -ErrorAction SilentlyContinue" >> "%ghost-logfile%" 2>&1
+    powershell -Command "$ProgressPreference='SilentlyContinue'; Get-PnpDevice -Class Bluetooth | Disable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue" >> "%ghost-logfile%" 2>&1
+    powershell -Command "$ProgressPreference='SilentlyContinue'; Start-Sleep -Seconds 1" >> "%ghost-logfile%" 2>&1
+    powershell -Command "$ProgressPreference='SilentlyContinue'; Get-PnpDevice -Class Bluetooth | Enable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue" >> "%ghost-logfile%" 2>&1
+    pnputil /scan-devices >> "%ghost-logfile%" 2>&1
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Bluetooth Drivers restored.
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters" /v "EnableOffload" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
@@ -3172,7 +3240,7 @@ goto menu
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Start-Service bthserv -ErrorAction SilentlyContinue" /f >> "%ghost-logfile%" 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Start-Service DeviceAssociationService -ErrorAction SilentlyContinue" /f >> "%ghost-logfile%" 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Start-Service DeviceAssociationBrokerSvc -ErrorAction SilentlyContinue" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Radio Services restored.
 
     sc config bthserv start= auto /f >> "%ghost-logfile%" 2>&1
@@ -3219,21 +3287,21 @@ goto menu
     echo --- Starting Xbox Fix --- >> "%ghost-logfile%" 2>&1
 
     chcp 437 >nul 2>&1
-    powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage Microsoft.XboxApp -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" /f >> "%ghost-logfile%" 2>&1
-    powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage Microsoft.Xbox.TCUI -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" /f >> "%ghost-logfile%" 2>&1
-    powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage Microsoft.XboxIdentityProvider -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    powershell -Command "$ProgressPreference='SilentlyContinue'; Get-AppxPackage Microsoft.XboxApp -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "%ghost-logfile%" 2>&1
+    powershell -Command "$ProgressPreference='SilentlyContinue'; Get-AppxPackage Microsoft.Xbox.TCUI -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "%ghost-logfile%" 2>&1
+    powershell -Command "$ProgressPreference='SilentlyContinue'; Get-AppxPackage Microsoft.XboxIdentityProvider -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "%ghost-logfile%" 2>&1
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Xbox App restored.
-
-    sc config XblAuthManager start= auto /f >> "%ghost-logfile%" 2>&1
-    sc config XblGameSave start= auto /f >> "%ghost-logfile%" 2>&1
-    sc config XboxGipSvc start= auto /f >> "%ghost-logfile%" 2>&1
-    sc config XboxNetApiSvc start= auto /f >> "%ghost-logfile%" 2>&1
+    
+    sc config XblAuthManager start= auto >> "%ghost-logfile%" 2>&1
+    sc config XblGameSave start= auto >> "%ghost-logfile%" 2>&1
+    sc config XboxGipSvc start= auto >> "%ghost-logfile%" 2>&1
+    sc config XboxNetApiSvc start= auto >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Xbox Services enabled.
-
+    
     chcp 437 >nul 2>&1
-    powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage Microsoft.XboxGamingOverlay -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    powershell -Command "$ProgressPreference='SilentlyContinue'; Get-AppxPackage Microsoft.XboxGamingOverlay -AllUsers | Foreach {Add-AppxPackage -Register '$($_.InstallLocation)\AppxManifest.xml' -DisableDevelopmentMode}" >> "%ghost-logfile%" 2>&1
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Game Bar restored.
 
     reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR" /v "value" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
@@ -3313,34 +3381,98 @@ goto menu
     echo.
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     echo --- Starting Windows Update Fix --- >> "%ghost-logfile%" 2>&1
+    
+    echo       %purple%[ %roxo%+%purple% ]%white% Stopping Updater services...
+    sc config wuauserv start= disabled >> "%ghost-logfile%" 2>&1
+    sc config bits start= disabled >> "%ghost-logfile%" 2>&1
+    sc config cryptsvc start= disabled >> "%ghost-logfile%" 2>&1
+    
+    net stop wuauserv /y >> "%ghost-logfile%" 2>&1
+    net stop bits /y >> "%ghost-logfile%" 2>&1
+    net stop cryptsvc /y >> "%ghost-logfile%" 2>&1
+    net stop msiserver /y >> "%ghost-logfile%" 2>&1
+    net stop appidsvc /y >> "%ghost-logfile%" 2>&1
+    net stop usosvc >> "%ghost-logfile%" 2>&1
 
-    echo      %purple%[ %roxo%+%purple% ]%white% Stopping Updater services...
-    net stop wuauserv /f >> "%ghost-logfile%" 2>&1
-    net stop cryptSvc /f >> "%ghost-logfile%" 2>&1
-    net stop bits /f >> "%ghost-logfile%" 2>&1
-    net stop msiserver /f >> "%ghost-logfile%" 2>&1
-    net stop appidsvc /f >> "%ghost-logfile%" 2>&1
+    regsvr32 /s atl.dll  >> "%ghost-logfile%" 2>&1
+    regsvr32 /s urlmon.dll >> "%ghost-logfile%" 2>&1
+    regsvr32 /s mshtml.dll  >> "%ghost-logfile%" 2>&1
+    regsvr32 /s shdocvw.dll >> "%ghost-logfile%" 2>&1
+    regsvr32 /s browseui.dll >> "%ghost-logfile%" 2>&1
+    regsvr32 /s jscript.dll  >> "%ghost-logfile%" 2>&1
+    regsvr32 /s vbscript.dll  >> "%ghost-logfile%" 2>&1
+    regsvr32 /s scrrun.dll  >> "%ghost-logfile%" 2>&1
+    regsvr32 /s msxml.dll >> "%ghost-logfile%" 2>&1
+    regsvr32 /s msxml3.dll >> "%ghost-logfile%" 2>&1
+    regsvr32 /s msxml6.dll   >> "%ghost-logfile%" 2>&1
+    regsvr32 /s actxprxy.dll >> "%ghost-logfile%" 2>&1
+    regsvr32 /s softpub.dll  >> "%ghost-logfile%" 2>&1
+    regsvr32 /s wintrust.dll  >> "%ghost-logfile%" 2>&1
+    regsvr32 /s dssenh.dll >> "%ghost-logfile%" 2>&1
+    regsvr32 /s rsaenh.dll >> "%ghost-logfile%" 2>&1
+    regsvr32 /s gpkcsp.dll >> "%ghost-logfile%" 2>&1
+    regsvr32 /s sccbase.dll >> "%ghost-logfile%" 2>&1
+    regsvr32 /s cryptdlg.dll >> "%ghost-logfile%" 2>&1
+    regsvr32 /s ole32.dll >> "%ghost-logfile%" 2>&1
+    regsvr32 /s oleaut32.dll >> "%ghost-logfile%" 2>&1
+    regsvr32 /s inseng.dll >> "%ghost-logfile%" 2>&1
+    regsvr32 /s wuapi.dll >> "%ghost-logfile%" 2>&1
+    regsvr32 /s wuaueng.dll >> "%ghost-logfile%" 2>&1
+    regsvr32 /s wuaueng1.dll >> "%ghost-logfile%" 2>&1
+    regsvr32 /s wucltui.dll >> "%ghost-logfile%" 2>&1
+    regsvr32 /s wups.dll >> "%ghost-logfile%" 2>&1
+    regsvr32 /s wups2.dll >> "%ghost-logfile%" 2>&1
+    regsvr32 /s wuwebv.dll >> "%ghost-logfile%" 2>&1
+    regsvr32 /s qmgr.dll >> "%ghost-logfile%" 2>&1
+    regsvr32 /s qmgrprxy.dll >> "%ghost-logfile%" 2>&1
 
-    echo      %purple%[ %roxo%+%purple% ]%white% Restoring Windows Update...
-    rmdir /s /q "%systemroot%\SoftwareDistribution"
-    rmdir /s /q "%systemroot%\System32\catroot2"
+    timeout /t 5 /nobreak > nul
+    
+    echo       %purple%[ %roxo%+%purple% ]%white% Resetting network components...
+    netsh winsock reset >> "%ghost-logfile%" 2>&1
+    netsh winhttp reset proxy >> "%ghost-logfile%" 2>&1
 
-    ren C:\Windows\SoftwareDistribution SoftwareDistribution.old
-    ren C:\Windows\System32\catroot2 catroot2.old
-    del /q /f /s %windir%\SoftwareDistribution\Download\*
-
-    del /f /q %windir%\Logs\CBS\CBS.log
-    del /f /q %windir%\Logs\DISM\dism.log
-
-    echo      %purple%[ %roxo%+%purple% ]%white% Repairing System Integrity...
+    echo       %purple%[ %roxo%+%purple% ]%white% Restoring Windows Update...
+    del /f /q /s "%ALLUSERSPROFILE%\Application Data\Microsoft\Network\Downloader\*" >> "%ghost-logfile%" 2>&1
+    del /f /q "%ALLUSERSPROFILE%\Microsoft\Network\Downloader\qmgr*.dat" >> "%ghost-logfile%" 2>&1
+    
+    rmdir /s /q "C:\Windows\SoftwareDistribution.old" >nul 2>&1
+    rmdir /s /q "C:\Windows\System32\catroot2.old" >nul 2>&1
+    
+    ren "C:\Windows\SoftwareDistribution" "SoftwareDistribution.old" >> "%ghost-logfile%" 2>&1
+    ren "C:\Windows\System32\catroot2" "catroot2.old" >> "%ghost-logfile%" 2>&1
+    
+    :: Purposeful redundancy
+    if exist "C:\Windows\SoftwareDistribution" (
+        del /q /f /s "C:\Windows\SoftwareDistribution\Download\*" >> "%ghost-logfile%" 2>&1
+    )
+    
+    del /f /q "%windir%\Logs\CBS\CBS.log"  >> "%ghost-logfile%" 2>&1
+    del /f /q "%windir%\Logs\DISM\dism.log" >> "%ghost-logfile%" 2>&1
+    
+    echo       %purple%[ %roxo%+%purple% ]%white% Restarting Updater services...
+    sc config wuauserv start= demand >> "%ghost-logfile%" 2>&1
+    sc config bits start= delayed-auto >> "%ghost-logfile%" 2>&1
+    sc config cryptsvc start= auto >> "%ghost-logfile%" 2>&1
+    
+    net start wuauserv >> "%ghost-logfile%" 2>&1
+    net start bits >> "%ghost-logfile%" 2>&1
+    net start cryptsvc >> "%ghost-logfile%" 2>&1
+    net start msiserver >> "%ghost-logfile%" 2>&1
+    net start appidsvc >> "%ghost-logfile%" 2>&1
+    
+    echo       %purple%[ %roxo%+%purple% ]%white% Repairing System Integrity...
+    DISM /Online /Cleanup-Image /RestoreHealth >> "%ghost-logfile%" 2>&1
     sfc /scannow
+    wsreset.exe
+    powershell -ExecutionPolicy Bypass -Command "Get-AppxPackage -AllUsers Microsoft.WindowsStore | ForEach-Object {Add-AppxPackage -DisableDevelopmentMode -Register '$($_.InstallLocation)\AppxManifest.xml'}" >> "%ghost-logfile%" 2>&1
     echo.
-    echo      %purple%[ %roxo%+%purple% ]%white% System Integrity repaired.
+    echo       %purple%[ %roxo%+%purple% ]%white% System Integrity repaired.
     echo.
-
+    
     echo.
     echo   %yellow%[ • ]%reset% If that doesn't solve your problem, try running Full Integrity Fix or Restore Point.
-
+    
     echo.
     timeout /t 4 /nobreak /f >> "%ghost-logfile%" 2>&1
     echo   %purple%[ %roxo%•%purple% ]%white% Windows Update fixed %green%successfully%white%.
@@ -3706,12 +3838,12 @@ goto menu
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *3DBuilder* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *Print3D* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *Microsoft3DViewer* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% 3D Builder uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -AllUsers *Microsoft.QuickAssist* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Quick Assist uninstalled.
 
     chcp 437 >nul 2>&1
@@ -3721,135 +3853,135 @@ goto menu
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *bingsports* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *BingWeather* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *News* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Bing uninstalled.
 
     ::chcp 437 >nul 2>&1
     ::powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *WindowsPhone* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     ::powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *YourPhone* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     ::powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *CommsPhone* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    ::chcp 65001 >nul
+    ::chcp 65001 >nul 2>&1
     ::echo      %purple%[ %roxo%+%purple% ]%white% Windows Phone uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *Facebook* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Facebook uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *Microsoft.Messaging* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Messaging uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *MicrosoftOfficeHub* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Office uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *OneNote* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *Office.OneNote* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% OneNote uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *People* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% People uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *SkypeApp* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Skype uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *solit* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *MicrosoftSolitaireCollection* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Solitaire uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *WindowsMaps* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Maps uninstalled.
 
     :: Uncomment this may break Windows Troubleshooting Fixes, Feedbacks or Help app 
     ::chcp 437 >nul 2>&1
     ::powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *WindowsFeedbackHub* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    ::chcp 65001 >nul
+    ::chcp 65001 >nul 2>&1
     ::echo      %purple%[ %roxo%+%purple% ]%white% "Feedback Hub" uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *windowscommunicationsapps* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Communications uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage *crossdevice* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Cross Device uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *Microsoft.549981C3F5F10* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Cortana uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *Teams* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Teams uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *MicrosoftStickyNotes* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Sticky Note uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *MixedReality.Portal* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Mixed Reality Portal uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *LinkedIn* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% LinkedIn uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *Copilot* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage *Microsoft.Copilot* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxProvisionedPackage -Online | Where-Object {$_.PackageName -like '*Microsoft.Copilot*'} | Remove-AppxProvisionedPackage -Online" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Copilot AI uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *Outlook* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *OutlookForWindows* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Outlook uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *Microsoft.Todos* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% To Do uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *Microsoft.PowerAutomateDesktop* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Power Automate uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *Microsoft.RemoteDesktop* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Remote Desktop uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -allusers *Clipchamp* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Clipchamp uninstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage *MicrosoftWindows.WebExperience* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Widgets uninstalled.
 
     echo.
@@ -3963,17 +4095,17 @@ goto menu
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage -AllUsers | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"}" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Bloatware apps reinstalled.
 
     chcp 437 >nul 2>&1
     powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxProvisionedPackage -Online | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"}" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Provisioned packages reinstalled.
 
     chcp 437 >nul 2>&1
     winget install "Windows Web Experience Pack" --silent /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul
+    chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Widgets installed.
 
     echo      %purple%[ %roxo%+%purple% ]%white% Repairing System Integrity...
