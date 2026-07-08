@@ -2538,14 +2538,23 @@ goto menu
 
     echo.
     echo                      %purple%[ %roxo%%underline%1%reset% %purple%]%white% Disable Unnecessary Services                %purple%[ %roxo%%underline%2%reset% %purple%]%white% Revert Unecessary Services
+    echo.
+    echo                      %purple%[ %roxo%%underline%3%reset% %purple%]%white% Disable Unnecessary Services keep File sharing
     echo.                 
     echo.
     echo                                                     %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
     echo.
     set /p answer="%reset% >:%roxo%"
 
-    if "%answer%"=="1" call :servicesapply
+    if "%answer%"=="1" (
+        set "skip_file_sharing_services="
+        call :servicesapply
+    )
     if "%answer%"=="2" call :servicesrevert
+    if "%answer%"=="3" (
+        set "skip_file_sharing_services=1"
+        call :servicesapply
+    )
     if "%answer%"=="b" goto menu
     if "%answer%"=="B" goto menu
 
@@ -2616,14 +2625,18 @@ goto menu
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\p2pimsvc"                                    /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Delivery Optimization disabled.
 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation"                             /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\Netlogon"                                      /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\CscService"                                    /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\svsvc"                                         /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\TrkWks"                                        /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\CDPSvc"                                        /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\CDPUserSvc"                                    /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo      %purple%[ %roxo%+%purple% ]%white% File Sharing disabled.
+    if "%skip_file_sharing_services%"=="1" (
+        echo      %purple%[ %roxo%+%purple% ]%white% File Sharing kept enabled.
+    ) else (
+        reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation"                         /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+        reg add "HKLM\SYSTEM\CurrentControlSet\Services\Netlogon"                                  /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+        reg add "HKLM\SYSTEM\CurrentControlSet\Services\CscService"                                /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+        reg add "HKLM\SYSTEM\CurrentControlSet\Services\svsvc"                                     /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+        reg add "HKLM\SYSTEM\CurrentControlSet\Services\TrkWks"                                    /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+        reg add "HKLM\SYSTEM\CurrentControlSet\Services\CDPSvc"                                    /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+        reg add "HKLM\SYSTEM\CurrentControlSet\Services\CDPUserSvc"                                /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+        echo      %purple%[ %roxo%+%purple% ]%white% File Sharing disabled.
+    )
 
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\HolographicShell"                              /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\FrameServerMonitor"                            /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
@@ -2699,6 +2712,7 @@ goto menu
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Unnecessary Services Disabled --- >> "%ghost-logfile%" 2>&1
+    set "skip_file_sharing_services="
     if "%mode%"=="menu" goto services
     exit /b
 
