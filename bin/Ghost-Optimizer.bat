@@ -3588,14 +3588,23 @@ goto menu
 
     echo.
     echo                        %purple%[ %roxo%%underline%1%reset% %purple%]%white% Uninstall Bloatware Apps                %purple%[ %roxo%%underline%2%reset% %purple%]%white% Reinstall Bloatware Apps
+    echo.
+    echo                        %purple%[ %roxo%%underline%3%reset% %purple%]%white% Uninstall Bloatware Apps keep Widgets
     echo.                 
     echo.
     echo                                                    %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
     echo.
     set /p answer="%reset% >:%roxo%"
 
-    if "%answer%"=="1" call :debloatapply
+    if "%answer%"=="1" (
+        set "skip_widgets_uninstall="
+        call :debloatapply
+    )
     if "%answer%"=="2" call :debloatrevert
+    if "%answer%"=="3" (
+        set "skip_widgets_uninstall=1"
+        call :debloatapply
+    )
     if "%answer%"=="b" goto menu
     if "%answer%"=="B" goto menu
 
@@ -3980,10 +3989,14 @@ goto menu
     chcp 65001 >nul 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Clipchamp uninstalled.
 
-    chcp 437 >nul 2>&1
-    powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage *MicrosoftWindows.WebExperience* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
-    chcp 65001 >nul 2>&1
-    echo      %purple%[ %roxo%+%purple% ]%white% Widgets uninstalled.
+    if "%skip_widgets_uninstall%"=="1" (
+        echo      %purple%[ %roxo%+%purple% ]%white% Widgets kept installed.
+    ) else (
+        chcp 437 >nul 2>&1
+        powershell -command "$ProgressPreference = 'SilentlyContinue'; "$ProgressPreference = 'SilentlyContinue'; "Get-AppxPackage *MicrosoftWindows.WebExperience* | Remove-AppxPackage" /f >> "%ghost-logfile%" 2>&1
+        chcp 65001 >nul 2>&1
+        echo      %purple%[ %roxo%+%purple% ]%white% Widgets uninstalled.
+    )
 
     echo.
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
@@ -3991,6 +4004,7 @@ goto menu
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Finished Debloat --- >> "%ghost-logfile%" 2>&1
+    set "skip_widgets_uninstall="
     if "%mode%"=="menu" goto menu
     exit /b
 
