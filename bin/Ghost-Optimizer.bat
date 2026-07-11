@@ -2539,6 +2539,8 @@ goto menu
     echo.
     echo                      %purple%[ %roxo%%underline%1%reset% %purple%]%white% Disable Unnecessary Services                %purple%[ %roxo%%underline%2%reset% %purple%]%white% Revert Unecessary Services
     echo.                 
+    echo                    %purple%[ %roxo%%underline%4%reset% %purple%]%white% Disable Unnecessary Services keep Microsoft Store ^& winget
+    echo.
     echo.
     echo                                                     %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
     echo.
@@ -2546,6 +2548,10 @@ goto menu
 
     if "%answer%"=="1" call :servicesapply
     if "%answer%"=="2" call :servicesrevert
+    if "%answer%"=="4" (
+        set "keep_store_winget_services=1"
+        call :servicesapply
+    )
     if "%answer%"=="b" goto menu
     if "%answer%"=="B" goto menu
 
@@ -2607,15 +2613,19 @@ goto menu
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\RetailDemo"                                    /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Retail Demo Service disabled.
 
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config"         /v "DODownloadMode" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config"         /v "DownloadMode" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings"       /v "DownloadMode" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\DoSvc"                                       /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    if "%keep_store_winget_services%"=="1" (
+        sc config DoSvc start= demand >> "%ghost-logfile%" 2>&1
+        echo      %purple%[ %roxo%+%purple% ]%white% Delivery Optimization kept enabled for Microsoft Store ^& winget.
+    ) else (
+        reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config"         /v "DODownloadMode" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+        reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config"         /v "DownloadMode" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+        reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings"       /v "DownloadMode" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
+        reg add "HKLM\SYSTEM\CurrentControlSet\Services\DoSvc"                                       /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+        echo      %purple%[ %roxo%+%purple% ]%white% Delivery Optimization disabled.
+    )
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\PNRPsvc"                                     /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\p2psvc"                                      /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\p2pimsvc"                                    /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
-    echo      %purple%[ %roxo%+%purple% ]%white% Delivery Optimization disabled.
-
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation"                             /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\Netlogon"                                      /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SYSTEM\CurrentControlSet\Services\CscService"                                    /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
@@ -2699,6 +2709,7 @@ goto menu
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Unnecessary Services Disabled --- >> "%ghost-logfile%" 2>&1
+    set "keep_store_winget_services="
     if "%mode%"=="menu" goto services
     exit /b
 
@@ -3031,7 +3042,7 @@ goto menu
     echo.
     echo                                  %purple%[ %roxo%%underline%5%reset% %purple%] %white%Windows Update Fix            %purple%[ %roxo%%underline%6%reset% %purple%] %white%Hibernation Fix
     echo.
-    echo                                           %purple%[ %roxo%%underline%7%reset% %purple%] %white%Virtualization ^& Mitigations Fix
+    echo                                  %purple%[ %roxo%%underline%7%reset% %purple%] %white%Virtualization ^& Mitigations Fix  %purple%[ %roxo%%underline%8%reset% %purple%] %white%Microsoft Store ^& winget Fix
     echo.
     echo.
     echo                                                    %purple%[ %roxo%%underline%B%reset% %purple%]%white% Back to menu 
@@ -3045,6 +3056,7 @@ goto menu
     if "%answer%"=="5" call :wufix
     if "%answer%"=="6" call :hiberfix
     if "%answer%"=="7" call :mitigationsfix
+    if "%answer%"=="8" call :storewingetfix
     if "%answer%"=="b" goto menu
     if "%answer%"=="B" goto menu
 
@@ -3480,6 +3492,108 @@ goto menu
     timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
     title Ghost Optimizer %version% %reboot%
     echo --- Finished Windows Update Fix --- >> "%ghost-logfile%" 2>&1
+    goto health
+
+goto menu
+
+    :storewingetfix
+    cls
+    echo.
+    echo   %purple%[ %roxo%•%purple% ]%white% Starting %roxo%Microsoft Store ^& winget%white% Fix...
+    echo.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    echo --- Starting Microsoft Store and winget Fix --- >> "%ghost-logfile%" 2>&1
+
+    echo       %purple%[ %roxo%+%purple% ]%white% Restoring required services...
+    sc config DoSvc start= demand >> "%ghost-logfile%" 2>&1
+    sc config BITS start= delayed-auto >> "%ghost-logfile%" 2>&1
+    sc config wuauserv start= demand >> "%ghost-logfile%" 2>&1
+    sc config UsoSvc start= demand >> "%ghost-logfile%" 2>&1
+    sc config WaaSMedicSvc start= demand >> "%ghost-logfile%" 2>&1
+    sc config CryptSvc start= auto >> "%ghost-logfile%" 2>&1
+    sc config AppXSvc start= auto >> "%ghost-logfile%" 2>&1
+    sc config StateRepository start= auto >> "%ghost-logfile%" 2>&1
+    sc config BrokerInfrastructure start= auto >> "%ghost-logfile%" 2>&1
+    sc config DcomLaunch start= auto >> "%ghost-logfile%" 2>&1
+    sc config RpcSs start= auto >> "%ghost-logfile%" 2>&1
+    sc config EventSystem start= auto >> "%ghost-logfile%" 2>&1
+    sc config Schedule start= auto >> "%ghost-logfile%" 2>&1
+    sc config Winmgmt start= auto >> "%ghost-logfile%" 2>&1
+    sc config InstallService start= demand >> "%ghost-logfile%" 2>&1
+    sc config ClipSVC start= demand >> "%ghost-logfile%" 2>&1
+    sc config LicenseManager start= demand >> "%ghost-logfile%" 2>&1
+    sc config AppReadiness start= demand >> "%ghost-logfile%" 2>&1
+    sc config TokenBroker start= demand >> "%ghost-logfile%" 2>&1
+    sc config AppIDSvc start= demand >> "%ghost-logfile%" 2>&1
+    sc config msiserver start= demand >> "%ghost-logfile%" 2>&1
+
+    echo       %purple%[ %roxo%+%purple% ]%white% Removing blocking Store and Update policies...
+    reg delete "HKLM\SOFTWARE\Policies\Microsoft\WindowsStore" /v RemoveWindowsStore /f >> "%ghost-logfile%" 2>&1
+    reg delete "HKLM\SOFTWARE\Policies\Microsoft\WindowsStore" /v DisableStoreApps /f >> "%ghost-logfile%" 2>&1
+    reg delete "HKLM\SOFTWARE\Policies\Microsoft\WindowsStore" /v AutoDownload /f >> "%ghost-logfile%" 2>&1
+    reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /v NoAutoUpdate /f >> "%ghost-logfile%" 2>&1
+    reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /v DisableWindowsUpdateAccess /f >> "%ghost-logfile%" 2>&1
+    reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /v SetDisableUXWUAccess /f >> "%ghost-logfile%" 2>&1
+    reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v NoAutoUpdate /f >> "%ghost-logfile%" 2>&1
+    reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v DisableWindowsUpdateAccess /f >> "%ghost-logfile%" 2>&1
+    reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v SetDisableUXWUAccess /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v DODownloadMode /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v DownloadMode /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings" /v DownloadMode /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
+
+    echo       %purple%[ %roxo%+%purple% ]%white% Resetting Windows Update and Store caches...
+    set "store_repair_id=!random!!random!"
+    net stop bits /y >> "%ghost-logfile%" 2>&1
+    net stop wuauserv /y >> "%ghost-logfile%" 2>&1
+    net stop cryptsvc /y >> "%ghost-logfile%" 2>&1
+    net stop msiserver /y >> "%ghost-logfile%" 2>&1
+    net stop appidsvc /y >> "%ghost-logfile%" 2>&1
+    del /f /q "%ALLUSERSPROFILE%\Microsoft\Network\Downloader\qmgr*.dat" >> "%ghost-logfile%" 2>&1
+    if exist "%windir%\SoftwareDistribution" ren "%windir%\SoftwareDistribution" "SoftwareDistribution.GhostStoreRepair.!store_repair_id!" >> "%ghost-logfile%" 2>&1
+    if exist "%windir%\System32\catroot2" ren "%windir%\System32\catroot2" "catroot2.GhostStoreRepair.!store_repair_id!" >> "%ghost-logfile%" 2>&1
+    del /f /s /q "%LocalAppData%\Packages\Microsoft.WindowsStore_8wekyb3d8bbwe\LocalCache\*" >> "%ghost-logfile%" 2>&1
+    del /f /s /q "%LocalAppData%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalCache\*" >> "%ghost-logfile%" 2>&1
+    net start cryptsvc >> "%ghost-logfile%" 2>&1
+    net start RpcSs >> "%ghost-logfile%" 2>&1
+    net start DcomLaunch >> "%ghost-logfile%" 2>&1
+    net start EventSystem >> "%ghost-logfile%" 2>&1
+    net start Schedule >> "%ghost-logfile%" 2>&1
+    net start Winmgmt >> "%ghost-logfile%" 2>&1
+    net start StateRepository >> "%ghost-logfile%" 2>&1
+    net start BrokerInfrastructure >> "%ghost-logfile%" 2>&1
+    net start AppXSvc >> "%ghost-logfile%" 2>&1
+    net start ClipSVC >> "%ghost-logfile%" 2>&1
+    net start LicenseManager >> "%ghost-logfile%" 2>&1
+    net start InstallService >> "%ghost-logfile%" 2>&1
+    net start bits >> "%ghost-logfile%" 2>&1
+    net start wuauserv >> "%ghost-logfile%" 2>&1
+    net start appidsvc >> "%ghost-logfile%" 2>&1
+    net start msiserver >> "%ghost-logfile%" 2>&1
+
+    echo       %purple%[ %roxo%+%purple% ]%white% Repairing System Integrity...
+    DISM /Online /Cleanup-Image /RestoreHealth >> "%ghost-logfile%" 2>&1
+    sfc /scannow >> "%ghost-logfile%" 2>&1
+    wsreset.exe >> "%ghost-logfile%" 2>&1
+    powershell -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference='Continue'; $names=@('Microsoft.WindowsStore','Microsoft.DesktopAppInstaller','Microsoft.StorePurchaseApp','Microsoft.Services.Store.Engagement'); foreach($name in $names){ Get-AppxPackage -AllUsers -Name $name | ForEach-Object { $manifest=Join-Path $_.InstallLocation 'AppxManifest.xml'; if(Test-Path $manifest){ Add-AppxPackage -DisableDevelopmentMode -Register $manifest } } }" >> "%ghost-logfile%" 2>&1
+
+    where winget.exe >nul 2>&1
+    if not errorlevel 1 (
+        echo       %purple%[ %roxo%+%purple% ]%white% Resetting winget sources...
+        winget source reset --force >> "%ghost-logfile%" 2>&1
+        winget source update --disable-interactivity >> "%ghost-logfile%" 2>&1
+    ) else (
+        echo       %yellow%[ • ]%reset% winget was not found. Microsoft Store repair completed.
+        echo winget.exe was not found. Microsoft Store repair completed. >> "%ghost-logfile%" 2>&1
+    )
+
+    echo.
+    echo   %yellow%[ • ]%reset% Restart Windows before retesting Microsoft Store or winget.
+    echo.
+    timeout /t 4 /nobreak /f >> "%ghost-logfile%" 2>&1
+    echo   %purple%[ %roxo%•%purple% ]%white% Microsoft Store ^& winget fix completed %green%successfully%white%.
+    timeout /t 2 /nobreak >> "%ghost-logfile%" 2>&1
+    title Ghost Optimizer %version% %reboot%
+    echo --- Finished Microsoft Store and winget Fix --- >> "%ghost-logfile%" 2>&1
     goto health
 
 goto menu
@@ -4081,7 +4195,7 @@ goto menu
     reg add "HKCU\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableThirdPartySuggestions" /t REG_DWORD /d 0 /f >> "%ghost-logfile%" 2>&1
     echo      %purple%[ %roxo%+%purple% ]%white% Spotlight enabled.
 
-    reg add "HKLM\SYSTEM\CurrentControlSet\Services\DoSvc"                                  /v "Start" /t REG_DWORD /d 4 /f >> "%ghost-logfile%" 2>&1
+    sc config DoSvc start= demand >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config"    /v "DODownloadMode" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config"    /v "DownloadMode" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings"  /v "DownloadMode" /t REG_DWORD /d 1 /f >> "%ghost-logfile%" 2>&1
