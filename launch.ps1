@@ -1,4 +1,4 @@
-﻿# Ghost Optimizer 5.5
+﻿# Ghost Optimizer 5.6
 # https://github.com/louzkk/Ghost-Optimizer
 
 Set-ExecutionPolicy Unrestricted -Scope Process -Force -ErrorAction SilentlyContinue
