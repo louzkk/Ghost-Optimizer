@@ -43,8 +43,5 @@ To restore your system, use **R (Revert all)** from the main menu and select the
 > [!CAUTION]
 > The Performance menu includes an option to disable VBS, Hyper-V and Spectre/Meltdown mitigations. It's a real performance gain, but it can break kernel-level anti-cheats and lowers your protection against speculative-execution exploits. It always asks for your confirmation.
 
-> [!NOTE]
-> This script reduces Windows telemetry and fixes many common privacy issues, but it can't make Windows as private as an open-source OS. If privacy is your priority, Linux may be a better choice.
-
 ## 📖 License
 Released under the [MIT License](LICENSE). Free for modification and distribution with proper attribution.
